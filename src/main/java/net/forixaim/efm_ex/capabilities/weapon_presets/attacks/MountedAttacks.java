@@ -1,7 +1,7 @@
 package net.forixaim.efm_ex.capabilities.weapon_presets.attacks;
 
 import com.mojang.datafixers.util.Pair;
-import net.forixaim.efm_ex.capabilities.EXWeaponCapability;
+import net.forixaim.efm_ex.capabilities.weaponcaps.EXWeaponCapability;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.world.capabilities.item.Style;
 

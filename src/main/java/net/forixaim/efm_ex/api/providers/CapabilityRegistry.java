@@ -1,7 +1,7 @@
 package net.forixaim.efm_ex.api.providers;
 
 import com.mojang.datafixers.util.Pair;
-import net.forixaim.efm_ex.capabilities.EXWeaponCapability;
+import net.forixaim.efm_ex.capabilities.weaponcaps.EXWeaponCapability;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;

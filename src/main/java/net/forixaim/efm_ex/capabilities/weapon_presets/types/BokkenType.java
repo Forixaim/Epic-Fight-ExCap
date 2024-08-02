@@ -8,11 +8,10 @@ import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
 public class BokkenType extends CoreCapability
 {
-	private static BokkenType instance;
+	private static final BokkenType instance = new BokkenType();
 
-	public BokkenType()
-	{
-		instance = this;
+	private BokkenType() {
+		init();
 	}
 
 	public static BokkenType getInstance()
@@ -23,19 +22,16 @@ public class BokkenType extends CoreCapability
 	/**
 	 * Should not be called more than once
 	 */
-	public void init()
+	private void init()
 	{
-		if (init)
-			return;
-		init = true;
 		provider.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("dual_swords", InteractionHand.OFF_HAND, CapabilityItem.WeaponCategories.SWORD, CapabilityItem.Styles.TWO_HAND, true))
 				.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("default", CapabilityItem.Styles.ONE_HAND, false));
 		builder.initialSetup(
 				CapabilityItem.WeaponCategories.SWORD,
 				EpicFightSounds.WHOOSH.get(),
 				EpicFightSounds.BLUNT_HIT.get()
-		).redirectedCollider(ColliderPreset.SWORD)
-				.redirectedPredicator(provider.exportCombination())
-				.redirectedProvider(provider.exportStyle());
+		).collider(ColliderPreset.SWORD)
+				.weaponCombinationPredicator(provider.exportCombination())
+				.styleProvider(provider.exportStyle());
 	}
 }

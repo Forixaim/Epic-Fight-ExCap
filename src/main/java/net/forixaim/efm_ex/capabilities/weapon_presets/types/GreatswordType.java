@@ -1,39 +1,31 @@
 package net.forixaim.efm_ex.capabilities.weapon_presets.types;
 
-import net.forixaim.efm_ex.api.providers.ProviderConditionalType;
 import net.forixaim.efm_ex.capabilities.CoreCapability;
-import net.minecraft.world.InteractionHand;
 import yesman.epicfight.gameasset.ColliderPreset;
-import yesman.epicfight.gameasset.EpicFightSkills;
 import yesman.epicfight.gameasset.EpicFightSounds;
-import yesman.epicfight.skill.SkillSlots;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
 public class GreatswordType extends CoreCapability
 {
-	private static GreatswordType instance;
+	private static final GreatswordType instance = new GreatswordType();
 
-	public GreatswordType()
-	{
-		instance = this;
+	private GreatswordType() {
+		init();
 	}
 
 	public static GreatswordType getInstance()
 	{
 		return instance;
 	}
-	public void init()
+	private void init()
 	{
-		if (init)
-			return;
-		init = true;
 		provider.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("default", CapabilityItem.Styles.TWO_HAND, true));
 		builder.initialSetup(
 				CapabilityItem.WeaponCategories.LONGSWORD,
 				EpicFightSounds.WHOOSH.get(),
 				EpicFightSounds.BLADE_HIT.get()
-		).redirectedCollider(ColliderPreset.LONGSWORD)
-				.redirectedPredicator(provider.exportCombination())
-				.redirectedProvider(provider.exportStyle());
+		).collider(ColliderPreset.LONGSWORD)
+				.weaponCombinationPredicator(provider.exportCombination())
+				.styleProvider(provider.exportStyle());
 	}
 }

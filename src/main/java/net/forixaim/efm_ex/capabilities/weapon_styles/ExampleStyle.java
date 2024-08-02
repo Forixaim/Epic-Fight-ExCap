@@ -5,7 +5,7 @@ import yesman.epicfight.world.capabilities.item.Style;
 public enum ExampleStyle implements Style
 {
 	HEAVY(false);
-	private int id;
+	private final int id;
 	private boolean offHandUse;
 	ExampleStyle(boolean offHandUse)
 	{
@@ -20,6 +20,6 @@ public enum ExampleStyle implements Style
 	@Override
 	public int universalOrdinal()
 	{
-		return Style.ENUM_MANAGER.assign(this);
+		return id;
 	}
 }

@@ -8,30 +8,26 @@ import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
 public class SpearType extends CoreCapability
 {
-	private static SpearType instance;
+	private static final SpearType instance = new SpearType();
 
-	public SpearType()
-	{
-		instance = this;
+	private SpearType() {
+		init();
 	}
 
 	public static SpearType getInstance()
 	{
 		return instance;
 	}
-	public void init()
+	private void init()
 	{
-		if (init)
-			return;
-		init = true;
 		provider.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("shielded", InteractionHand.OFF_HAND, CapabilityItem.WeaponCategories.SHIELD, CapabilityItem.Styles.ONE_HAND, true))
 				.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("default", CapabilityItem.Styles.TWO_HAND, false));
 		builder.initialSetup(
 						CapabilityItem.WeaponCategories.SPEAR,
 						EpicFightSounds.WHOOSH.get(),
 						EpicFightSounds.BLADE_HIT.get()
-				).redirectedCollider(ColliderPreset.SPEAR)
-				.redirectedPredicator(provider.exportCombination())
-				.redirectedProvider(provider.exportStyle());
+				).collider(ColliderPreset.SPEAR)
+				.weaponCombinationPredicator(provider.exportCombination())
+				.styleProvider(provider.exportStyle());
 	}
 }

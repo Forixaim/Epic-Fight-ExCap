@@ -2,14 +2,13 @@ package net.forixaim.efm_ex.capabilities.weapon_presets.attacks;
 
 import com.mojang.datafixers.util.Pair;
 import net.forixaim.efm_ex.capabilities.CoreCapability;
-import net.forixaim.efm_ex.capabilities.EXWeaponCapability;
+import net.forixaim.efm_ex.capabilities.weaponcaps.EXWeaponCapability;
 import net.forixaim.efm_ex.capabilities.weapon_presets.types.TachiType;
 import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.EpicFightSkills;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.Style;
-
 import java.util.function.Function;
 
 public class TachiAttacks
