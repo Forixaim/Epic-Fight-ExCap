@@ -6,7 +6,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 import yesman.epicfight.api.animation.LivingMotion;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.collider.Collider;
@@ -47,16 +46,6 @@ public class EXWeaponCapability extends WeaponCapability
 		protected Builder()
 		{
 			super();
-		}
-
-		public Builder initialSetup(WeaponCategory category, Skill passiveSkill, SoundEvent swingSound, SoundEvent hitSound, @NotNull Collider collider)
-		{
-			this.category(category);
-			this.passiveSkill(passiveSkill);
-			this.swingSound(swingSound);
-			this.hitSound(hitSound);
-			this.collider(collider);
-			return this;
 		}
 
 		public Builder initialSetup(WeaponCategory category, SoundEvent swingSound, SoundEvent hitSound)

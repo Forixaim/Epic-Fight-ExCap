@@ -14,7 +14,7 @@ import java.util.function.Function;
 
 public class SpearAttacks
 {
-	public static final void injectAttacks()
+	public static void injectAttacks()
 	{
 		SpearType.getInstance().getAttackCombinationRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add(CapabilityItem.Styles.TWO_HAND, SpearAttacks.defaultTwoHandAttackCycle));
 		SpearType.getInstance().getAttackCombinationRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add(CapabilityItem.Styles.ONE_HAND, SpearAttacks.defaultOneHandAttackCycle));

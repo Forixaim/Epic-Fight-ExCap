@@ -1,8 +1,8 @@
 package net.forixaim.efm_ex.capabilities.weaponcaps.compat.data;
 
 public class AnimConfig {
-    private int nAttacks;
-    private AnimType type;
+    private final int nAttacks;
+    private final AnimType type;
 
     public AnimConfig(AnimType type, int nAttacks) {
         this.type = type;

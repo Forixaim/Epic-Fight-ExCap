@@ -2,7 +2,6 @@ package net.forixaim.efm_ex.capabilities;
 
 
 import net.forixaim.efm_ex.capabilities.weapon_presets.attacks.*;
-import net.forixaim.efm_ex.capabilities.weapon_presets.types.*;
 
 public class WeaponModificationRegistry
 {
