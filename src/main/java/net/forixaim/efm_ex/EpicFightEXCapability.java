@@ -44,16 +44,10 @@ public class EpicFightEXCapability {
 
     public EpicFightEXCapability() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        Style.ENUM_MANAGER.registerEnumCls(MODID, ExampleStyle.class);
-        modEventBus.addListener(this::commonSetup);
+        Style.ENUM_MANAGER.registerEnumCls(MODID, ExampleStyle.class);;
 
         MinecraftForge.EVENT_BUS.register(this);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-    }
-
-    private void commonSetup(final FMLCommonSetupEvent event)
-    {
-        WeaponModificationRegistry.RegisterWeaponCapabilityModification();
     }
 }

@@ -30,45 +30,45 @@ public class CapabilityRegistry
 	}
 
 	//Skill Existence/Activation
-	public ProviderConditional add(@NotNull String name, @NotNull ProviderConditionalType type, @NotNull SkillSlot slot, @NotNull Skill skill, @Nullable Style style, @Nullable Boolean combo)
+	public ProviderConditional add(@NotNull String name, @NotNull ProviderConditionalType type, @NotNull SkillSlot slot, @NotNull Skill skill, @Nullable Style style, @Nullable Boolean combo, Skill weaponPassive)
 	{
-		return new ProviderConditional(new ResourceLocation(MOD_ID, name), type, style, skill, slot, null, combo);
+		return new ProviderConditional(new ResourceLocation(MOD_ID, name), type, style, skill, weaponPassive, slot, null, combo);
 	}
 
 	//Data Key
-	public ProviderConditional add(@NotNull String name, @NotNull SkillSlot slot, @Nullable SkillDataKey<Boolean> key, @Nullable Style style, @Nullable Boolean combo)
+	public ProviderConditional add(@NotNull String name, @NotNull SkillSlot slot, @Nullable SkillDataKey<Boolean> key, @Nullable Style style, @Nullable Boolean combo, Skill passive)
 	{
-		return new ProviderConditional(new ResourceLocation(MOD_ID, name), ProviderConditionalType.DATA_KEY, style, null, slot, key, combo);
+		return new ProviderConditional(new ResourceLocation(MOD_ID, name), ProviderConditionalType.DATA_KEY, style, null, passive, slot, key, combo);
 	}
 
 	//Weapon Category
-	public ProviderConditional add(@NotNull String name, @NotNull InteractionHand hand, @Nullable WeaponCategory category, Style style, Boolean combo)
+	public ProviderConditional add(@NotNull String name, @NotNull InteractionHand hand, @Nullable WeaponCategory category, Style style, Boolean combo, Skill passive)
 	{
-		return new ProviderConditional(new ResourceLocation(MOD_ID, name), ProviderConditionalType.WEAPON_CATEGORY, style, hand, category, null, combo);
+		return new ProviderConditional(new ResourceLocation(MOD_ID, name), ProviderConditionalType.WEAPON_CATEGORY, style, hand, passive, category, null, combo);
 	}
 
 	//Specific Weapon
-	public ProviderConditional add(@NotNull String name, @NotNull InteractionHand hand, Item item, Style style, Boolean combo)
+	public ProviderConditional add(@NotNull String name, @NotNull InteractionHand hand, Item item, Style style, Boolean combo, Skill passive)
 	{
-		return new ProviderConditional(new ResourceLocation(MOD_ID, name), ProviderConditionalType.SPECIFIC_WEAPON, style, hand, null, item, combo);
+		return new ProviderConditional(new ResourceLocation(MOD_ID, name), ProviderConditionalType.SPECIFIC_WEAPON, style, hand, passive, null, item, combo);
 	}
 
 	//Composite
-	public ProviderConditional add(@NotNull String name, Style style, Boolean combination, ProviderConditional... conditionals)
+	public ProviderConditional add(@NotNull String name, Style style, Boolean combination, Skill passive, ProviderConditional... conditionals)
 	{
-		return new ProviderConditional(new ResourceLocation(MOD_ID, name), ProviderConditionalType.COMPOSITE, style, combination, conditionals);
+		return new ProviderConditional(new ResourceLocation(MOD_ID, name), ProviderConditionalType.COMPOSITE, style, combination, passive, conditionals);
 	}
 
 	//Custom
-	public ProviderConditional add(@NotNull String name, Style style, Boolean combination, Function<LivingEntityPatch<?>, Boolean> customFunction)
+	public ProviderConditional add(@NotNull String name, Style style, Boolean combination, Skill passive, Function<LivingEntityPatch<?>, Boolean> customFunction)
 	{
-		return new ProviderConditional(new ResourceLocation(MOD_ID, name), ProviderConditionalType.CUSTOM, style, combination, customFunction);
+		return new ProviderConditional(new ResourceLocation(MOD_ID, name), ProviderConditionalType.CUSTOM, style, combination, passive, customFunction);
 	}
 
 	//Default
-	public ProviderConditional add(@NotNull String name, Style style, Boolean combination)
+	public ProviderConditional add(@NotNull String name, Style style, Boolean combination, Skill passive)
 	{
-		return new ProviderConditional(new ResourceLocation(MOD_ID, name), ProviderConditionalType.DEFAULT, style, combination);
+		return new ProviderConditional(new ResourceLocation(MOD_ID, name), ProviderConditionalType.DEFAULT, style, combination, passive);
 	}
 
 	//Add Attack Style

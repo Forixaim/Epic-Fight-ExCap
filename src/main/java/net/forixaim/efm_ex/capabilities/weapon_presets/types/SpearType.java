@@ -18,10 +18,11 @@ public class SpearType extends CoreCapability
 	{
 		return instance;
 	}
+
 	private void init()
 	{
-		provider.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("shielded", InteractionHand.OFF_HAND, CapabilityItem.WeaponCategories.SHIELD, CapabilityItem.Styles.ONE_HAND, true))
-				.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("default", CapabilityItem.Styles.TWO_HAND, false));
+		provider.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("shielded", InteractionHand.OFF_HAND, CapabilityItem.WeaponCategories.SHIELD, CapabilityItem.Styles.ONE_HAND, true, null))
+				.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("default", CapabilityItem.Styles.TWO_HAND, false, null));
 		builder.initialSetup(
 						CapabilityItem.WeaponCategories.SPEAR,
 						EpicFightSounds.WHOOSH.get(),

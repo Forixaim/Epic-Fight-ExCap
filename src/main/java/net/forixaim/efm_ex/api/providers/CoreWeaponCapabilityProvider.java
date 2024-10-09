@@ -1,5 +1,6 @@
 package net.forixaim.efm_ex.api.providers;
 
+import yesman.epicfight.skill.Skill;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.item.Style;
 
@@ -10,25 +11,38 @@ import java.util.function.Function;
 /**
  * This class is meant to be as an extendbale
  */
-public class StyleComboProvider
+public class CoreWeaponCapabilityProvider
 {
     private final List<ProviderConditional> conditionals;
 
-    public StyleComboProvider()
+    public CoreWeaponCapabilityProvider()
     {
         conditionals = new ArrayList<ProviderConditional>();
     }
 
-    public StyleComboProvider addConditional(ProviderConditional conditional)
+    public CoreWeaponCapabilityProvider addConditional(ProviderConditional conditional)
     {
         this.conditionals.add(0, conditional);
         return this;
     }
 
-    public StyleComboProvider addDefaultConditional(ProviderConditional conditional)
+    public CoreWeaponCapabilityProvider addDefaultConditional(ProviderConditional conditional)
     {
         this.conditionals.add(conditional);
         return this;
+    }
+
+    private void sortByPriority()
+    {
+        for (int i = 0; i < conditionals.size() - 1; i++)
+        {
+            ProviderConditional conditional = conditionals.get(i).copy();
+            if (conditional.getPriority() < conditionals.get(i + 1).getPriority())
+            {
+                conditionals.set(i, conditionals.get(i+1));
+                conditionals.set(i+1, conditional);
+            }
+        }
     }
 
     /**
@@ -37,7 +51,8 @@ public class StyleComboProvider
      */
     public Function<LivingEntityPatch<?>, Style> exportStyle()
     {
-        Function<LivingEntityPatch<?>, Style> providerFunction = (entityPatch) ->
+        sortByPriority();
+	    return entityPatch ->
         {
             for (ProviderConditional conditional : conditionals)
             {
@@ -48,7 +63,6 @@ public class StyleComboProvider
             }
             return null;
         };
-        return providerFunction;
     }
 
     /**
@@ -57,7 +71,8 @@ public class StyleComboProvider
      */
     public Function<LivingEntityPatch<?>, Boolean> exportCombination()
     {
-        Function<LivingEntityPatch<?>, Boolean> providerFunction = (entityPatch) ->
+        sortByPriority();
+	    return entityPatch ->
         {
             for (ProviderConditional conditional : conditionals)
             {
@@ -68,6 +83,21 @@ public class StyleComboProvider
             }
             return null;
         };
-        return providerFunction;
+    }
+
+    public Function<LivingEntityPatch<?>, Skill> exportWeaponPassiveSkill()
+    {
+        sortByPriority();
+        return entityPatch ->
+        {
+          for (ProviderConditional conditional : conditionals)
+          {
+              if (conditional.testConditionalSkill(entityPatch) != null)
+              {
+                  return conditional.testConditionalSkill(entityPatch);
+              }
+          }
+          return null;
+        };
     }
 }

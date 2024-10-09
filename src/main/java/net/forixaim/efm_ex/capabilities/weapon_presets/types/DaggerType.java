@@ -20,13 +20,14 @@ public class DaggerType extends CoreCapability
 	}
 	private void init()
 	{
-		provider.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("dual_daggers", InteractionHand.OFF_HAND, CapabilityItem.WeaponCategories.DAGGER, CapabilityItem.Styles.TWO_HAND, true))
-				.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("default", CapabilityItem.Styles.TWO_HAND, false));
+		provider.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("dual_daggers", InteractionHand.OFF_HAND, CapabilityItem.WeaponCategories.DAGGER, CapabilityItem.Styles.TWO_HAND, true, null))
+				.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("default", CapabilityItem.Styles.TWO_HAND, false, null));
 		builder.initialSetup(
 				CapabilityItem.WeaponCategories.DAGGER,
 				EpicFightSounds.WHOOSH_SMALL.get(),
 				EpicFightSounds.BLADE_HIT.get()
 		).collider(ColliderPreset.DAGGER)
+				.passiveProvider(provider.exportWeaponPassiveSkill())
 				.weaponCombinationPredicator(provider.exportCombination())
 				.styleProvider(provider.exportStyle());
 	}

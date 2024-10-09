@@ -20,12 +20,13 @@ public class TachiType extends CoreCapability
 
 	private void init()
 	{
-		provider.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("default", CapabilityItem.Styles.TWO_HAND, false));
+		provider.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("default", CapabilityItem.Styles.TWO_HAND, false, null));
 		builder.initialSetup(
 				CapabilityItem.WeaponCategories.TACHI,
 				EpicFightSounds.WHOOSH.get(),
 				EpicFightSounds.BLADE_HIT.get())
 				.collider(ColliderPreset.TACHI)
+				.passiveProvider(provider.exportWeaponPassiveSkill())
 				.weaponCombinationPredicator(provider.exportCombination())
 				.styleProvider(provider.exportStyle());
 	}

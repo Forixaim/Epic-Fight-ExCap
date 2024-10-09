@@ -3,7 +3,7 @@ package net.forixaim.efm_ex.capabilities;
 import com.mojang.datafixers.util.Pair;
 import net.forixaim.efm_ex.api.providers.CapabilityRegistry;
 import net.forixaim.efm_ex.api.providers.ProviderConditional;
-import net.forixaim.efm_ex.api.providers.StyleComboProvider;
+import net.forixaim.efm_ex.api.providers.CoreWeaponCapabilityProvider;
 import net.forixaim.efm_ex.capabilities.weaponcaps.EXWeaponCapability;
 import yesman.epicfight.main.EpicFightMod;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
@@ -18,7 +18,7 @@ public class CoreCapability
 	public static final CapabilityRegistry COMBO_PROVIDER_REGISTRY = CapabilityRegistry.create(EpicFightMod.MODID);
 	protected final List<ProviderConditional> styleComboProviderRegistry = new ArrayList<>();
 	protected final List<Pair<Style, Function<Pair<Style, EXWeaponCapability.Builder>, EXWeaponCapability.Builder>>> attackCombinationRegistry = new ArrayList<>();
-	protected final StyleComboProvider provider = new StyleComboProvider();
+	protected final CoreWeaponCapabilityProvider provider = new CoreWeaponCapabilityProvider();
 	protected final EXWeaponCapability.Builder builder = EXWeaponCapability.builder();
 
 	private void registerAttackCombo()

@@ -2,12 +2,24 @@ package net.forixaim.efm_ex.api.providers;
 
 public enum ProviderConditionalType
 {
-    WEAPON_CATEGORY,
-    SPECIFIC_WEAPON,
-    SKILL_EXISTENCE,
-    SKILL_ACTIVATION,
-    DATA_KEY,
-    COMPOSITE,
-    CUSTOM,
-    DEFAULT
+    WEAPON_CATEGORY(1),
+    SPECIFIC_WEAPON(2),
+    SKILL_EXISTENCE(3),
+    SKILL_ACTIVATION(4),
+    DATA_KEY(5),
+    COMPOSITE(6),
+    CUSTOM(7),
+    DEFAULT(0);
+
+    private final int priority;
+
+    ProviderConditionalType(int priority)
+    {
+        this.priority = priority;
+    }
+
+    public int getPriority()
+    {
+        return priority;
+    }
 }

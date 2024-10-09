@@ -20,7 +20,7 @@ public class BokkenAttacks
 
 	public static void injectAttacks()
 	{
-		BokkenType.getInstance().getStyleComboProviderRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add("heavy", ProviderConditionalType.SKILL_EXISTENCE, SkillSlots.PASSIVE1, EpicFightSkills.BERSERKER, ExampleStyle.HEAVY, false));
+		BokkenType.getInstance().getStyleComboProviderRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add("heavy", ProviderConditionalType.SKILL_EXISTENCE, SkillSlots.PASSIVE1, EpicFightSkills.BERSERKER, ExampleStyle.HEAVY, false, null));
 		BokkenType.getInstance().getAttackCombinationRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add(ExampleStyle.HEAVY, heavyAttackCycle));
 		BokkenType.getInstance().getAttackCombinationRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add(CapabilityItem.Styles.ONE_HAND, SwordAttacks.defaultOneHandAttackCycle));
 		BokkenType.getInstance().getAttackCombinationRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add(CapabilityItem.Styles.TWO_HAND, SwordAttacks.defaultTwoHandAttackCycle));

@@ -24,13 +24,14 @@ public class BokkenType extends CoreCapability
 	 */
 	private void init()
 	{
-		provider.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("dual_swords", InteractionHand.OFF_HAND, CapabilityItem.WeaponCategories.SWORD, CapabilityItem.Styles.TWO_HAND, true))
-				.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("default", CapabilityItem.Styles.ONE_HAND, false));
+		provider.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("dual_swords", InteractionHand.OFF_HAND, CapabilityItem.WeaponCategories.SWORD, CapabilityItem.Styles.TWO_HAND, true, null))
+				.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("default", CapabilityItem.Styles.ONE_HAND, false, null));
 		builder.initialSetup(
 				CapabilityItem.WeaponCategories.SWORD,
 				EpicFightSounds.WHOOSH.get(),
 				EpicFightSounds.BLUNT_HIT.get()
 		).collider(ColliderPreset.SWORD)
+				.passiveProvider(provider.exportWeaponPassiveSkill())
 				.weaponCombinationPredicator(provider.exportCombination())
 				.styleProvider(provider.exportStyle());
 	}
