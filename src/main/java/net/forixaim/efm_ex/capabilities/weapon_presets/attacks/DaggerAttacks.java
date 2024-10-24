@@ -2,7 +2,6 @@ package net.forixaim.efm_ex.capabilities.weapon_presets.attacks;
 
 import com.mojang.datafixers.util.Pair;
 import net.forixaim.efm_ex.capabilities.CoreCapability;
-import net.forixaim.efm_ex.capabilities.MoveSet;
 import net.forixaim.efm_ex.capabilities.weaponcaps.EXWeaponCapability;
 import net.forixaim.efm_ex.capabilities.weapon_presets.types.DaggerType;
 import yesman.epicfight.api.animation.LivingMotions;
@@ -17,32 +16,11 @@ public class DaggerAttacks
 {
 	public static void injectAttacks()
 	{
-		DaggerType.getInstance().getAttackSets().add(DaggerAttacks.OneHandedMoveset);
-		DaggerType.getInstance().getAttackSets().add(DaggerAttacks.DualWieldedMoveset);
-		DaggerType.getInstance().getAttackSets().add(MountedAttacks.SwordMountMoveset);
+		DaggerType.getInstance().getAttackCombinationRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add(CapabilityItem.Styles.ONE_HAND, DaggerAttacks.defaultOneHandAttackCycle));
+		DaggerType.getInstance().getAttackCombinationRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add(CapabilityItem.Styles.TWO_HAND, DaggerAttacks.defaultTwoHandAttackCycle));
+		DaggerType.getInstance().getAttackCombinationRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add(CapabilityItem.Styles.MOUNT, MountedAttacks.mountedSwordAttack));
 
 	}
-
-	public static final MoveSet OneHandedMoveset = MoveSet.createMoveSet(CapabilityItem.Styles.ONE_HAND)
-			.addLMM(LivingMotions.BLOCK, Animations.SWORD_GUARD)
-			.addAttackAnimation
-					(Animations.DAGGER_AUTO1, Animations.DAGGER_AUTO2, Animations.DAGGER_AUTO3, Animations.DAGGER_DASH, Animations.DAGGER_AIR_SLASH)
-			.innateSkill(itemStack -> EpicFightSkills.EVISCERATE);
-
-	public static final MoveSet DualWieldedMoveset = MoveSet.createMoveSet(CapabilityItem.Styles.TWO_HAND)
-			.addLMM(LivingMotions.BLOCK, Animations.SWORD_DUAL_GUARD)
-			.addLMM(LivingMotions.RUN, Animations.BIPED_RUN_DUAL)
-			.addLMMRecursive(Animations.BIPED_HOLD_DUAL_WEAPON,
-					LivingMotions.IDLE,
-					LivingMotions.WALK,
-					LivingMotions.CHASE,
-					LivingMotions.KNEEL,
-					LivingMotions.SNEAK,
-					LivingMotions.SWIM,
-					LivingMotions.FLOAT,
-					LivingMotions.FALL)
-			.addAttackAnimation(Animations.DAGGER_DUAL_AUTO1, Animations.DAGGER_DUAL_AUTO2, Animations.DAGGER_DUAL_AUTO3, Animations.DAGGER_DUAL_AUTO4, Animations.DAGGER_DUAL_DASH, Animations.DAGGER_DUAL_AIR_SLASH)
-			.innateSkill(itemStack -> EpicFightSkills.BLADE_RUSH);
 
 	public static final Function<Pair<Style, EXWeaponCapability.Builder>, EXWeaponCapability.Builder> defaultOneHandAttackCycle = (main) ->
 	{

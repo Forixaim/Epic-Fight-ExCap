@@ -2,7 +2,6 @@ package net.forixaim.efm_ex.capabilities.weapon_presets.attacks;
 
 import com.mojang.datafixers.util.Pair;
 import net.forixaim.efm_ex.capabilities.CoreCapability;
-import net.forixaim.efm_ex.capabilities.MoveSet;
 import net.forixaim.efm_ex.capabilities.weaponcaps.EXWeaponCapability;
 import net.forixaim.efm_ex.capabilities.weapon_presets.types.SwordType;
 import yesman.epicfight.api.animation.LivingMotions;
@@ -17,40 +16,10 @@ public class SwordAttacks
 {
 	public static void injectAttacks()
 	{
-		SwordType.getInstance().getAttackSets().add(OneHandedMoveset);
-		SwordType.getInstance().getAttackSets().add(DualWieldedMoveset);
-		SwordType.getInstance().getAttackSets().add(MountedAttacks.SwordMountMoveset);
+		SwordType.getInstance().getAttackCombinationRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add(CapabilityItem.Styles.ONE_HAND, SwordAttacks.defaultOneHandAttackCycle));
+		SwordType.getInstance().getAttackCombinationRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add(CapabilityItem.Styles.TWO_HAND, SwordAttacks.defaultTwoHandAttackCycle));
+		SwordType.getInstance().getAttackCombinationRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add(CapabilityItem.Styles.MOUNT, MountedAttacks.mountedSwordAttack));
 	}
-
-	public static final MoveSet OneHandedMoveset = MoveSet.createMoveSet(CapabilityItem.Styles.ONE_HAND)
-			.addLMM(LivingMotions.BLOCK, Animations.SWORD_GUARD)
-			.addAttackAnimation(Animations.SWORD_AUTO1,
-					Animations.SWORD_AUTO2,
-					Animations.SWORD_AUTO3,
-					Animations.SWORD_DASH,
-					Animations.SWORD_AIR_SLASH)
-			.innateSkill(itemStack -> EpicFightSkills.SWEEPING_EDGE);
-
-
-
-	public static final MoveSet DualWieldedMoveset = MoveSet.createMoveSet(CapabilityItem.Styles.TWO_HAND)
-			.addLMM(LivingMotions.BLOCK, Animations.SWORD_DUAL_GUARD)
-			.addLMM(LivingMotions.RUN, Animations.BIPED_RUN_DUAL)
-			.addLMMRecursive(Animations.BIPED_HOLD_DUAL_WEAPON,
-					LivingMotions.IDLE,
-					LivingMotions.WALK,
-					LivingMotions.CHASE,
-					LivingMotions.KNEEL,
-					LivingMotions.SNEAK,
-					LivingMotions.SWIM,
-					LivingMotions.FLOAT,
-					LivingMotions.FALL)
-			.addAttackAnimation(Animations.SWORD_AUTO1,
-					Animations.SWORD_AUTO2,
-					Animations.SWORD_AUTO3,
-					Animations.SWORD_DASH,
-					Animations.SWORD_AIR_SLASH)
-			.innateSkill(itemStack -> EpicFightSkills.DANCING_EDGE);
 
 	public static final Function<Pair<Style, EXWeaponCapability.Builder>, EXWeaponCapability.Builder> defaultOneHandAttackCycle = (main) ->
 	{

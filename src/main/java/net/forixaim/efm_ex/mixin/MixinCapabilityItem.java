@@ -6,7 +6,6 @@ import net.forixaim.efm_ex.capabilities.weaponcaps.EXWeaponCapability;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,11 +27,9 @@ import java.util.List;
 @Mixin(CapabilityItem.class)
 public abstract class MixinCapabilityItem
 {
-	@Shadow public abstract Style getStyle(LivingEntityPatch<?> entitypatch);
-
 	@Unique public CapabilityItem epicFight_EXCapability$inst = (CapabilityItem) (Object) this;
 
-	@Unique private FistType fistType = FistType.getInstance();
+	@Unique private FistType exCap$coreInject = FistType.getInstance();
 
 	@Inject(method = "changeWeaponInnateSkill", at = @At("RETURN"), remap = false)
 	public void changeInnate(PlayerPatch<?> playerpatch, ItemStack itemstack, CallbackInfo ci)
@@ -59,14 +56,14 @@ public abstract class MixinCapabilityItem
 	{
 		if (entityPatch instanceof PlayerPatch)
 		{
-			cir.setReturnValue(fistType.export().build().getStyle(entityPatch));
+			cir.setReturnValue(exCap$coreInject.export().build().getStyle(entityPatch));
 		}
 	}
 
 	@Inject(method = "getAutoAttckMotion", at = @At("HEAD"), remap = false, cancellable = true)
 	public void getAutoAttackMotion(PlayerPatch<?> patch, CallbackInfoReturnable<List<AnimationProvider<?>>> cir)
 	{
-		cir.setReturnValue(fistType.mapSets().get(getStyle(patch)).exportAttackMotions());
+		cir.setReturnValue(exCap$coreInject.export().build().getAutoAttckMotion(patch));
 	}
 
 
