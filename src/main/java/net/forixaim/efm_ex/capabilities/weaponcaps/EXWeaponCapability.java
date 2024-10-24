@@ -27,8 +27,6 @@ import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCapability;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -226,12 +224,6 @@ public class EXWeaponCapability extends WeaponCapability
 		public void createStyleCategory(Style style, Function<Pair<Style, Builder>, Builder> weaponCombo)
 		{
 			weaponCombo.apply(new Pair<>(style, this));
-		}
-
-		public Builder offHandUse(Boolean use)
-		{
-			this.canBePlacedOffhand(use);
-			return this;
 		}
 	}
 }
