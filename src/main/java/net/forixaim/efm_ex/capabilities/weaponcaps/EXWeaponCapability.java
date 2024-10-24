@@ -7,6 +7,7 @@ import com.mojang.datafixers.util.Pair;
 import io.redspace.ironsspellbooks.api.spells.CastType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
@@ -29,6 +30,7 @@ import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -39,14 +41,33 @@ public class EXWeaponCapability extends WeaponCapability
 	protected final Function<LivingEntityPatch<?>, Skill> passiveSkillProvider;
 	protected final Map<Style, List<Pair<CastType, AnimationProvider<?>>>> chantAnimations;
 	protected final Map<Style, List<Pair<CastType, AnimationProvider<?>>>> castAnimations;
+	protected final Map<Style, Map<LivingMotion, AnimationProvider<?>>> battleModeAnimations;
 
 	protected EXWeaponCapability(CapabilityItem.Builder builder)
 	{
 		super(builder);
 		Builder efbsBuilder = (Builder) builder;
+		this.battleModeAnimations = efbsBuilder.battleModeAnimations;
 		this.passiveSkillProvider = efbsBuilder.passiveSkillProvider;
 		this.castAnimations = efbsBuilder.castAnimations;
 		this.chantAnimations = efbsBuilder.chantAnimations;
+	}
+
+	@Override
+	public Map<LivingMotion, AnimationProvider<?>> getLivingMotionModifier(LivingEntityPatch<?> player, InteractionHand hand)
+	{
+		if (this.battleModeAnimations != null && !this.battleModeAnimations.isEmpty())
+		{
+			if (player instanceof PlayerPatch<?> playerPatch && playerPatch.isBattleMode())
+			{
+				Map<LivingMotion, AnimationProvider<?>> motions = this.battleModeAnimations.getOrDefault(this.getStyle(player), Maps.newHashMap());
+				Map<LivingMotion, AnimationProvider<?>> commonMotions = this.battleModeAnimations.getOrDefault(Styles.COMMON, Maps.newHashMap());
+				Objects.requireNonNull(motions);
+				commonMotions.forEach(motions::putIfAbsent);
+				return motions;
+			}
+		}
+		return super.getLivingMotionModifier(player, hand);
 	}
 
 	public Map<Style, List<Pair<CastType, AnimationProvider<?>>>> getCastAnimations()
@@ -107,13 +128,13 @@ public class EXWeaponCapability extends WeaponCapability
 		Function<LivingEntityPatch<?>, Skill> passiveSkillProvider;
 		protected final Map<Style, List<Pair<CastType, AnimationProvider<?>>>> castAnimations;
 		protected final Map<Style, List<Pair<CastType, AnimationProvider<?>>>> chantAnimations;
-
-
+		protected Map<Style, Map<LivingMotion, AnimationProvider<?>>> battleModeAnimations;
 
 		protected Builder()
 		{
 			super();
 			this.constructor(EXWeaponCapability::new);
+			battleModeAnimations = Maps.newHashMap();
 			castAnimations = Maps.newHashMap();
 			chantAnimations = Maps.newHashMap();
 		}
@@ -129,6 +150,19 @@ public class EXWeaponCapability extends WeaponCapability
 		public final Builder chantAnimations(Style style, Pair<CastType, AnimationProvider<?>>... castAnims)
 		{
 			castAnimations.put(style, Lists.newArrayList(castAnims));
+			return this;
+		}
+
+		public Builder battleMotionModifier(Style wieldStyle, LivingMotion livingMotion, StaticAnimation animation) {
+			if (this.battleModeAnimations == null) {
+				this.battleModeAnimations = Maps.newHashMap();
+			}
+
+			if (!this.battleModeAnimations.containsKey(wieldStyle)) {
+				this.battleModeAnimations.put(wieldStyle, Maps.newHashMap());
+			}
+
+			this.battleModeAnimations.get(wieldStyle).put(livingMotion, animation);
 			return this;
 		}
 
