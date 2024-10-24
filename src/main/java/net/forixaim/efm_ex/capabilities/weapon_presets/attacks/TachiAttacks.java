@@ -2,6 +2,7 @@ package net.forixaim.efm_ex.capabilities.weapon_presets.attacks;
 
 import com.mojang.datafixers.util.Pair;
 import net.forixaim.efm_ex.capabilities.CoreCapability;
+import net.forixaim.efm_ex.capabilities.MoveSet;
 import net.forixaim.efm_ex.capabilities.weaponcaps.EXWeaponCapability;
 import net.forixaim.efm_ex.capabilities.weapon_presets.types.TachiType;
 import yesman.epicfight.api.animation.LivingMotions;
@@ -15,10 +16,31 @@ public class TachiAttacks
 {
 	public static void injectAttacks()
 	{
-		TachiType.getInstance().getAttackCombinationRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add(CapabilityItem.Styles.TWO_HAND, TachiAttacks.defaultTwoHandAttackCycle));
-		TachiType.getInstance().getAttackCombinationRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add(CapabilityItem.Styles.MOUNT, MountedAttacks.mountedSwordAttack));
+		TachiType.getInstance().getAttackSets().add(tachiTwoHandedAttacks);
+		TachiType.getInstance().getAttackSets().add(MountedAttacks.SwordMountMoveset);
 
 	}
+
+	public static final MoveSet tachiTwoHandedAttacks = MoveSet.createMoveSet(CapabilityItem.Styles.TWO_HAND)
+			.addLMMRecursive(Animations.BIPED_HOLD_TACHI,
+					LivingMotions.IDLE,
+					LivingMotions.KNEEL,
+					LivingMotions.WALK,
+					LivingMotions.RUN,
+					LivingMotions.SNEAK,
+					LivingMotions.CHASE,
+					LivingMotions.SWIM,
+					LivingMotions.FLOAT,
+					LivingMotions.FALL)
+			.addLMM(LivingMotions.BLOCK, Animations.LONGSWORD_GUARD)
+			.addAttackAnimation(
+					Animations.TACHI_AUTO1,
+					Animations.TACHI_AUTO2,
+					Animations.TACHI_AUTO3,
+					Animations.TACHI_DASH,
+					Animations.LONGSWORD_AIR_SLASH
+			)
+			.innateSkill(itemStack -> EpicFightSkills.RUSHING_TEMPO);
 
 	public static Function<Pair<Style, EXWeaponCapability.Builder>,EXWeaponCapability.Builder> defaultTwoHandAttackCycle = (main) ->
 	{

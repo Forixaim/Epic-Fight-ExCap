@@ -16,10 +16,8 @@ public class CapabilityRegistry
 {
 	public static final Function<Item, CapabilityItem.Builder> BOKKEN = (item ->
 			BokkenType.getInstance().export());
-
 	public static final Function<Item, CapabilityItem.Builder> SWORD = (item ->
 			SwordType.getInstance().export());
-
 	public static final Function<Item, CapabilityItem.Builder> LONGSWORD = (item ->
 			LongswordType.getInstance().export());
 	public static final Function<Item, CapabilityItem.Builder> GREATSWORD = (item ->

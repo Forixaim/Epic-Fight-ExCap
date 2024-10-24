@@ -5,11 +5,14 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 import io.redspace.ironsspellbooks.api.spells.CastType;
+import net.forixaim.efm_ex.capabilities.MoveSet;
+import net.forixaim.efm_ex.util.ListSizeMismatchException;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
+import org.antlr.runtime.MismatchedRangeException;
 import yesman.epicfight.api.animation.AnimationProvider;
 import yesman.epicfight.api.animation.LivingMotion;
 import yesman.epicfight.api.animation.types.StaticAnimation;
@@ -27,6 +30,7 @@ import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCapability;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -224,6 +228,24 @@ public class EXWeaponCapability extends WeaponCapability
 		public void createStyleCategory(Style style, Function<Pair<Style, Builder>,Pair<Builder, Pair<List<AnimationProvider<?>>, Map<Style, Map<LivingMotion, AnimationProvider<?>>>>>> weaponCombo)
 		{
 			weaponCombo.apply(new Pair<>(style, this));
+		}
+
+		public void createMoveSet(MoveSet moveSet)
+		{
+			StaticAnimation[] animations = new StaticAnimation[moveSet.getAttackAnimations().size()];
+			for (int i = 0; i < animations.length; i++)
+			{
+				animations[i] = moveSet.getAttackAnimations().get(i);
+			}
+			//Add all living motion modifiers
+			List<LivingMotion> livingMotions = Lists.newArrayList(moveSet.getLivingMotionModifiers().keySet());
+			List<StaticAnimation> motionModifiers = Lists.newArrayList(moveSet.getLivingMotionModifiers().values());
+			super.newStyleCombo(moveSet.getWieldStyle(), animations);
+			for (int i = 0; i < livingMotions.size(); i++)
+			{
+				super.livingMotionModifier(moveSet.getWieldStyle(), livingMotions.get(i), motionModifiers.get(i));
+			}
+			super.innateSkill(moveSet.getWieldStyle(), moveSet.getWeaponInnateSkill());
 		}
 	}
 }

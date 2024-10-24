@@ -16,7 +16,6 @@ public class WeaponModificationRegistry
 		BokkenAttacks.injectAttacks();
 		SwordAttacks.injectAttacks();
 		LongswordAttacks.injectAttacks();
-		GreatswordAttacks.injectAttacks();
 		SpearAttacks.injectAttacks();
 		DaggerAttacks.injectAttacks();
 		TachiAttacks.injectAttacks();
