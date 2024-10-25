@@ -1,11 +1,3 @@
 {
-	"attributes":
-	{
-		"common":
-		{
-			"impact":2.3,
-			"max_strikes":2
-		}
-	},
 	"type": "efm_ex:tachi"
 }

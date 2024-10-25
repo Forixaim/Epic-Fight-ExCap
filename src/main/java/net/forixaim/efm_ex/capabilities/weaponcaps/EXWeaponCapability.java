@@ -42,11 +42,13 @@ public class EXWeaponCapability extends WeaponCapability
 	protected final Map<Style, List<Pair<CastType, AnimationProvider<?>>>> chantAnimations;
 	protected final Map<Style, List<Pair<CastType, AnimationProvider<?>>>> castAnimations;
 	protected final Map<Style, Map<LivingMotion, AnimationProvider<?>>> battleModeAnimations;
+	protected final Map<Style, AnimationProvider<?>> battleTransitionAnimations;
 
 	protected EXWeaponCapability(CapabilityItem.Builder builder)
 	{
 		super(builder);
 		Builder efbsBuilder = (Builder) builder;
+		this.battleTransitionAnimations = efbsBuilder.battleTransitionAnimations;
 		this.battleModeAnimations = efbsBuilder.battleModeAnimations;
 		this.passiveSkillProvider = efbsBuilder.passiveSkillProvider;
 		this.castAnimations = efbsBuilder.castAnimations;
@@ -68,6 +70,11 @@ public class EXWeaponCapability extends WeaponCapability
 			}
 		}
 		return super.getLivingMotionModifier(player, hand);
+	}
+
+	public Map<Style, AnimationProvider<?>> getBattleTransitionAnimations()
+	{
+		return battleTransitionAnimations;
 	}
 
 	public Map<Style, List<Pair<CastType, AnimationProvider<?>>>> getCastAnimations()
@@ -129,12 +136,14 @@ public class EXWeaponCapability extends WeaponCapability
 		protected final Map<Style, List<Pair<CastType, AnimationProvider<?>>>> castAnimations;
 		protected final Map<Style, List<Pair<CastType, AnimationProvider<?>>>> chantAnimations;
 		protected Map<Style, Map<LivingMotion, AnimationProvider<?>>> battleModeAnimations;
+		protected final Map<Style, AnimationProvider<?>> battleTransitionAnimations;
 
 		protected Builder()
 		{
 			super();
 			this.constructor(EXWeaponCapability::new);
 			battleModeAnimations = Maps.newHashMap();
+			battleTransitionAnimations = Maps.newHashMap();
 			castAnimations = Maps.newHashMap();
 			chantAnimations = Maps.newHashMap();
 		}
@@ -143,6 +152,12 @@ public class EXWeaponCapability extends WeaponCapability
 		public final Builder castAnimations(Style style, Pair<CastType, AnimationProvider<?>>... castAnims)
 		{
 			castAnimations.put(style, Lists.newArrayList(castAnims));
+			return this;
+		}
+
+		public Builder addTransitionAnimation(Style wieldStyle, StaticAnimation transitionAnimations)
+		{
+			battleTransitionAnimations.put(wieldStyle, transitionAnimations);
 			return this;
 		}
 

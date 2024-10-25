@@ -1,11 +1,3 @@
 {
-  "attributes":
-  {
-    "common":
-    {
-      "impact":3.6,
-      "max_strikes":4
-    }
-  },
   "type":"efm_ex:greatsword"
 }
