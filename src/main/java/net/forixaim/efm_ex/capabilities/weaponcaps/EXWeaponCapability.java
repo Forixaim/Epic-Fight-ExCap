@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * A custom implementation of the original WeaponCapability class with a focus on modularity with a conditional passive skill provider.
@@ -39,8 +40,8 @@ import java.util.function.Function;
 public class EXWeaponCapability extends WeaponCapability
 {
 	protected final Function<LivingEntityPatch<?>, Skill> passiveSkillProvider;
-	protected final Map<Style, List<Pair<CastType, AnimationProvider<?>>>> chantAnimations;
-	protected final Map<Style, List<Pair<CastType, AnimationProvider<?>>>> castAnimations;
+	protected final Map<Style, Map<Object, AnimationProvider<?>>> chantAnimations;
+	protected final Map<Style, Map<Object, AnimationProvider<?>>> castAnimations;
 	protected final Map<Style, Map<LivingMotion, AnimationProvider<?>>> battleModeAnimations;
 	protected final Map<Style, AnimationProvider<?>> battleTransitionAnimations;
 
@@ -77,12 +78,12 @@ public class EXWeaponCapability extends WeaponCapability
 		return battleTransitionAnimations;
 	}
 
-	public Map<Style, List<Pair<CastType, AnimationProvider<?>>>> getCastAnimations()
+	public Map<Style, Map<Object, AnimationProvider<?>>>  getCastAnimations()
 	{
 		return castAnimations;
 	}
 
-	public Map<Style, List<Pair<CastType, AnimationProvider<?>>>> getChantAnimations()
+	public Map<Style, Map<Object, AnimationProvider<?>>>  getChantAnimations()
 	{
 		return chantAnimations;
 	}
@@ -132,9 +133,10 @@ public class EXWeaponCapability extends WeaponCapability
 	 */
 	public static class Builder extends WeaponCapability.Builder
 	{
-		Function<LivingEntityPatch<?>, Skill> passiveSkillProvider;
-		protected final Map<Style, List<Pair<CastType, AnimationProvider<?>>>> castAnimations;
-		protected final Map<Style, List<Pair<CastType, AnimationProvider<?>>>> chantAnimations;
+		protected Function<LivingEntityPatch<?>, Skill> passiveSkillProvider;
+		//The Object parameter is to be cast into CastType class
+		protected final Map<Style, Map<Object, AnimationProvider<?>>>  castAnimations;
+		protected final Map<Style, Map<Object, AnimationProvider<?>>>  chantAnimations;
 		protected Map<Style, Map<LivingMotion, AnimationProvider<?>>> battleModeAnimations;
 		protected final Map<Style, AnimationProvider<?>> battleTransitionAnimations;
 
@@ -148,36 +150,23 @@ public class EXWeaponCapability extends WeaponCapability
 			chantAnimations = Maps.newHashMap();
 		}
 
-		@SafeVarargs
-		public final Builder castAnimations(Style style, Pair<CastType, AnimationProvider<?>>... castAnims)
+		/**
+		 *
+		 * @param style
+		 * @param castType must be a CastType class which will be cast into the respective class when onSpellCast.
+		 * @param provider
+		 * @return
+		 */
+		public Builder addCastAnimation(Style style, Object castType, AnimationProvider<?> provider)
 		{
-			castAnimations.put(style, Lists.newArrayList(castAnims));
+			castAnimations.computeIfAbsent(style, k -> Maps.newHashMap());
+			castAnimations.get(style).put(castType, provider);
 			return this;
 		}
 
 		public Builder addTransitionAnimation(Style wieldStyle, StaticAnimation transitionAnimations)
 		{
 			battleTransitionAnimations.put(wieldStyle, transitionAnimations);
-			return this;
-		}
-
-		@SafeVarargs
-		public final Builder chantAnimations(Style style, Pair<CastType, AnimationProvider<?>>... castAnims)
-		{
-			castAnimations.put(style, Lists.newArrayList(castAnims));
-			return this;
-		}
-
-		public Builder battleMotionModifier(Style wieldStyle, LivingMotion livingMotion, StaticAnimation animation) {
-			if (this.battleModeAnimations == null) {
-				this.battleModeAnimations = Maps.newHashMap();
-			}
-
-			if (!this.battleModeAnimations.containsKey(wieldStyle)) {
-				this.battleModeAnimations.put(wieldStyle, Maps.newHashMap());
-			}
-
-			this.battleModeAnimations.get(wieldStyle).put(livingMotion, animation);
 			return this;
 		}
 
