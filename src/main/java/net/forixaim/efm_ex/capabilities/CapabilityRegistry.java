@@ -31,6 +31,9 @@ public class CapabilityRegistry
 	public static final Function<Item, CapabilityItem.Builder> DAGGER = (item ->
 			DaggerType.getInstance().export());
 
+	public static final Function<Item, CapabilityItem.Builder> SPELL= (item ->
+			MNASpellType.getInstance().export());
+
 	@SubscribeEvent
 	public static void Register(WeaponCapabilityPresetRegistryEvent Event)
 	{

@@ -2,32 +2,40 @@ package net.forixaim.efm_ex;
 
 import com.google.common.collect.Maps;
 import com.mna.api.events.SpellCastEvent;
-import com.mna.spells.shapes.ShapeBeam;
+import io.redspace.ironsspellbooks.IronsSpellbooks;
 import io.redspace.ironsspellbooks.api.events.SpellOnCastEvent;
 import io.redspace.ironsspellbooks.api.registry.SpellRegistry;
 import io.redspace.ironsspellbooks.api.spells.AbstractSpell;
 import io.redspace.ironsspellbooks.api.spells.CastType;
 import net.forixaim.efm_ex.capabilities.weaponcaps.EXWeaponCapability;
+import net.forixaim.efm_ex.capabilities.weaponcaps.compat.EXSpellCapability;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import yesman.epicfight.api.animation.AnimationProvider;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
+import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 
 import java.util.Map;
 
 public class MagicEvents
 {
-	public static Map<CastType, AnimationProvider<?>> castMap(Map<Object, AnimationProvider<?>> entry)
+
+	private static Map<CastType, AnimationProvider<?>> castMap(Map<Object, AnimationProvider<?>> entry)
 	{
-		Map<CastType, AnimationProvider<?>> castMap = Maps.newHashMap();
-		for (Object castType : entry.keySet())
+		if (ModList.get().isLoaded(IronsSpellbooks.MODID))
 		{
-			if (castType instanceof CastType ct)
-				castMap.put(ct, entry.get(castType));
+			Map<CastType, AnimationProvider<?>> castMap = Maps.newHashMap();
+			for (Object castType : entry.keySet())
+			{
+				if (castType instanceof CastType ct)
+					castMap.put(ct, entry.get(castType));
+			}
+			return castMap;
 		}
-		return castMap;
+		return null;
 	}
 
 	@SubscribeEvent
@@ -52,6 +60,14 @@ public class MagicEvents
 	@SubscribeEvent
 	public static void onMNACastEvent(SpellCastEvent event)
 	{
+		LivingEntityPatch<?> entityPatch = EpicFightCapabilities.getEntityPatch(event.getSource().getCaster(), LivingEntityPatch.class);
+		if (entityPatch instanceof ServerPlayerPatch playerPatch)
+		{
+			if (playerPatch.getHoldingItemCapability(InteractionHand.MAIN_HAND) instanceof EXSpellCapability eswc)
+			{
+
+			}
+		}
 
 	}
 

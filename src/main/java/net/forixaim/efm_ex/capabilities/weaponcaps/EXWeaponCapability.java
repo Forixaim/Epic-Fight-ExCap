@@ -4,6 +4,7 @@ package net.forixaim.efm_ex.capabilities.weaponcaps;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
+import io.redspace.ironsspellbooks.IronsSpellbooks;
 import io.redspace.ironsspellbooks.api.spells.CastType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -11,6 +12,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.fml.ModList;
 import yesman.epicfight.api.animation.AnimationProvider;
 import yesman.epicfight.api.animation.LivingMotion;
 import yesman.epicfight.api.animation.types.StaticAnimation;
@@ -160,7 +162,10 @@ public class EXWeaponCapability extends WeaponCapability
 		public Builder addCastAnimation(Style style, Object castType, AnimationProvider<?> provider)
 		{
 			castAnimations.computeIfAbsent(style, k -> Maps.newHashMap());
-			castAnimations.get(style).put(castType, provider);
+			if (ModList.get().isLoaded(IronsSpellbooks.MODID))
+			{
+				castAnimations.get(style).put(castType, provider);
+			}
 			return this;
 		}
 

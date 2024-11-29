@@ -19,9 +19,9 @@ public class CoreCapability
 	protected final List<ProviderConditional> styleComboProviderRegistry = new ArrayList<>();
 	protected final List<Pair<Style, Function<Pair<Style, EXWeaponCapability.Builder>, EXWeaponCapability.Builder>>> attackCombinationRegistry = new ArrayList<>();
 	protected final CoreWeaponCapabilityProvider provider = new CoreWeaponCapabilityProvider();
-	protected final EXWeaponCapability.Builder builder = EXWeaponCapability.builder();
+	protected EXWeaponCapability.Builder builder = EXWeaponCapability.builder();
 
-	private void registerAttackCombo()
+	protected void registerAttackCombo()
 	{
 		for (Pair<Style, Function<Pair<Style, EXWeaponCapability.Builder>, EXWeaponCapability.Builder>> weaponCombo : attackCombinationRegistry)
 		{
@@ -29,7 +29,7 @@ public class CoreCapability
 		}
 	}
 
-	private void registerProviderConditionals()
+	protected void registerProviderConditionals()
 	{
 		for (ProviderConditional conditional : styleComboProviderRegistry)
 		{

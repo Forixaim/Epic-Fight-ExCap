@@ -1,14 +1,10 @@
 package net.forixaim.efm_ex.capabilities.weaponcaps.compat;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mna.api.spells.parts.Shape;
-import com.mna.items.sorcery.ItemSpellBook;
 import com.mojang.datafixers.util.Pair;
-import io.redspace.ironsspellbooks.api.spells.CastType;
 import net.forixaim.efm_ex.capabilities.weaponcaps.EXWeaponCapability;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
@@ -19,7 +15,6 @@ import yesman.epicfight.api.collider.Collider;
 import yesman.epicfight.particle.HitParticleType;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
-import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
@@ -27,22 +22,36 @@ import yesman.epicfight.world.capabilities.item.WeaponCategory;
 import java.util.Map;
 import java.util.function.Function;
 
-public class EXSpellbookWeaponCapability extends EXWeaponCapability
+public class EXSpellCapability extends EXWeaponCapability
 {
-	private Map<Shape, AnimationProvider<?>> castAnimation;
+	private Map<Shape, AnimationProvider<?>> castAnimations;
 	
-	protected EXSpellbookWeaponCapability(CapabilityItem.Builder builder)
+	protected EXSpellCapability(CapabilityItem.Builder builder)
 	{
 		super(builder);
+		castAnimations = ((Builder)builder).castAnimations;
 	}
 
-	public Map<Shape, AnimationProvider<?>> getCastAnimation(LivingEntityPatch<?> entityPatch)
+	public Map<Shape, AnimationProvider<?>> getCastAnimations(LivingEntityPatch<?> entityPatch)
 	{
-		return castAnimation;
+		return castAnimations;
+	}
+
+	public static Builder builder() {
+		return new Builder();
 	}
 	
 	public static class Builder extends EXWeaponCapability.Builder
 	{
+		protected final Map<Shape, AnimationProvider<?>> castAnimations;
+
+		public Builder()
+		{
+			super();
+			constructor(EXSpellCapability::new);
+			castAnimations = Maps.newHashMap();
+		}
+
 		public Builder addTransitionAnimation(Style wieldStyle, StaticAnimation transitionAnimations)
 		{
 			battleTransitionAnimations.put(wieldStyle, transitionAnimations);
@@ -62,6 +71,20 @@ public class EXSpellbookWeaponCapability extends EXWeaponCapability
 			return this;
 		}
 
+		public Builder addMNACastAnim(Style style, Shape shape, AnimationProvider<?> animation)
+		{
+			if (!castAnimations.containsKey(shape))
+			{
+				castAnimations.put(shape, animation);
+			}
+			return this;
+		}
+
+		public Builder addMNACastAnimations(Style style, Function<Pair<Style, EXSpellCapability.Builder>, EXSpellCapability.Builder> castAnimations)
+		{
+			return castAnimations.apply(Pair.of(style, this));
+		}
+		@Override
 		public Builder initialSetup(WeaponCategory category, SoundEvent swingSound, SoundEvent hitSound)
 		{
 			this.category(category);
@@ -70,6 +93,7 @@ public class EXSpellbookWeaponCapability extends EXWeaponCapability
 			return this;
 		}
 
+		@Override
 		public Builder passiveProvider(Function<LivingEntityPatch<?>, Skill> passiveSkillProvider)
 		{
 			this.passiveSkillProvider = passiveSkillProvider;
