@@ -56,10 +56,6 @@ public class MNASpellType extends CoreCapability
 				.passiveProvider(provider.exportWeaponPassiveSkill())
 				.weaponCombinationPredicator(provider.exportCombination())
 				.styleProvider(provider.exportStyle());
-		if (builder instanceof EXSpellCapability.Builder spellBuilder)
-		{
-
-		}
 	}
 
 	@Override

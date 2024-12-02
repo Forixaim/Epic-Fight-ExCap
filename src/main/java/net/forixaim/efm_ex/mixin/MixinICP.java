@@ -20,9 +20,9 @@ import java.util.function.Function;
 @Mixin(value = ItemCapabilityProvider.class)
 public abstract class MixinICP
 {
-	@Shadow @Final private static Map<Class<? extends Item>, Function<Item, CapabilityItem.Builder>> CAPABILITY_BY_CLASS;
+	@Shadow(remap = false) @Final private static Map<Class<? extends Item>, Function<Item, CapabilityItem.Builder>> CAPABILITY_BY_CLASS;
 
-	@Inject(method = "registerWeaponTypesByClass", at = @At("RETURN"))
+	@Inject(method = "registerWeaponTypesByClass", at = @At("RETURN"), remap = false)
 	private static void injectWeapons(CallbackInfo ci)
 	{
 		if (ModList.get().isLoaded(ManaAndArtificeMod.ID))

@@ -20,5 +20,6 @@ public class WeaponModificationRegistry
 		SpearAttacks.injectAttacks();
 		DaggerAttacks.injectAttacks();
 		TachiAttacks.injectAttacks();
+		MNASpellAttacks.Inject();
 	}
 }

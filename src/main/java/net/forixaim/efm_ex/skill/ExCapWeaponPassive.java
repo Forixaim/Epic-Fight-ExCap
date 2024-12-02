@@ -49,7 +49,7 @@ public class ExCapWeaponPassive extends Skill
 					}
 					if (!battleStyle.getWeaponDrawAnimations().isEmpty())
 					{
-						for (Pair<WeaponCategory, AnimationProvider<StaticAnimation>> animationProviderPair : battleStyle.getWeaponDrawAnimations())
+						for (Pair<WeaponCategory, AnimationProvider<?>> animationProviderPair : battleStyle.getWeaponDrawAnimations())
 						{
 							if (container.getExecuter().getHoldingItemCapability(InteractionHand.MAIN_HAND).getWeaponCategory() == animationProviderPair.getFirst())
 							{
