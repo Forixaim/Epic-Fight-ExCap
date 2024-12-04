@@ -13,6 +13,7 @@ public class WeaponModificationRegistry
 	@SubscribeEvent
 	public static void RegisterWeaponCapabilityModification(FMLCommonSetupEvent event)
 	{
+		AxeAttacks.injectAttacks();
 		BokkenAttacks.injectAttacks();
 		SwordAttacks.injectAttacks();
 		LongswordAttacks.injectAttacks();
@@ -21,5 +22,6 @@ public class WeaponModificationRegistry
 		DaggerAttacks.injectAttacks();
 		TachiAttacks.injectAttacks();
 		MNASpellAttacks.Inject();
+		BowAttacks.Inject();
 	}
 }

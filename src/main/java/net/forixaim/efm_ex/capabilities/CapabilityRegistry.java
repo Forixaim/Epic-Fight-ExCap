@@ -14,6 +14,9 @@ import java.util.function.Function;
 @Mod.EventBusSubscriber(modid = EpicFightEXCapability.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CapabilityRegistry
 {
+	public static final Function<Item, CapabilityItem.Builder> AXE = (item ->
+			AxeType.getInstance().export());
+
 	public static final Function<Item, CapabilityItem.Builder> BOKKEN = (item ->
 			BokkenType.getInstance().export());
 
@@ -34,6 +37,9 @@ public class CapabilityRegistry
 	public static final Function<Item, CapabilityItem.Builder> SPELL= (item ->
 			MNASpellType.getInstance().export());
 
+	public static final Function<Item, CapabilityItem.Builder> BOW = (item ->
+			BowType.getInstance().export());
+
 	@SubscribeEvent
 	public static void Register(WeaponCapabilityPresetRegistryEvent Event)
 	{
@@ -44,6 +50,9 @@ public class CapabilityRegistry
 		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "tachi"), TACHI);
 		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "dagger"), DAGGER);
 		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "spear"), SPEAR);
+		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "spell"), SPELL);
+		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "bow"), BOW);
+		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "axe"), AXE);
 
 	}
 }
