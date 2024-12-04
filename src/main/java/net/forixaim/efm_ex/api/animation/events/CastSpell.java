@@ -20,16 +20,15 @@ import java.util.List;
 
 public class CastSpell
 {
-	private static final List<Shape> ALLOWED_SHAPES = Lists.newArrayList(
-			Shapes.BOLT,
-			Shapes.TOUCH,
-			Shapes.PROJECTILE,
-			Shapes.WAVE
-	);
-
 	public static final AnimationEvent.AnimationEventConsumer castMNASpell = ((livingEntityPatch, staticAnimation, objects) -> {
 		if (ModList.get().isLoaded(ManaAndArtificeMod.ID))
 		{
+			final List<Shape> ALLOWED_SHAPES = Lists.newArrayList(
+					Shapes.BOLT,
+					Shapes.TOUCH,
+					Shapes.PROJECTILE,
+					Shapes.WAVE
+			);
 			ItemStack item = livingEntityPatch.getOriginal().getItemInHand(InteractionHand.MAIN_HAND);
 			if (livingEntityPatch instanceof ServerPlayerPatch playerPatch && livingEntityPatch.getOriginal().getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof ItemSpell spell)
 			{
