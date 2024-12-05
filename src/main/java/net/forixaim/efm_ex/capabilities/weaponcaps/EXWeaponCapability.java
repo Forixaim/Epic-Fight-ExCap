@@ -47,7 +47,7 @@ public class EXWeaponCapability extends WeaponCapability
 	protected final Map<Style, Map<Object, AnimationProvider<?>>> castAnimations;
 	protected final Map<Style, Map<LivingMotion, AnimationProvider<?>>> battleModeAnimations;
 	protected final Map<Style, AnimationProvider<?>> battleTransitionAnimations;
-	protected final Map<Style, Map<GuardSkill, Map<GuardSkill.BlockType, AnimationProvider<?>>>> guardAnimations;
+	protected final Map<Style, Map<GuardSkill, Map<GuardSkill.BlockType, List<AnimationProvider<?>>>>> guardAnimations;
 
 	protected EXWeaponCapability(CapabilityItem.Builder builder)
 	{
@@ -125,6 +125,21 @@ public class EXWeaponCapability extends WeaponCapability
 		}
 	}
 
+	@Override
+	public StaticAnimation getGuardMotion(GuardSkill skill, GuardSkill.BlockType blockType, PlayerPatch<?> playerpatch)
+	{
+		Style style = this.getStyle(playerpatch);
+		if (guardAnimations.containsKey(style) && guardAnimations.get(style).containsKey(skill) && guardAnimations.get(style).get(skill).containsKey(blockType))
+		{
+			List<AnimationProvider<?>> animations = guardAnimations.get(style).get(skill).get(blockType);
+			if (animations != null && !animations.isEmpty())
+			{
+				return animations.get(playerpatch.getOriginal().getRandom().nextInt(animations.size())).get();
+			}
+		}
+		return super.getGuardMotion(skill, blockType, playerpatch);
+	}
+
 	public Function<LivingEntityPatch<?>, Skill> getPassiveProvider()
 	{
 		return passiveSkillProvider;
@@ -144,7 +159,9 @@ public class EXWeaponCapability extends WeaponCapability
 		protected final Map<Style, Map<Object, AnimationProvider<?>>>  chantAnimations;
 		protected Map<Style, Map<LivingMotion, AnimationProvider<?>>> battleModeAnimations;
 		protected final Map<Style, AnimationProvider<?>> battleTransitionAnimations;
-		protected final Map<Style, Map<GuardSkill, Map<GuardSkill.BlockType, AnimationProvider<?>>>> guardAnimations;
+
+		//Utilizing the getGuardMotion method in EXWeaponCapability, guardAnimations can define a custom set of guard animations for each guard skill and block type.
+		protected final Map<Style, Map<GuardSkill, Map<GuardSkill.BlockType, List<AnimationProvider<?>>>>> guardAnimations;
 
 		protected Builder()
 		{
@@ -161,8 +178,14 @@ public class EXWeaponCapability extends WeaponCapability
 		{
 			guardAnimations.computeIfAbsent(wieldStyle, k -> Maps.newHashMap());
 			guardAnimations.get(wieldStyle).computeIfAbsent(guardSkill, k -> Maps.newHashMap());
-			guardAnimations.get(wieldStyle).get(guardSkill).put(blockType, animation);
+			guardAnimations.get(wieldStyle).get(guardSkill).computeIfAbsent(blockType, k -> Lists.newArrayList());
+			guardAnimations.get(wieldStyle).get(guardSkill).get(blockType).add(animation);
+			return this;
+		}
 
+		public Builder quickAddGuardMotion(Style wieldStyle, GuardSkill guardSkill, Supplier<Map<GuardSkill.BlockType, StaticAnimation>> animations)
+		{
+			animations.get().forEach((blockType, animation) -> addGuardMotion(wieldStyle, guardSkill, blockType, animation));
 			return this;
 		}
 
