@@ -23,6 +23,7 @@ import yesman.epicfight.particle.HitParticleType;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.SkillContainer;
 import yesman.epicfight.skill.SkillSlots;
+import yesman.epicfight.skill.guard.GuardSkill;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
@@ -46,6 +47,7 @@ public class EXWeaponCapability extends WeaponCapability
 	protected final Map<Style, Map<Object, AnimationProvider<?>>> castAnimations;
 	protected final Map<Style, Map<LivingMotion, AnimationProvider<?>>> battleModeAnimations;
 	protected final Map<Style, AnimationProvider<?>> battleTransitionAnimations;
+	protected final Map<Style, Map<GuardSkill, Map<GuardSkill.BlockType, AnimationProvider<?>>>> guardAnimations;
 
 	protected EXWeaponCapability(CapabilityItem.Builder builder)
 	{
@@ -56,6 +58,7 @@ public class EXWeaponCapability extends WeaponCapability
 		this.passiveSkillProvider = efbsBuilder.passiveSkillProvider;
 		this.castAnimations = efbsBuilder.castAnimations;
 		this.chantAnimations = efbsBuilder.chantAnimations;
+		this.guardAnimations = efbsBuilder.guardAnimations;
 	}
 
 	@Override
@@ -141,6 +144,7 @@ public class EXWeaponCapability extends WeaponCapability
 		protected final Map<Style, Map<Object, AnimationProvider<?>>>  chantAnimations;
 		protected Map<Style, Map<LivingMotion, AnimationProvider<?>>> battleModeAnimations;
 		protected final Map<Style, AnimationProvider<?>> battleTransitionAnimations;
+		protected final Map<Style, Map<GuardSkill, Map<GuardSkill.BlockType, AnimationProvider<?>>>> guardAnimations;
 
 		protected Builder()
 		{
@@ -150,7 +154,18 @@ public class EXWeaponCapability extends WeaponCapability
 			battleTransitionAnimations = Maps.newHashMap();
 			castAnimations = Maps.newHashMap();
 			chantAnimations = Maps.newHashMap();
+			guardAnimations = Maps.newHashMap();
 		}
+
+		public Builder addGuardMotion(Style wieldStyle, GuardSkill guardSkill, GuardSkill.BlockType blockType, StaticAnimation animation)
+		{
+			guardAnimations.computeIfAbsent(wieldStyle, k -> Maps.newHashMap());
+			guardAnimations.get(wieldStyle).computeIfAbsent(guardSkill, k -> Maps.newHashMap());
+			guardAnimations.get(wieldStyle).get(guardSkill).put(blockType, animation);
+
+			return this;
+		}
+
 
 		/**
 		 *
