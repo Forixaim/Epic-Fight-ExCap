@@ -14,14 +14,19 @@ public class AxeType extends CoreCapability
 		init();
 	}
 
+	public static AxeType getInstance()
+	{
+		return instance;
+	}
+
 	private void init()
 	{
-		provider.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("default", CapabilityItem.Styles.TWO_HAND, false, null));
+		provider.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("default", CapabilityItem.Styles.ONE_HAND, false, null));
 		builder.initialSetup(
-						CapabilityItem.WeaponCategories.LONGSWORD,
-						EpicFightSounds.WHOOSH_BIG.get(),
+						CapabilityItem.WeaponCategories.AXE,
+						EpicFightSounds.WHOOSH.get(),
 						EpicFightSounds.BLADE_HIT.get()
-				).collider(ColliderPreset.LONGSWORD)
+				).collider(ColliderPreset.TOOLS)
 				.passiveProvider(provider.exportWeaponPassiveSkill())
 				.weaponCombinationPredicator(provider.exportCombination())
 				.styleProvider(provider.exportStyle());
