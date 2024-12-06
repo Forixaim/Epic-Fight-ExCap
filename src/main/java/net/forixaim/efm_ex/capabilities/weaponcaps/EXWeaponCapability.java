@@ -61,23 +61,6 @@ public class EXWeaponCapability extends WeaponCapability
 		this.guardAnimations = efbsBuilder.guardAnimations;
 	}
 
-	@Override
-	public Map<LivingMotion, AnimationProvider<?>> getLivingMotionModifier(LivingEntityPatch<?> player, InteractionHand hand)
-	{
-		if (this.battleModeAnimations != null && !this.battleModeAnimations.isEmpty())
-		{
-			if (player instanceof PlayerPatch<?> playerPatch && playerPatch.isBattleMode())
-			{
-				Map<LivingMotion, AnimationProvider<?>> motions = this.battleModeAnimations.getOrDefault(this.getStyle(player), Maps.newHashMap());
-				Map<LivingMotion, AnimationProvider<?>> commonMotions = this.battleModeAnimations.getOrDefault(Styles.COMMON, Maps.newHashMap());
-				Objects.requireNonNull(motions);
-				commonMotions.forEach(motions::putIfAbsent);
-				return motions;
-			}
-		}
-		return super.getLivingMotionModifier(player, hand);
-	}
-
 	public Map<Style, AnimationProvider<?>> getBattleTransitionAnimations()
 	{
 		return battleTransitionAnimations;
