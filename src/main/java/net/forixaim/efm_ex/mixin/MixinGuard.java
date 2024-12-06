@@ -40,7 +40,7 @@ public class MixinGuard
 	{
 		container.getExecuter().getEventListener().addEventListener(PlayerEventListener.EventType.MOVEMENT_INPUT_EVENT, EXCAP_UUID, movementInputEvent ->
 		{
-			if (container.getExecuter().getHoldingItemCapability(InteractionHand.MAIN_HAND) instanceof EXWeaponCapability weaponCapability)
+			if (container.getExecuter().getOriginal().isUsingItem() && container.getExecuter().getHoldingItemCapability(InteractionHand.MAIN_HAND) instanceof EXWeaponCapability weaponCapability)
 			{
 				if (weaponCapability.getGuardMotion(epicFight_EXCapability$self, GuardSkill.BlockType.GUARD, movementInputEvent.getPlayerPatch()) != null)
 				{
