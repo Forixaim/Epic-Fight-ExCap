@@ -20,9 +20,7 @@ import yesman.epicfight.api.collider.Collider;
 import yesman.epicfight.network.EpicFightNetworkManager;
 import yesman.epicfight.network.server.SPChangeSkill;
 import yesman.epicfight.particle.HitParticleType;
-import yesman.epicfight.skill.Skill;
-import yesman.epicfight.skill.SkillContainer;
-import yesman.epicfight.skill.SkillSlots;
+import yesman.epicfight.skill.*;
 import yesman.epicfight.skill.guard.GuardSkill;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
@@ -115,8 +113,16 @@ public class EXWeaponCapability extends WeaponCapability
 		if (guardAnimations.containsKey(style) && guardAnimations.get(style).containsKey(skill) && guardAnimations.get(style).get(skill).containsKey(blockType))
 		{
 			List<AnimationProvider<?>> animations = guardAnimations.get(style).get(skill).get(blockType);
+			SkillDataManager dataManager = playerpatch.getSkill(skill).getDataManager();
 			if (animations != null && !animations.isEmpty())
 			{
+				if (dataManager.hasData(SkillDataKeys.PARRY_MOTION_COUNTER.get()) && blockType == GuardSkill.BlockType.ADVANCED_GUARD)
+				{
+					int motionCounter = dataManager.getDataValue(SkillDataKeys.PARRY_MOTION_COUNTER.get());
+					dataManager.setDataF(SkillDataKeys.PARRY_MOTION_COUNTER.get(), (v) -> v + 1);
+					motionCounter %= animations.size();
+					return animations.get(motionCounter).get();
+				}
 				return animations.get(playerpatch.getOriginal().getRandom().nextInt(animations.size())).get();
 			}
 		}

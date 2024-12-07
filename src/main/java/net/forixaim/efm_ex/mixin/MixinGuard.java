@@ -4,22 +4,16 @@ import net.forixaim.efm_ex.capabilities.weaponcaps.EXWeaponCapability;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import yesman.epicfight.client.events.engine.ControllEngine;
-import yesman.epicfight.client.world.capabilites.entitypatch.player.LocalPlayerPatch;
 import yesman.epicfight.skill.SkillContainer;
 import yesman.epicfight.skill.guard.GuardSkill;
-import yesman.epicfight.world.capabilities.item.WeaponCategory;
 import yesman.epicfight.world.entity.eventlistener.PlayerEventListener;
 
-import java.util.List;
 import java.util.UUID;
 
 @Mixin(value = GuardSkill.class, remap = false)
@@ -30,9 +24,6 @@ public class MixinGuard
 
 	@Unique
 	private static final UUID EXCAP_UUID = UUID.fromString("057e27b3-b742-40f8-bcc2-c6ac70ec215b");
-
-
-	@Shadow(remap = false) @Final protected static UUID EVENT_UUID;
 
 
 	@Inject(method = "onInitiate", at = @At("HEAD"), remap = false)

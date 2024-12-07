@@ -26,8 +26,7 @@ public class CastSpell
 			final List<Shape> ALLOWED_SHAPES = Lists.newArrayList(
 					Shapes.BOLT,
 					Shapes.TOUCH,
-					Shapes.PROJECTILE,
-					Shapes.WAVE
+					Shapes.PROJECTILE
 			);
 			ItemStack item = livingEntityPatch.getOriginal().getItemInHand(InteractionHand.MAIN_HAND);
 			if (livingEntityPatch instanceof ServerPlayerPatch playerPatch && livingEntityPatch.getOriginal().getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof ItemSpell spell)
