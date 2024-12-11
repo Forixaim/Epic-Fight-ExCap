@@ -28,6 +28,7 @@ public class SpearType extends CoreCapability
 						EpicFightSounds.WHOOSH.get(),
 						EpicFightSounds.BLADE_HIT.get()
 				).collider(ColliderPreset.SPEAR)
+				.passiveProvider(provider.exportWeaponPassiveSkill())
 				.weaponCombinationPredicator(provider.exportCombination())
 				.styleProvider(provider.exportStyle());
 	}
