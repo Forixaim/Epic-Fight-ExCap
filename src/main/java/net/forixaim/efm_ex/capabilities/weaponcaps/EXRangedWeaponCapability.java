@@ -6,10 +6,8 @@ import yesman.epicfight.api.animation.AnimationProvider;
 import yesman.epicfight.api.animation.LivingMotion;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
-import yesman.epicfight.world.capabilities.item.RangedWeaponCapability;
 
 import java.util.Map;
-import java.util.List;
 
 public class EXRangedWeaponCapability extends EXWeaponCapability
 {
@@ -37,10 +35,6 @@ public class EXRangedWeaponCapability extends EXWeaponCapability
 
 	public boolean canBePlacedOffhand() {
 		return false;
-	}
-
- public List<AnimationProvider<?>> getAutoAttckMotion(PlayerPatch<?> playerpatch) {
-		return getBasicAutoAttackMotion();
 	}
 
 	public static EXRangedWeaponCapability.Builder builder() {

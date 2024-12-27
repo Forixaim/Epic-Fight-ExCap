@@ -30,6 +30,7 @@ public class BowAttacks
 				.addAnimationsModifier(LivingMotions.WALK, Animations.BIPED_WALK)
 				.addAnimationsModifier(LivingMotions.AIM, Animations.BIPED_BOW_AIM)
 				.addAnimationsModifier(LivingMotions.SHOT, Animations.BIPED_BOW_SHOT)
+				.newStyleCombo(CapabilityItem.Styles.COMMON, Animations.FIST_AUTO1, Animations.FIST_AUTO2, Animations.FIST_AUTO3, Animations.FIST_DASH, Animations.FIST_AIR_SLASH)
 				.constructor(EXBowWeaponCapability::new);
 
 		return main.getSecond();
