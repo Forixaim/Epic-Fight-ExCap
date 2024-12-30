@@ -1,97 +1,73 @@
 package net.forixaim.efm_ex.capabilities.weapon_presets.attacks;
 
-import com.mojang.datafixers.util.Pair;
-import net.forixaim.efm_ex.capabilities.CoreCapability;
-import net.forixaim.efm_ex.capabilities.weaponcaps.EXWeaponCapability;
+import net.forixaim.efm_ex.capabilities.movesets.MoveSet;
 import net.forixaim.efm_ex.capabilities.weapon_presets.types.LongswordType;
 import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.gameasset.EpicFightSkills;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
-import yesman.epicfight.world.capabilities.item.Style;
-
-import java.util.function.Function;
 
 public class LongswordAttacks
 {
+
 	public static void injectAttacks()
 	{
-		LongswordType.getInstance().getAttackCombinationRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add(CapabilityItem.Styles.OCHS, LongswordAttacks.LiechtenauerAttackCycle));
-		LongswordType.getInstance().getAttackCombinationRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add(CapabilityItem.Styles.ONE_HAND, LongswordAttacks.defaultOneHandAttackCycle));
-		LongswordType.getInstance().getAttackCombinationRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add(CapabilityItem.Styles.TWO_HAND, LongswordAttacks.defaultTwoHandAttackCycle));
-		LongswordType.getInstance().getAttackCombinationRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add(CapabilityItem.Styles.MOUNT, MountedAttacks.mountedSwordAttack));
+		LongswordType.getInstance().getAttackSets().put(CapabilityItem.Styles.OCHS, LiechtenauerMS);
+		LongswordType.getInstance().getAttackSets().put(CapabilityItem.Styles.ONE_HAND, longsword1HMS);
+		LongswordType.getInstance().getAttackSets().put(CapabilityItem.Styles.TWO_HAND, longsword2HMS);
+		LongswordType.getInstance().getAttackSets().put(CapabilityItem.Styles.MOUNT, MountedAttacks.mountedSwordMS);
 
 	}
 
-	public static final Function<Pair<Style, EXWeaponCapability.Builder>, EXWeaponCapability.Builder> defaultTwoHandAttackCycle = (main) ->
-	{
-		EXWeaponCapability.Builder builder = main.getSecond();
-		Style style = main.getFirst();
-		builder.livingMotionModifier(style, LivingMotions.IDLE, Animations.BIPED_HOLD_LONGSWORD);
-		builder.livingMotionModifier(style, LivingMotions.WALK, Animations.BIPED_WALK_LONGSWORD);
-		builder.livingMotionModifier(style, LivingMotions.CHASE, Animations.BIPED_WALK_LONGSWORD);
-		builder.livingMotionModifier(style, LivingMotions.RUN, Animations.BIPED_RUN_LONGSWORD);
-		builder.livingMotionModifier(style, LivingMotions.SNEAK, Animations.BIPED_HOLD_LONGSWORD);
-		builder.livingMotionModifier(style, LivingMotions.KNEEL, Animations.BIPED_HOLD_LONGSWORD);
-		builder.livingMotionModifier(style, LivingMotions.JUMP, Animations.BIPED_HOLD_LONGSWORD);
-		builder.livingMotionModifier(style, LivingMotions.SWIM, Animations.BIPED_HOLD_LONGSWORD);
-		builder.livingMotionModifier(style, LivingMotions.BLOCK, Animations.LONGSWORD_GUARD);
-		builder.newStyleCombo(style,
-				Animations.LONGSWORD_AUTO1,
-				Animations.LONGSWORD_AUTO2,
-				Animations.LONGSWORD_AUTO3,
-				Animations.LONGSWORD_DASH,
-				Animations.LONGSWORD_AIR_SLASH
-		);
-		builder.innateSkill(style, (itemstack) -> EpicFightSkills.LIECHTENAUER);
-		return builder;
-	};
+	public static final MoveSet longsword2HMS = MoveSet.builder()
+			.addLivingMotionsRecursive(Animations.BIPED_HOLD_LONGSWORD,
+					LivingMotions.IDLE, LivingMotions.SNEAK, LivingMotions.KNEEL,
+					LivingMotions.JUMP, LivingMotions.SWIM)
+			.addLivingMotionsRecursive(Animations.BIPED_WALK_LONGSWORD,
+					LivingMotions.WALK, LivingMotions.CHASE)
+			.addLivingMotionModifier(LivingMotions.RUN, Animations.BIPED_RUN_LONGSWORD)
+			.addLivingMotionModifier(LivingMotions.BLOCK, Animations.LONGSWORD_GUARD)
+			.addAutoAttacks(
+					Animations.LONGSWORD_AUTO1,
+					Animations.LONGSWORD_AUTO2,
+					Animations.LONGSWORD_AUTO3,
+					Animations.LONGSWORD_DASH,
+					Animations.LONGSWORD_AIR_SLASH
+			)
+			.addInnateSkill(itemStack -> EpicFightSkills.LIECHTENAUER)
+			.build();
 
-	public static final Function<Pair<Style, EXWeaponCapability.Builder>, EXWeaponCapability.Builder> defaultOneHandAttackCycle = (main) ->
-	{
-		EXWeaponCapability.Builder builder = main.getSecond();
-		Style style = main.getFirst();
-		builder.livingMotionModifier(style, LivingMotions.IDLE, Animations.BIPED_HOLD_LONGSWORD);
-		builder.livingMotionModifier(style, LivingMotions.WALK, Animations.BIPED_WALK_LONGSWORD);
-		builder.livingMotionModifier(style, LivingMotions.CHASE, Animations.BIPED_WALK_LONGSWORD);
-		builder.livingMotionModifier(style, LivingMotions.RUN, Animations.BIPED_RUN_LONGSWORD);
-		builder.livingMotionModifier(style, LivingMotions.SNEAK, Animations.BIPED_HOLD_LONGSWORD);
-		builder.livingMotionModifier(style, LivingMotions.KNEEL, Animations.BIPED_HOLD_LONGSWORD);
-		builder.livingMotionModifier(style, LivingMotions.JUMP, Animations.BIPED_HOLD_LONGSWORD);
-		builder.livingMotionModifier(style, LivingMotions.SWIM, Animations.BIPED_HOLD_LONGSWORD);
-		builder.livingMotionModifier(style, LivingMotions.BLOCK, Animations.LONGSWORD_GUARD);
-		builder.newStyleCombo(style,
-				Animations.LONGSWORD_AUTO1,
-				Animations.LONGSWORD_AUTO2,
-				Animations.LONGSWORD_AUTO3,
-				Animations.LONGSWORD_DASH,
-				Animations.LONGSWORD_AIR_SLASH
-		);
-		builder.innateSkill(style, (itemstack) -> EpicFightSkills.SHARP_STAB);
-		return builder;
-	};
+	public static final MoveSet longsword1HMS = MoveSet.builder()
+			.addLivingMotionsRecursive(Animations.BIPED_HOLD_LONGSWORD,
+					LivingMotions.IDLE, LivingMotions.SNEAK, LivingMotions.KNEEL,
+					LivingMotions.JUMP, LivingMotions.SWIM)
+			.addLivingMotionsRecursive(Animations.BIPED_WALK_LONGSWORD,
+					LivingMotions.WALK, LivingMotions.CHASE)
+			.addLivingMotionModifier(LivingMotions.RUN, Animations.BIPED_RUN_LONGSWORD)
+			.addLivingMotionModifier(LivingMotions.BLOCK, Animations.LONGSWORD_GUARD)
+			.addAutoAttacks(
+					Animations.LONGSWORD_AUTO1,
+					Animations.LONGSWORD_AUTO2, Animations.LONGSWORD_AUTO3,
+					Animations.LONGSWORD_DASH, Animations.LONGSWORD_AIR_SLASH
+			)
+			.addInnateSkill(itemStack -> EpicFightSkills.SHARP_STAB)
+			.build();
 
-	public static final Function<Pair<Style, EXWeaponCapability.Builder>, EXWeaponCapability.Builder> LiechtenauerAttackCycle = (main) ->
-	{
-		EXWeaponCapability.Builder builder = main.getSecond();
-		Style style = main.getFirst();
-		builder.livingMotionModifier(style, LivingMotions.IDLE, Animations.BIPED_HOLD_LIECHTENAUER);
-		builder.livingMotionModifier(style, LivingMotions.WALK, Animations.BIPED_WALK_LIECHTENAUER);
-		builder.livingMotionModifier(style, LivingMotions.CHASE, Animations.BIPED_WALK_LIECHTENAUER);
-		builder.livingMotionModifier(style, LivingMotions.RUN, Animations.BIPED_HOLD_LIECHTENAUER);
-		builder.livingMotionModifier(style, LivingMotions.SNEAK, Animations.BIPED_HOLD_LIECHTENAUER);
-		builder.livingMotionModifier(style, LivingMotions.KNEEL, Animations.BIPED_HOLD_LIECHTENAUER);
-		builder.livingMotionModifier(style, LivingMotions.JUMP, Animations.BIPED_HOLD_LIECHTENAUER);
-		builder.livingMotionModifier(style, LivingMotions.SWIM, Animations.BIPED_HOLD_LIECHTENAUER);
-		builder.livingMotionModifier(style, LivingMotions.BLOCK, Animations.LONGSWORD_GUARD);
-		builder.newStyleCombo(style,
-				Animations.LONGSWORD_LIECHTENAUER_AUTO1,
-				Animations.LONGSWORD_LIECHTENAUER_AUTO2,
-				Animations.LONGSWORD_LIECHTENAUER_AUTO3,
-				Animations.LONGSWORD_DASH,
-				Animations.LONGSWORD_AIR_SLASH
-		);
-		builder.innateSkill(style, (itemstack) -> EpicFightSkills.SHARP_STAB);
-		return builder;
-	};
+	public static final MoveSet LiechtenauerMS = MoveSet.builder()
+			.addLivingMotionsRecursive(Animations.BIPED_HOLD_LIECHTENAUER,
+					LivingMotions.IDLE, LivingMotions.SNEAK, LivingMotions.KNEEL,
+					LivingMotions.JUMP, LivingMotions.SWIM)
+			.addLivingMotionsRecursive(Animations.BIPED_WALK_LIECHTENAUER,
+					LivingMotions.WALK, LivingMotions.CHASE)
+			.addLivingMotionModifier(LivingMotions.RUN, Animations.BIPED_HOLD_LIECHTENAUER)
+			.addLivingMotionModifier(LivingMotions.BLOCK, Animations.LONGSWORD_GUARD)
+			.addAutoAttacks(
+					Animations.LONGSWORD_LIECHTENAUER_AUTO1,
+					Animations.LONGSWORD_LIECHTENAUER_AUTO2,
+					Animations.LONGSWORD_LIECHTENAUER_AUTO3,
+					Animations.LONGSWORD_DASH,
+					Animations.LONGSWORD_AIR_SLASH
+			)
+			.addInnateSkill(itemStack -> EpicFightSkills.SHARP_STAB)
+			.build();
 }

@@ -1,5 +1,6 @@
 package net.forixaim.efm_ex.api.providers;
 
+import com.google.common.collect.Lists;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.item.Style;
@@ -17,12 +18,12 @@ public class CoreWeaponCapabilityProvider
 
     public CoreWeaponCapabilityProvider()
     {
-        conditionals = new ArrayList<ProviderConditional>();
+        conditionals = Lists.newArrayList();
     }
 
     public CoreWeaponCapabilityProvider addConditional(ProviderConditional conditional)
     {
-        this.conditionals.add(0, conditional);
+        this.conditionals.add(conditional);
         return this;
     }
 
@@ -34,6 +35,7 @@ public class CoreWeaponCapabilityProvider
 
     private void sortByPriority()
     {
+        if (conditionals.size() <= 1) return;
         for (int i = 0; i < conditionals.size() - 1; i++)
         {
             ProviderConditional conditional = conditionals.get(i).copy();
@@ -82,22 +84,6 @@ public class CoreWeaponCapabilityProvider
                 }
             }
             return null;
-        };
-    }
-
-    public Function<LivingEntityPatch<?>, Skill> exportWeaponPassiveSkill()
-    {
-        sortByPriority();
-        return entityPatch ->
-        {
-          for (ProviderConditional conditional : conditionals)
-          {
-              if (conditional.testConditionalSkill(entityPatch) != null)
-              {
-                  return conditional.testConditionalSkill(entityPatch);
-              }
-          }
-          return null;
         };
     }
 }

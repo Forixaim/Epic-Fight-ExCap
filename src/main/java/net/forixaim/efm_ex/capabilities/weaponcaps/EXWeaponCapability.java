@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 import io.redspace.ironsspellbooks.IronsSpellbooks;
-import io.redspace.ironsspellbooks.api.spells.CastType;
+import net.forixaim.efm_ex.capabilities.movesets.MoveSet;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
@@ -29,9 +29,9 @@ import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCapability;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -40,7 +40,8 @@ import java.util.function.Supplier;
  */
 public class EXWeaponCapability extends WeaponCapability
 {
-	protected final Function<LivingEntityPatch<?>, Skill> passiveSkillProvider;
+
+	protected final Map<Style, Skill> weaponPassiveSkill;
 	protected final Map<Style, Map<Object, AnimationProvider<?>>> chantAnimations;
 	protected final Map<Style, Map<Object, AnimationProvider<?>>> castAnimations;
 	protected final Map<Style, Map<LivingMotion, AnimationProvider<?>>> battleModeAnimations;
@@ -53,10 +54,10 @@ public class EXWeaponCapability extends WeaponCapability
 		Builder efbsBuilder = (Builder) builder;
 		this.battleTransitionAnimations = efbsBuilder.battleTransitionAnimations;
 		this.battleModeAnimations = efbsBuilder.battleModeAnimations;
-		this.passiveSkillProvider = efbsBuilder.passiveSkillProvider;
 		this.castAnimations = efbsBuilder.castAnimations;
 		this.chantAnimations = efbsBuilder.chantAnimations;
 		this.guardAnimations = efbsBuilder.guardAnimations;
+		this.weaponPassiveSkill = efbsBuilder.weaponPassiveSkill;
 	}
 
 	public Map<Style, AnimationProvider<?>> getBattleTransitionAnimations()
@@ -93,7 +94,7 @@ public class EXWeaponCapability extends WeaponCapability
 
 		weaponInnateSkillContainer.setDisabled(weaponInnateSkill == null);
 		EpicFightNetworkManager.sendToPlayer(new SPChangeSkill(SkillSlots.WEAPON_INNATE, skillName, state), (ServerPlayer)playerpatch.getOriginal());
-		Skill skill = getPassiveProvider().apply(playerpatch);
+		Skill skill = weaponPassiveSkill.get(this.getStyle(playerpatch));
 		SkillContainer passiveSkillContainer = playerpatch.getSkill(SkillSlots.WEAPON_PASSIVE);
 		if (skill != null) {
 			if (passiveSkillContainer.getSkill() != skill) {
@@ -104,6 +105,11 @@ public class EXWeaponCapability extends WeaponCapability
 			passiveSkillContainer.setSkill(null);
 			EpicFightNetworkManager.sendToPlayer(new SPChangeSkill(SkillSlots.WEAPON_PASSIVE, "empty", SPChangeSkill.State.ENABLE), (ServerPlayer)playerpatch.getOriginal());
 		}
+	}
+
+	@Override
+	public Map<LivingMotion, AnimationProvider<?>> getLivingMotionModifier(LivingEntityPatch<?> player, InteractionHand hand) {
+		return super.getLivingMotionModifier(player, hand);
 	}
 
 	@Override
@@ -129,11 +135,6 @@ public class EXWeaponCapability extends WeaponCapability
 		return super.getGuardMotion(skill, blockType, playerpatch);
 	}
 
-	public Function<LivingEntityPatch<?>, Skill> getPassiveProvider()
-	{
-		return passiveSkillProvider;
-	}
-
 	public static Builder builder() {
 		return new Builder();
 	}
@@ -148,6 +149,7 @@ public class EXWeaponCapability extends WeaponCapability
 		protected final Map<Style, Map<Object, AnimationProvider<?>>>  chantAnimations;
 		protected Map<Style, Map<LivingMotion, AnimationProvider<?>>> battleModeAnimations;
 		protected final Map<Style, AnimationProvider<?>> battleTransitionAnimations;
+		protected final Map<Style, Skill> weaponPassiveSkill;
 
 		//Utilizing the getGuardMotion method in EXWeaponCapability, guardAnimations can define a custom set of guard animations for each guard skill and block type.
 		protected final Map<Style, Map<GuardSkill, Map<GuardSkill.BlockType, List<AnimationProvider<?>>>>> guardAnimations;
@@ -161,14 +163,15 @@ public class EXWeaponCapability extends WeaponCapability
 			castAnimations = Maps.newHashMap();
 			chantAnimations = Maps.newHashMap();
 			guardAnimations = Maps.newHashMap();
+			weaponPassiveSkill = Maps.newHashMap();
 		}
 
-		public Builder addGuardMotion(Style wieldStyle, GuardSkill guardSkill, GuardSkill.BlockType blockType, StaticAnimation animation)
+		public Builder addGuardMotion(Style wieldStyle, GuardSkill guardSkill, GuardSkill.BlockType blockType, StaticAnimation... animation)
 		{
 			guardAnimations.computeIfAbsent(wieldStyle, k -> Maps.newHashMap());
 			guardAnimations.get(wieldStyle).computeIfAbsent(guardSkill, k -> Maps.newHashMap());
 			guardAnimations.get(wieldStyle).get(guardSkill).computeIfAbsent(blockType, k -> Lists.newArrayList());
-			guardAnimations.get(wieldStyle).get(guardSkill).get(blockType).add(animation);
+			guardAnimations.get(wieldStyle).get(guardSkill).get(blockType).addAll(Arrays.asList(animation));
 			return this;
 		}
 
@@ -294,6 +297,15 @@ public class EXWeaponCapability extends WeaponCapability
 		public void createStyleCategory(Style style, Function<Pair<Style, Builder>, Builder> weaponCombo)
 		{
 			weaponCombo.apply(new Pair<>(style, this));
+		}
+
+		public void addMoveset(Style style, MoveSet moveSet)
+		{
+			newStyleCombo(style, moveSet.getAutoAttackAnimations().toArray(StaticAnimation[]::new));
+			moveSet.getLivingMotionModifiers().forEach((motion, animation) -> livingMotionModifier(style, motion, animation));
+			moveSet.getGuardAnimations().forEach((guardSkill, blockTypeListMap) -> blockTypeListMap.forEach(((blockType, animationProviders) -> addGuardMotion(style, guardSkill, blockType, animationProviders.toArray(StaticAnimation[]::new)))));
+			innateSkill(style, moveSet.getWeaponInnateSkill());
+			weaponPassiveSkill.put(style, moveSet.getWeaponPassiveSkill());
 		}
 	}
 }

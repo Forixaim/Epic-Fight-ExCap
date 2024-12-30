@@ -6,6 +6,8 @@ import yesman.epicfight.gameasset.ColliderPreset;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
+import static net.forixaim.efm_ex.capabilities.weapon_presets.types.MainConditionals.SwordShieldLS;
+
 public class SpearType extends CoreCapability
 {
 	private static final SpearType instance = new SpearType();
@@ -21,15 +23,12 @@ public class SpearType extends CoreCapability
 
 	private void init()
 	{
-		provider.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("shielded", InteractionHand.OFF_HAND, CapabilityItem.WeaponCategories.SHIELD, CapabilityItem.Styles.ONE_HAND, true, null))
-				.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("default", CapabilityItem.Styles.TWO_HAND, false, null));
+		provider.addConditional(SwordShieldLS)
+				.addConditional(DefaultConditionals.default2HWieldStyle);
 		builder.initialSetup(
 						CapabilityItem.WeaponCategories.SPEAR,
 						EpicFightSounds.WHOOSH.get(),
 						EpicFightSounds.BLADE_HIT.get()
-				).collider(ColliderPreset.SPEAR)
-				.passiveProvider(provider.exportWeaponPassiveSkill())
-				.weaponCombinationPredicator(provider.exportCombination())
-				.styleProvider(provider.exportStyle());
+				).collider(ColliderPreset.SPEAR);
 	}
 }

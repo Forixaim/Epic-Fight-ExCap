@@ -50,4 +50,6 @@ public class EpicFightEXCapability {
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
+
+
 }

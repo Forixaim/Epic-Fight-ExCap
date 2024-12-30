@@ -18,21 +18,18 @@ public class BowType extends CoreCapability
 
 	private BowType()
 	{
-		this.builder = EXRangedWeaponCapability.builder();
+		this.builder = EXRangedWeaponCapability.builder().zoomInType(CapabilityItem.ZoomInType.USE_TICK);
 		init();
 	}
 
 	private void init()
 	{
-		provider.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("default", CapabilityItem.Styles.TWO_HAND, false, null));
+		provider.addConditional(DefaultConditionals.default2HWieldStyle);
 		builder.initialSetup(
 						CapabilityItem.WeaponCategories.RANGED,
-						EpicFightSounds.WHOOSH_SMALL.get(),
+						EpicFightSounds.WHOOSH.get(),
 						EpicFightSounds.BLUNT_HIT.get()
 				).collider(ColliderPreset.FIST)
-				.passiveProvider(provider.exportWeaponPassiveSkill())
-				.weaponCombinationPredicator(provider.exportCombination())
-				.styleProvider(provider.exportStyle())
 				.constructor(EXBowWeaponCapability::new);
 	}
 }

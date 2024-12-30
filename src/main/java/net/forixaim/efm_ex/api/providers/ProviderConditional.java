@@ -20,12 +20,10 @@ import java.util.function.Function;
 public class ProviderConditional
 {
 	//Identifiers
-	private final ResourceLocation identifier;
 	private final ProviderConditionalType type;
 	//Output
 	private final Style style;
 	private final Boolean combination;
-	private final Skill weaponPassive;
 	//Input
 	private final Skill skillToCheck;
 	private final WeaponCategory category;
@@ -36,141 +34,40 @@ public class ProviderConditional
 	private final InteractionHand hand;
 	private final Function<LivingEntityPatch<?>, Boolean> customFunction;
 
-	private ProviderConditional(@NotNull ResourceLocation identifier, @NotNull ProviderConditionalType type, @Nullable Style style, @Nullable Skill skill, @Nullable Skill weaponPassive, WeaponCategory category, Item weapon, InteractionHand hand, @Nullable SkillSlot slot, @Nullable SkillDataKey<Boolean> key, @Nullable Boolean combo, Function<LivingEntityPatch<?>, Boolean> booleanFunction, ProviderConditional... providerConditionals)
-	{
-		this.identifier = identifier;
+	private ProviderConditional(ProviderConditionalType type, Style style, Skill skillToCheck, WeaponCategory category, Item weapon, InteractionHand hand, SkillSlot slot, SkillDataKey<Boolean> key, Boolean combination, Function<LivingEntityPatch<?>, Boolean> customFunction, ProviderConditional[] providerConditionals) {
 		this.type = type;
 		this.style = style;
-		this.weaponPassive = weaponPassive;
-		this.skillToCheck = skill;
+		this.skillToCheck = skillToCheck;
 		this.category = category;
 		this.weapon = weapon;
+		this.hand = hand;
 		this.slot = slot;
 		this.key = key;
-		this.combination = combo;
+		this.combination = combination;
+		this.customFunction = customFunction;
 		this.providerConditionals = providerConditionals;
-		this.hand = hand;
-		this.customFunction = booleanFunction;
 	}
 
-	/**
-	 * Moved to ComboProviderRegistry
-	 * @param type Must be SKILL_EXISTENCE, SKILL_ACTIVATION, or DATA_KEY
-	 * @param style the style of your choosing
-	 * @param skill The Skill in specific.
-	 * @param slot Skill Slot corresponding to the skill.
-	 * @param key Data keys associated with the Skill
-	 * @param combo weapon predicate combo.
-	 */
-	public ProviderConditional(@NotNull ResourceLocation identifier, @NotNull ProviderConditionalType type, @Nullable Style style, @Nullable Skill skill, @Nullable Skill weaponPassive, @Nullable SkillSlot slot, @Nullable SkillDataKey<Boolean> key, @Nullable Boolean combo)
+	public static ProviderConditionalBuilder builder()
 	{
-		this.identifier = identifier;
-		this.type = type;
-		this.style = style;
-		this.weaponPassive = weaponPassive;
-		this.skillToCheck = skill;
-		this.category = null;
-		this.weapon = null;
-		this.slot = slot;
-		this.key = key;
-		this.combination = combo;
-		this.providerConditionals = null;
-		this.hand = null;
-		this.customFunction = null;
+		return new ProviderConditionalBuilder();
 	}
 
-	/**
-	 *
-	 * @param type must be WEAPON_CATEGORY or SPECIFIC_WEAPON
-	 * @param style the Style of your choosing
-	 * @param hand the InteractionHand of the item
-	 * @param category The weapon category
-	 * @param item Any Specific Item
-	 * @param combo The combo predicate logic whenever this is the true or false for dual wielding.
-	 */
-	public ProviderConditional(@NotNull ResourceLocation identifier, @NotNull ProviderConditionalType type, Style style,  @NotNull InteractionHand hand, @Nullable Skill weaponPassive, @Nullable WeaponCategory category, @Nullable Item item, Boolean combo)
+	public ProviderConditional(ProviderConditionalBuilder builder)
 	{
-		this.identifier = identifier;
-		this.type = type;
-		this.style = style;
-		this.skillToCheck = null;
-		this.weaponPassive = weaponPassive;
-		this.category = category;
-		this.weapon = item;
-		this.slot = null;
-		this.key = null;
-		this.combination = combo;
-		this.providerConditionals = null;
-		this.hand = hand;
-		this.customFunction = null;
+		this.type = builder.type;
+		this.style = builder.wieldStyle;
+		this.combination = builder.visibleOffHand;
+		this.skillToCheck = builder.skillToCheck;
+		this.category = builder.category;
+		this.weapon = builder.weapon;
+		this.providerConditionals = builder.providerConditionals;
+		this.slot = builder.slot;
+		this.key = builder.key;
+		this.hand = builder.hand;
+		this.customFunction = builder.customFunction;
 	}
 
-	/**
-	 * @param type  MUST be DEFAULT
-	 * @param style a style of your choosing.
-	 * @param combination The combo predicate logic whenever this is the true or false for dual wielding.
-	 */
-	public ProviderConditional(@NotNull ResourceLocation identifier, @NotNull ProviderConditionalType type, Style style, Boolean combination, @Nullable Skill weaponPassive)
-	{
-		this.identifier = identifier;
-		this.type = type;
-		this.style = style;
-		this.weaponPassive = weaponPassive;
-		this.skillToCheck = null;
-		this.category = null;
-		this.weapon = null;
-		this.slot = null;
-		this.key = null;
-		this.combination = combination;
-		this.providerConditionals = null;
-		this.hand = null;
-		this.customFunction = null;
-	}
-
-	/**
-	 * @param type  MUST be COMPOSITE
-	 * @param style a style of your choosing.
-	 * @param combination The combo predicate logic whenever this is the true or false for dual wielding.
-	 */
-	public ProviderConditional(@NotNull ResourceLocation identifier, @NotNull ProviderConditionalType type, Style style, Boolean combination, @Nullable Skill weaponPassive, ProviderConditional... conditionals)
-	{
-		this.identifier = identifier;
-		this.type = type;
-		this.style = style;
-		this.weaponPassive = weaponPassive;
-		this.providerConditionals = conditionals;
-		this.skillToCheck = null;
-		this.category = null;
-		this.weapon = null;
-		this.slot = null;
-		this.combination = combination;
-		this.key = null;
-		this.hand = null;
-		this.customFunction = null;
-	}
-
-	/**
-	 * @param type Must be CUSTOM
-	 * @param style the Style of the end result
-	 * @param combination The combo predicate logic whenever this is the true or false for dual wielding.
-	 * @param booleanFunction a custom function to evaluate if true.
-	 */
-	public ProviderConditional(@NotNull ResourceLocation identifier, @NotNull ProviderConditionalType type, Style style, Boolean combination, @Nullable Skill weaponPassive, Function<LivingEntityPatch<?>, Boolean> booleanFunction)
-	{
-		this.identifier = identifier;
-		this.type = type;
-		this.style = style;
-		this.weaponPassive = weaponPassive;
-		this.skillToCheck = null;
-		this.category = null;
-		this.hand = null;
-		this.providerConditionals = null;
-		this.key = null;
-		this.combination = combination;
-		this.slot = null;
-		this.weapon = null;
-		this.customFunction = booleanFunction;
-	}
 
 	/**
 	 * @param entityPatch the patch used to return whatever it is.
@@ -296,65 +193,6 @@ public class ProviderConditional
 		return null;
 	}
 
-	public Skill testConditionalSkill(LivingEntityPatch<?> entityPatch)
-	{
-		if (type.equals(ProviderConditionalType.SKILL_ACTIVATION))
-		{
-			if (entityPatch instanceof PlayerPatch<?> pPatch)
-			{
-				if (pPatch.getSkill(slot).isActivated())
-				{
-					return weaponPassive;
-				}
-			}
-		}
-		if (type.equals(ProviderConditionalType.SKILL_EXISTENCE))
-		{
-			if (HelperFunctions.skillCheck(entityPatch, skillToCheck, slot))
-				return weaponPassive;
-		}
-		if (type.equals(ProviderConditionalType.WEAPON_CATEGORY))
-		{
-			if (HelperFunctions.itemCheck(entityPatch, category, hand))
-				return weaponPassive;
-		}
-		if (type.equals(ProviderConditionalType.DATA_KEY))
-		{
-			if (entityPatch instanceof PlayerPatch<?> playerPatch)
-			{
-				if (playerPatch.getSkill(slot).getDataManager().hasData(key) && playerPatch.getSkill(slot).getDataManager().getDataValue(key))
-					return weaponPassive;
-			}
-		}
-		if (type.equals(ProviderConditionalType.SPECIFIC_WEAPON))
-		{
-			assert hand != null;
-			if (entityPatch.getOriginal().getItemInHand(hand).is(this.weapon))
-				return weaponPassive;
-		}
-		if (type.equals(ProviderConditionalType.COMPOSITE))
-		{
-			assert providerConditionals != null;
-			for (ProviderConditional conditional : providerConditionals)
-			{
-				if (!conditional.testConditionalBoolean(entityPatch))
-					return null;
-			}
-			return weaponPassive;
-		}
-		if (type.equals(ProviderConditionalType.CUSTOM))
-		{
-			assert this.customFunction != null;
-			if (this.customFunction.apply(entityPatch))
-			{
-				return weaponPassive;
-			}
-		}
-		if (type.equals(ProviderConditionalType.DEFAULT))
-			return weaponPassive;
-		return null;
-	}
-
 	public Boolean testConditionalCombo(LivingEntityPatch<?> entityPatch)
 	{
 		if (type.equals(ProviderConditionalType.SKILL_ACTIVATION))
@@ -459,6 +297,96 @@ public class ProviderConditional
 
 	public ProviderConditional copy()
 	{
-		return new ProviderConditional(identifier, type, style, skillToCheck, weaponPassive, category, weapon, hand, slot, key, combination, customFunction, providerConditionals);
+		return new ProviderConditional(type, style, skillToCheck, category, weapon, hand, slot, key, combination, customFunction, providerConditionals);
+	}
+	public static class ProviderConditionalBuilder
+	{
+		private ProviderConditionalType type;
+		private Style wieldStyle;
+		private Boolean visibleOffHand;
+		private Skill skillToCheck;
+		private WeaponCategory category;
+		private Item weapon;
+		private ProviderConditional[] providerConditionals;
+		private SkillSlot slot;
+		private SkillDataKey<Boolean> key;
+		private InteractionHand hand;
+		private Function<LivingEntityPatch<?>, Boolean> customFunction;
+
+		public ProviderConditionalBuilder()
+		{
+			type = ProviderConditionalType.DEFAULT;
+			skillToCheck = null;
+			category = null;
+			weapon = null;
+			providerConditionals = null;
+			slot = null;
+			key = null;
+			hand = null;
+			customFunction = null;
+			wieldStyle = null;
+			visibleOffHand = false;
+		}
+
+		public ProviderConditional build()
+		{
+			return new ProviderConditional(this);
+		}
+
+		public ProviderConditionalBuilder isVisibleOffHand(boolean visibleOffHand) {
+			this.visibleOffHand = visibleOffHand;
+			return this;
+		}
+
+		public ProviderConditionalBuilder setWieldStyle(Style wieldStyle) {
+			this.wieldStyle = wieldStyle;
+			return this;
+		}
+
+		public ProviderConditionalBuilder setType(@NotNull ProviderConditionalType type)
+		{
+			this.type = type;
+			return this;
+		}
+
+		public ProviderConditionalBuilder setSkillToCheck(Skill skillToCheck) {
+			this.skillToCheck = skillToCheck;
+			return this;
+		}
+
+		public ProviderConditionalBuilder setCategory(WeaponCategory category) {
+			this.category = category;
+			return this;
+		}
+
+		public ProviderConditionalBuilder setWeapon(Item weapon) {
+			this.weapon = weapon;
+			return this;
+		}
+
+		public ProviderConditionalBuilder setProviderConditionals(ProviderConditional[] providerConditionals) {
+			this.providerConditionals = providerConditionals;
+			return this;
+		}
+
+		public ProviderConditionalBuilder setSlot(SkillSlot slot) {
+			this.slot = slot;
+			return this;
+		}
+
+		public ProviderConditionalBuilder setKey(SkillDataKey<Boolean> key) {
+			this.key = key;
+			return this;
+		}
+
+		public ProviderConditionalBuilder setHand(InteractionHand hand) {
+			this.hand = hand;
+			return this;
+		}
+
+		public ProviderConditionalBuilder setCustomFunction(Function<LivingEntityPatch<?>, Boolean> customFunction) {
+			this.customFunction = customFunction;
+			return this;
+		}
 	}
 }

@@ -2,9 +2,8 @@ package net.forixaim.efm_ex.capabilities.weapon_presets.attacks;
 
 import com.mna.api.spells.collections.Shapes;
 import net.forixaim.efm_ex.animations.mna.MNAAnimations;
-import net.forixaim.efm_ex.capabilities.CoreCapability;
+import net.forixaim.efm_ex.capabilities.movesets.MoveSet;
 import net.forixaim.efm_ex.capabilities.weapon_presets.types.MNASpellType;
-import net.forixaim.efm_ex.capabilities.weaponcaps.EXWeaponCapability;
 import net.forixaim.efm_ex.capabilities.weaponcaps.compat.EXSpellCapability;
 import com.mojang.datafixers.util.Pair;
 import yesman.epicfight.gameasset.Animations;
@@ -19,10 +18,7 @@ public class MNASpellAttacks
 
 	public static void Inject()
 	{
-		MNASpellType.getInstance().getAttackCombinationRegistry().add(CoreCapability.COMBO_PROVIDER_REGISTRY.add(
-				CapabilityItem.Styles.ONE_HAND,
-				baseSpellAttacks
-		));
+		MNASpellType.getInstance().getAttackSets().put(CapabilityItem.Styles.ONE_HAND, baseSpellMS);
 		MNASpellType.getInstance().getCastAnimRegistry().add(Pair.of(CapabilityItem.Styles.ONE_HAND, baseCastAttacks));
 	}
 
@@ -34,14 +30,16 @@ public class MNASpellAttacks
 		return main.getSecond();
 	};
 
-	public static final Function<Pair<Style, EXWeaponCapability.Builder>, EXWeaponCapability.Builder> baseSpellAttacks = main ->
-	{
-		Style style = main.getFirst();
-		EXWeaponCapability.Builder builder = main.getSecond();
-		builder.newStyleCombo(style, MNAAnimations.SPELL_AUTO1, MNAAnimations.SPELL_AUTO2, MNAAnimations.SPELL_AUTO3, Animations.FIST_DASH, Animations.FIST_AIR_SLASH);
-		builder.innateSkill(style, itemStack -> EpicFightSkills.RELENTLESS_COMBO);
-		return main.getSecond();
-	};
+	public static final MoveSet baseSpellMS = MoveSet.builder()
+			.addAutoAttacks(
+					MNAAnimations.SPELL_AUTO1,
+					MNAAnimations.SPELL_AUTO2,
+					MNAAnimations.SPELL_AUTO3,
+					Animations.FIST_DASH,
+					Animations.FIST_AIR_SLASH
+			)
+			.addInnateSkill(itemStack -> EpicFightSkills.RELENTLESS_COMBO)
+			.build();
 
 
 }

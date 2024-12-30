@@ -47,15 +47,12 @@ public class MNASpellType extends CoreCapability
 	}
 	private void init()
 	{
-		provider.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("default", CapabilityItem.Styles.ONE_HAND, false, null));
+		provider.addConditional(DefaultConditionals.default1HWieldStyle);
 		builder.initialSetup(
 						CapabilityItem.WeaponCategories.FIST,
 						EpicFightSounds.WHOOSH.get(),
 						EpicFightSounds.BLUNT_HIT.get()
-				).collider(ColliderPreset.FIST)
-				.passiveProvider(provider.exportWeaponPassiveSkill())
-				.weaponCombinationPredicator(provider.exportCombination())
-				.styleProvider(provider.exportStyle());
+				).collider(ColliderPreset.FIST);
 	}
 
 	@Override

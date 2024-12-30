@@ -1,31 +1,19 @@
 package net.forixaim.efm_ex.capabilities.weapon_presets.attacks;
 
-import com.mojang.datafixers.util.Pair;
-import net.forixaim.efm_ex.capabilities.weaponcaps.EXWeaponCapability;
+import net.forixaim.efm_ex.capabilities.movesets.MoveSet;
 import yesman.epicfight.gameasset.Animations;
-import yesman.epicfight.world.capabilities.item.Style;
-
-import java.util.function.Function;
 
 public class MountedAttacks
 {
-	public static Function<Pair<Style, EXWeaponCapability.Builder>, EXWeaponCapability.Builder> mountedSwordAttack = (main) ->
-	{
-		EXWeaponCapability.Builder builder = main.getSecond();
-		Style style = main.getFirst();
-		builder.newStyleCombo(style,
-				Animations.SWORD_MOUNT_ATTACK
-		);
-		return builder;
-	};
+	public static final MoveSet mountedSwordMS = MoveSet.builder()
+			.addAutoAttacks(
+					Animations.SWORD_MOUNT_ATTACK
+			)
+			.build();
 
-	public static Function<Pair<Style, EXWeaponCapability.Builder>, EXWeaponCapability.Builder> mountedSpearAttack = (main) ->
-	{
-		EXWeaponCapability.Builder builder = main.getSecond();
-		Style style = main.getFirst();
-		builder.newStyleCombo(style,
-				Animations.SPEAR_MOUNT_ATTACK
-		);
-		return builder;
-	};
+	public static final MoveSet mountedSpearMS = MoveSet.builder()
+			.addAutoAttacks(
+					Animations.SPEAR_MOUNT_ATTACK
+			)
+			.build();
 }

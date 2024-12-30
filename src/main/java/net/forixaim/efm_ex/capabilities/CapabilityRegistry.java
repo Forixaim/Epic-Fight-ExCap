@@ -34,6 +34,9 @@ public class CapabilityRegistry
 	public static final Function<Item, CapabilityItem.Builder> DAGGER = (item ->
 			DaggerType.getInstance().export());
 
+	public static final Function<Item, CapabilityItem.Builder> UCHIGATANA = item ->
+			UchigatanaType.getInstance().export();
+
 	public static final Function<Item, CapabilityItem.Builder> SPELL= (item ->
 			MNASpellType.getInstance().export());
 
@@ -53,6 +56,7 @@ public class CapabilityRegistry
 		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "spell"), SPELL);
 		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "bow"), BOW);
 		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "axe"), AXE);
+		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "uchigatana"), UCHIGATANA);
 
 	}
 }

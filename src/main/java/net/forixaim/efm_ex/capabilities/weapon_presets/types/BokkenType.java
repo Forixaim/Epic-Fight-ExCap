@@ -6,6 +6,8 @@ import yesman.epicfight.gameasset.ColliderPreset;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
+import static net.forixaim.efm_ex.capabilities.weapon_presets.types.MainConditionals.DualSwords;
+
 public class BokkenType extends CoreCapability
 {
 	private static final BokkenType instance = new BokkenType();
@@ -24,15 +26,12 @@ public class BokkenType extends CoreCapability
 	 */
 	private void init()
 	{
-		provider.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("dual_swords", InteractionHand.OFF_HAND, CapabilityItem.WeaponCategories.SWORD, CapabilityItem.Styles.TWO_HAND, true, null))
-				.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("default", CapabilityItem.Styles.ONE_HAND, false, null));
+		provider.addConditional(DualSwords)
+				.addConditional(DefaultConditionals.default1HWieldStyle);
 		builder.initialSetup(
 				CapabilityItem.WeaponCategories.SWORD,
 				EpicFightSounds.WHOOSH.get(),
 				EpicFightSounds.BLUNT_HIT.get()
-		).collider(ColliderPreset.SWORD)
-				.passiveProvider(provider.exportWeaponPassiveSkill())
-				.weaponCombinationPredicator(provider.exportCombination())
-				.styleProvider(provider.exportStyle());
+		).collider(ColliderPreset.SWORD);
 	}
 }

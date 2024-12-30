@@ -21,14 +21,11 @@ public class AxeType extends CoreCapability
 
 	private void init()
 	{
-		provider.addDefaultConditional(COMBO_PROVIDER_REGISTRY.add("default", CapabilityItem.Styles.ONE_HAND, false, null));
+		provider.addConditional(DefaultConditionals.default1HWieldStyle);
 		builder.initialSetup(
 						CapabilityItem.WeaponCategories.AXE,
 						EpicFightSounds.WHOOSH.get(),
 						EpicFightSounds.BLADE_HIT.get()
-				).collider(ColliderPreset.TOOLS)
-				.passiveProvider(provider.exportWeaponPassiveSkill())
-				.weaponCombinationPredicator(provider.exportCombination())
-				.styleProvider(provider.exportStyle());
+				).collider(ColliderPreset.TOOLS);
 	}
 }
