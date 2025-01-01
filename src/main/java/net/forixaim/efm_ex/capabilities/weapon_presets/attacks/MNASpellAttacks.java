@@ -2,7 +2,7 @@ package net.forixaim.efm_ex.capabilities.weapon_presets.attacks;
 
 import com.mna.api.spells.collections.Shapes;
 import net.forixaim.efm_ex.animations.mna.MNAAnimations;
-import net.forixaim.efm_ex.capabilities.movesets.MoveSet;
+import net.forixaim.efm_ex.api.moveset.MoveSet;
 import net.forixaim.efm_ex.capabilities.weapon_presets.types.MNASpellType;
 import net.forixaim.efm_ex.capabilities.weaponcaps.compat.EXSpellCapability;
 import com.mojang.datafixers.util.Pair;

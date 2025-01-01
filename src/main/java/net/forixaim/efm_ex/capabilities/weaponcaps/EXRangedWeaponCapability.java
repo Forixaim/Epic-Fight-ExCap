@@ -1,8 +1,8 @@
 package net.forixaim.efm_ex.capabilities.weaponcaps;
 
 import com.google.common.collect.Maps;
-import net.forixaim.efm_ex.capabilities.movesets.MoveSet;
-import net.forixaim.efm_ex.capabilities.movesets.RangedMoveSet;
+import net.forixaim.efm_ex.api.moveset.MoveSet;
+import net.forixaim.efm_ex.api.moveset.RangedMoveSet;
 import net.minecraft.world.InteractionHand;
 import yesman.epicfight.api.animation.AnimationProvider;
 import yesman.epicfight.api.animation.LivingMotion;

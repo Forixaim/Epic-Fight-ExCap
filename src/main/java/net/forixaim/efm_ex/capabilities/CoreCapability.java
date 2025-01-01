@@ -4,9 +4,8 @@ import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 import net.forixaim.efm_ex.api.providers.ProviderConditional;
 import net.forixaim.efm_ex.api.providers.CoreWeaponCapabilityProvider;
-import net.forixaim.efm_ex.capabilities.movesets.MoveSet;
+import net.forixaim.efm_ex.api.moveset.MoveSet;
 import net.forixaim.efm_ex.capabilities.weaponcaps.EXWeaponCapability;
-import yesman.epicfight.main.EpicFightMod;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.Style;
 

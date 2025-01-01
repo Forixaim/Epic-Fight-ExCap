@@ -1,6 +1,6 @@
 package net.forixaim.efm_ex.capabilities.weapon_presets.attacks;
 
-import net.forixaim.efm_ex.capabilities.movesets.MoveSet;
+import net.forixaim.efm_ex.api.moveset.MoveSet;
 import net.forixaim.efm_ex.capabilities.weapon_presets.types.SpearType;
 import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.gameasset.Animations;
@@ -11,8 +11,8 @@ public class SpearAttacks
 {
 	public static void injectAttacks()
 	{
-		SpearType.getInstance().getAttackSets().put(CapabilityItem.Styles.TWO_HAND, spear1HMS);
-		SpearType.getInstance().getAttackSets().put(CapabilityItem.Styles.ONE_HAND, spear2HMS);
+		SpearType.getInstance().getAttackSets().put(CapabilityItem.Styles.ONE_HAND, spear1HMS);
+		SpearType.getInstance().getAttackSets().put(CapabilityItem.Styles.TWO_HAND, spear2HMS);
 		SpearType.getInstance().getAttackSets().put(CapabilityItem.Styles.MOUNT, MountedAttacks.mountedSpearMS);
 	}
 	public static final MoveSet spear2HMS = MoveSet.builder()

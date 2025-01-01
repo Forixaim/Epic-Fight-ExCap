@@ -1,7 +1,5 @@
-package net.forixaim.efm_ex.capabilities.movesets;
+package net.forixaim.efm_ex.api.moveset;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.world.item.ItemStack;
@@ -109,7 +107,13 @@ public class MoveSet
 
         public MoveSetBuilder addGuardAnimations(GuardSkill guardSkill, GuardSkill.BlockType blockType, StaticAnimation... animation)
         {
-            GuardAnimations.computeIfAbsent(guardSkill, (guardSkill1 -> Maps.newHashMap())).put(blockType, Arrays.asList(animation));
+            GuardAnimations.computeIfAbsent(guardSkill, (guardSkill1 -> Maps.newHashMap())).computeIfAbsent(blockType, blockType1 -> Lists.newArrayList()).addAll(Arrays.asList(animation));
+            return this;
+        }
+
+        public MoveSetBuilder easyAddGuardAnimations(Skill guardSkill, Map<GuardSkill.BlockType, StaticAnimation> animations)
+        {
+            animations.forEach((blockType, animation) -> this.addGuardAnimations((GuardSkill) guardSkill, blockType, animation));
             return this;
         }
 

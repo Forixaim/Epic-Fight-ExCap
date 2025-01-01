@@ -1,6 +1,6 @@
 package net.forixaim.efm_ex.capabilities.weapon_presets.attacks;
 
-import net.forixaim.efm_ex.capabilities.movesets.MoveSet;
+import net.forixaim.efm_ex.api.moveset.MoveSet;
 import net.forixaim.efm_ex.capabilities.weapon_presets.types.DaggerType;
 import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.gameasset.Animations;

@@ -5,7 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "efm_ex.refmap.json",
   "mixins": [
-    "MixinGuard"
+    "MixinGuard",
+    "MixinParryingSkill"
   ],
   "client": [
   ],

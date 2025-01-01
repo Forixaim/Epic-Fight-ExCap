@@ -1,4 +1,4 @@
-package net.forixaim.efm_ex.capabilities.movesets;
+package net.forixaim.efm_ex.api.moveset;
 
 import com.google.common.collect.Maps;
 import net.minecraft.world.item.ItemStack;

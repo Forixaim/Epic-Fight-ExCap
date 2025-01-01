@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 import io.redspace.ironsspellbooks.IronsSpellbooks;
-import net.forixaim.efm_ex.capabilities.movesets.MoveSet;
+import net.forixaim.efm_ex.api.moveset.MoveSet;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
