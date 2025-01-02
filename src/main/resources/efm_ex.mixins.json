@@ -5,10 +5,10 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "efm_ex.refmap.json",
   "mixins": [
-    "MixinGuard",
-    "MixinParryingSkill"
   ],
   "client": [
+    "MixinGuard",
+    "MixinParryingSkill"
   ],
   "injectors": {
     "defaultRequire": 1
