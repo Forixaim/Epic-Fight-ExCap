@@ -12,6 +12,7 @@ import yesman.epicfight.world.capabilities.item.Style;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class CoreCapability
@@ -43,15 +44,15 @@ public class CoreCapability
 		return AttackSets;
 	}
 
-
-	/**
-	 * Deprecated: switched to a more modular MoveSet class
-	 * @return attackComboRegistry for legacy purposes.
-	 */
-	@Deprecated
-	public List<Pair<Style, Function<Pair<Style, EXWeaponCapability.Builder>, EXWeaponCapability.Builder>>> getAttackCombinationRegistry()
+	public static CoreCapability quickStart(Consumer<EXWeaponCapability.Builder> quickStart)
 	{
-		return attackCombinationRegistry;
+		return new CoreCapability().start(quickStart);
+	}
+
+	private CoreCapability start(Consumer<EXWeaponCapability.Builder> qs)
+	{
+		qs.accept(builder);
+		return this;
 	}
 
 	public List<ProviderConditional> getStyleComboProviderRegistry()

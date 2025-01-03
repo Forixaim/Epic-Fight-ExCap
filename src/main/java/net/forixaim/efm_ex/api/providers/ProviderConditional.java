@@ -364,7 +364,7 @@ public class ProviderConditional
 			return this;
 		}
 
-		public ProviderConditionalBuilder setProviderConditionals(ProviderConditional[] providerConditionals) {
+		public ProviderConditionalBuilder setProviderConditionals(ProviderConditional... providerConditionals) {
 			this.providerConditionals = providerConditionals;
 			return this;
 		}

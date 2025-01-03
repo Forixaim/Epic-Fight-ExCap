@@ -1,7 +1,7 @@
 package net.forixaim.efm_ex.capabilities;
 
 import net.forixaim.efm_ex.EpicFightEXCapability;
-import net.forixaim.efm_ex.capabilities.weapon_presets.types.*;
+import net.forixaim.efm_ex.capabilities.weapon_presets.ExCapWeapons;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -14,34 +14,17 @@ import java.util.function.Function;
 @Mod.EventBusSubscriber(modid = EpicFightEXCapability.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CapabilityRegistry
 {
-	public static final Function<Item, CapabilityItem.Builder> AXE = (item ->
-			AxeType.getInstance().export());
-
-	public static final Function<Item, CapabilityItem.Builder> BOKKEN = (item ->
-			BokkenType.getInstance().export());
-
-	public static final Function<Item, CapabilityItem.Builder> SWORD = (item ->
-			SwordType.getInstance().export());
-
-	public static final Function<Item, CapabilityItem.Builder> LONGSWORD = (item ->
-			LongswordType.getInstance().export());
-	public static final Function<Item, CapabilityItem.Builder> GREATSWORD = (item ->
-			GreatswordType.getInstance().export());
-	public static final Function<Item, CapabilityItem.Builder> TACHI = (item ->
-			TachiType.getInstance().export());
-	public static final Function<Item, CapabilityItem.Builder> SPEAR = (item ->
-			SpearType.getInstance().export());
-	public static final Function<Item, CapabilityItem.Builder> DAGGER = (item ->
-			DaggerType.getInstance().export());
-
-	public static final Function<Item, CapabilityItem.Builder> UCHIGATANA = item ->
-			UchigatanaType.getInstance().export();
-
-	public static final Function<Item, CapabilityItem.Builder> SPELL= (item ->
-			MNASpellType.getInstance().export());
-
-	public static final Function<Item, CapabilityItem.Builder> BOW = (item ->
-			BowType.getInstance().export());
+	public static final Function<Item, CapabilityItem.Builder> AXE = item -> ExCapWeapons.AXE.export();
+	public static final Function<Item, CapabilityItem.Builder> BOKKEN = item -> ExCapWeapons.BOKKEN.export();
+	public static final Function<Item, CapabilityItem.Builder> SWORD = item -> ExCapWeapons.SWORD.export();
+	public static final Function<Item, CapabilityItem.Builder> LONGSWORD = item -> ExCapWeapons.LONGSWORD.export();
+	public static final Function<Item, CapabilityItem.Builder> GREATSWORD = item -> ExCapWeapons.GREATSWORD.export();
+	public static final Function<Item, CapabilityItem.Builder> TACHI = item -> ExCapWeapons.TACHI.export();
+	public static final Function<Item, CapabilityItem.Builder> SPEAR = item -> ExCapWeapons.SPEAR.export();
+	public static final Function<Item, CapabilityItem.Builder> DAGGER = item -> ExCapWeapons.DAGGER.export();
+	public static final Function<Item, CapabilityItem.Builder> UCHIGATANA = item -> ExCapWeapons.UCHIGATANA.export();
+	public static final Function<Item, CapabilityItem.Builder> SPELL= item -> ExCapWeapons.SPELL.export();
+	public static final Function<Item, CapabilityItem.Builder> BOW = item -> ExCapWeapons.BOW.export();
 
 	@SubscribeEvent
 	public static void Register(WeaponCapabilityPresetRegistryEvent Event)

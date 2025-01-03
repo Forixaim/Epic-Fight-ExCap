@@ -16,9 +16,11 @@ public class HelperFunctions
 	}
 	public static boolean skillCheck(LivingEntityPatch<?> entityPatch, Skill skill, SkillSlot slot)
 	{
-		if (entityPatch instanceof PlayerPatch)
+		if (entityPatch instanceof PlayerPatch<?> patch)
 		{
-			return ((PlayerPatch<?>) entityPatch).getSkill(slot).hasSkill(skill);
+			if (slot == null)
+				return (patch.getSkill(skill)) != null;
+			return patch.getSkill(slot).hasSkill(skill);
 		}
 		return false;
 	}

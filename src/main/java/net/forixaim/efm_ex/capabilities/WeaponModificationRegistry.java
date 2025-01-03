@@ -2,38 +2,52 @@ package net.forixaim.efm_ex.capabilities;
 
 
 import net.forixaim.efm_ex.EpicFightEXCapability;
-import net.forixaim.efm_ex.api.events.MoveSetRegistryEvent;
-import net.forixaim.efm_ex.capabilities.weapon_presets.attacks.*;
-import net.minecraftforge.eventbus.EventBus;
-import net.minecraftforge.eventbus.api.Event;
+import net.forixaim.efm_ex.api.events.ExCapWeaponRegistryEvent;
+
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.IModBusEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+
+import static net.forixaim.efm_ex.capabilities.weapon_presets.ExCapWeapons.*;
+import static net.forixaim.efm_ex.capabilities.weapon_presets.MovesetMappings.*;
+import static net.forixaim.efm_ex.capabilities.weapon_presets.MainConditionals.*;
 
 @Mod.EventBusSubscriber(modid = EpicFightEXCapability.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class WeaponModificationRegistry
 {
-	public static void fullInject()
-	{
-		AxeAttacks.injectAttacks();
-		BokkenAttacks.injectAttacks();
-		SwordAttacks.injectAttacks();
-		LongswordAttacks.injectAttacks();
-		GreatswordAttacks.injectAttacks();
-		SpearAttacks.injectAttacks();
-		DaggerAttacks.injectAttacks();
-		TachiAttacks.injectAttacks();
-		MNASpellAttacks.Inject();
-		BowAttacks.Inject();
-		UchigatanaAttacks.injectAttacks();
-	}
-
 	@SubscribeEvent
-	public static void RegisterWeaponCapabilityModification(FMLLoadCompleteEvent event)
+	public static void registerExCap(ExCapWeaponRegistryEvent event)
 	{
-		event.enqueueWork(WeaponModificationRegistry::fullInject);
+		event.addProvider(BOKKEN, DualSwords, default1HWieldStyle);
+		event.addMSEZ(BOKKEN, bokkenMovesets);
+
+		event.addProvider(LONGSWORD, SwordShieldLS, default2HWieldStyle, LiechtenauerCondition);
+		event.addMSEZ(LONGSWORD, longswordMovesets);
+
+		event.addProvider(SWORD, DualDaggers, default1HWieldStyle);
+		event.addMSEZ(SWORD, swordMovesets);
+
+		event.addProvider(UCHIGATANA, UchigatanaSheathed, default2HWieldStyle);
+		event.addMSEZ(UCHIGATANA, uchigatanaMovesets);
+
+		event.addProvider(GREATSWORD, default2HWieldStyle);
+		event.addMSEZ(GREATSWORD, greatswordMovesets);
+
+		event.addProvider(TACHI, default2HWieldStyle);
+		event.addMSEZ(TACHI, tachiMovesets);
+
+		event.addProvider(BOW, default2HWieldStyle);
+		event.addMSEZ(BOW, bowMovesets);
+
+		event.addProvider(AXE, default1HWieldStyle);
+		event.addMSEZ(AXE, axeMovesets);
+
+		event.addProvider(SPELL, default1HWieldStyle);
+		event.addMSEZ(SPELL, spellMovesets);
+
+		event.addProvider(SPEAR, default1HWieldStyle);
+		event.addMSEZ(SPEAR, spearMovesets);
+
+		event.addProvider(DAGGER, default1HWieldStyle);
+		event.addMSEZ(DAGGER, daggerMovesets);
 	}
 }

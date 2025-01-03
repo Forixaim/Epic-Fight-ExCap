@@ -43,10 +43,6 @@ public abstract class MixinParryingSkill
                 {
                     dm.setDataSync(SkillDataKeys.PARRY_MOTION_COUNTER.get(), dm.getDataValue(SkillDataKeys.PARRY_MOTION_COUNTER.get()), (ServerPlayer) playerpatch.getOriginal());
                 }
-                else
-                {
-                    dm.setDataSync(SkillDataKeys.PARRY_MOTION_COUNTER.get(), dm.getDataValue(SkillDataKeys.PARRY_MOTION_COUNTER.get()), (LocalPlayer) playerpatch.getOriginal());
-                }
             }
         }
 

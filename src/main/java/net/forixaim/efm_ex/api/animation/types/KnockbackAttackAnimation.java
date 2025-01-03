@@ -1,6 +1,5 @@
 package net.forixaim.efm_ex.api.animation.types;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.server.level.ServerLevel;
@@ -280,21 +279,17 @@ public class KnockbackAttackAnimation extends AttackAnimation
 		{
 			Set<Entity> entities = Sets.newHashSet();
 			JointColliderPair[] var7 = this.colliders;
-			int var8 = var7.length;
 
-			for (int var9 = 0; var9 < var8; ++var9)
-			{
-				Pair<Joint, Collider> colliderInfo = var7[var9];
-				Collider collider = (Collider) colliderInfo.getSecond();
-				if (collider == null)
-				{
-					collider = entitypatch.getColliderMatching(this.hand);
-				}
+            for (Pair<Joint, Collider> colliderInfo : var7) {
+                Collider collider = colliderInfo.getSecond();
+                if (collider == null) {
+                    collider = entitypatch.getColliderMatching(this.hand);
+                }
 
-				entities.addAll(collider.updateAndSelectCollideEntity(entitypatch, animation, prevElapsedTime, elapsedTime, (Joint) colliderInfo.getFirst(), attackSpeed));
-			}
+                entities.addAll(collider.updateAndSelectCollideEntity(entitypatch, animation, prevElapsedTime, elapsedTime, colliderInfo.getFirst(), attackSpeed));
+            }
 
-			return new ArrayList(entities);
+			return new ArrayList<>(entities);
 		}
 
 		public JointColliderPair[] getColliders()

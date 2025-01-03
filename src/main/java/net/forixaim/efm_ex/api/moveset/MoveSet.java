@@ -105,9 +105,13 @@ public class MoveSet
             return this;
         }
 
-        public MoveSetBuilder addGuardAnimations(GuardSkill guardSkill, GuardSkill.BlockType blockType, StaticAnimation... animation)
+        public MoveSetBuilder addGuardAnimations(Skill guardSkill, GuardSkill.BlockType blockType, StaticAnimation... animation)
         {
-            GuardAnimations.computeIfAbsent(guardSkill, (guardSkill1 -> Maps.newHashMap())).computeIfAbsent(blockType, blockType1 -> Lists.newArrayList()).addAll(Arrays.asList(animation));
+            if (guardSkill instanceof GuardSkill)
+            {
+                GuardAnimations.computeIfAbsent((GuardSkill) guardSkill, (guardSkill1 -> Maps.newHashMap())).computeIfAbsent(blockType, blockType1 -> Lists.newArrayList()).addAll(Arrays.asList(animation));
+            }
+
             return this;
         }
 

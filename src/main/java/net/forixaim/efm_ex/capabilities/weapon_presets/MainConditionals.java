@@ -1,4 +1,4 @@
-package net.forixaim.efm_ex.capabilities.weapon_presets.types;
+package net.forixaim.efm_ex.capabilities.weapon_presets;
 
 import net.forixaim.efm_ex.api.providers.ProviderConditional;
 import net.forixaim.efm_ex.api.providers.ProviderConditionalType;
@@ -10,6 +10,18 @@ import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
 public class MainConditionals
 {
+    public static ProviderConditional default1HWieldStyle = ProviderConditional.builder()
+            .setType(ProviderConditionalType.DEFAULT)
+            .setWieldStyle(CapabilityItem.Styles.ONE_HAND)
+            .isVisibleOffHand(true)
+            .build();
+
+    public static ProviderConditional default2HWieldStyle = ProviderConditional.builder()
+            .setType(ProviderConditionalType.DEFAULT)
+            .isVisibleOffHand(false)
+            .setWieldStyle(CapabilityItem.Styles.TWO_HAND)
+            .build();
+
     public static ProviderConditional SwordShieldLS = ProviderConditional.builder()
             .setType(ProviderConditionalType.WEAPON_CATEGORY)
             .setHand(InteractionHand.OFF_HAND)

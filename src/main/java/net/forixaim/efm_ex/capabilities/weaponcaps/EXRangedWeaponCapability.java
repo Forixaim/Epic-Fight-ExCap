@@ -16,7 +16,7 @@ public class EXRangedWeaponCapability extends EXWeaponCapability
 {
 	protected final Map<Style, Map<LivingMotion, AnimationProvider<?>>> rangeAnimationModifiers;
 
-	protected EXRangedWeaponCapability(CapabilityItem.Builder builder) {
+	public EXRangedWeaponCapability(CapabilityItem.Builder builder) {
 		super(builder);
 		EXRangedWeaponCapability.Builder rangedBuilder = (EXRangedWeaponCapability.Builder)builder;
 		this.rangeAnimationModifiers = rangedBuilder.rangeAnimationModifiers;

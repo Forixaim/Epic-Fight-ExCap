@@ -3,6 +3,8 @@ package net.forixaim.efm_ex.capabilities.weaponcaps.compat;
 import com.google.common.collect.Maps;
 import com.mna.api.spells.parts.Shape;
 import com.mojang.datafixers.util.Pair;
+import net.forixaim.efm_ex.api.moveset.CastingMoveSet;
+import net.forixaim.efm_ex.api.moveset.MoveSet;
 import net.forixaim.efm_ex.capabilities.weaponcaps.EXWeaponCapability;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -26,7 +28,7 @@ public class EXSpellCapability extends EXWeaponCapability
 {
 	private Map<Shape, AnimationProvider<?>> castAnimations;
 	
-	protected EXSpellCapability(CapabilityItem.Builder builder)
+	public EXSpellCapability(CapabilityItem.Builder builder)
 	{
 		super(builder);
 		castAnimations = ((Builder)builder).castAnimations;
@@ -168,6 +170,16 @@ public class EXSpellCapability extends EXWeaponCapability
 		@Override
 		public Builder innateSkill(Style style, Function<ItemStack, Skill> innateSkill) {
 			return (Builder) super.innateSkill(style, innateSkill);
+		}
+
+		@Override
+		public void addMoveset(Style style, MoveSet moveSet)
+		{
+			super.addMoveset(style, moveSet);
+			if (moveSet instanceof CastingMoveSet cms)
+			{
+                castAnimations.putAll(cms.getSpellAnimations());
+			}
 		}
 
 		@Override
