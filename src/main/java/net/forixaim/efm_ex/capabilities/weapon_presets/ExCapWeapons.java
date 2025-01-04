@@ -1,15 +1,20 @@
 package net.forixaim.efm_ex.capabilities.weapon_presets;
 
+import net.forixaim.efm_ex.EpicFightEXCapability;
+import net.forixaim.efm_ex.api.events.ExCapWeaponRegistryEvent;
 import net.forixaim.efm_ex.capabilities.CoreCapability;
 import net.forixaim.efm_ex.capabilities.weaponcaps.EXBowWeaponCapability;
 import net.forixaim.efm_ex.capabilities.weaponcaps.compat.EXSpellCapability;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import yesman.epicfight.gameasset.ColliderPreset;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
+@Mod.EventBusSubscriber(modid = EpicFightEXCapability.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ExCapWeapons
 {
-    public static CoreCapability BOKKEN;
+    public static CoreCapability BOKKEN = null;
     public static CoreCapability SWORD;
     public static CoreCapability AXE;
     public static CoreCapability LONGSWORD;
@@ -21,7 +26,13 @@ public class ExCapWeapons
     public static CoreCapability UCHIGATANA;
     public static CoreCapability DAGGER;
 
-    static
+    @SubscribeEvent
+    public static void onRegister(ExCapWeaponRegistryEvent event)
+    {
+        event.getExCapWeapons().put(EpicFightEXCapability.MODID, ExCapWeapons::build);
+    }
+
+    public static void build()
     {
         DAGGER = CoreCapability.quickStart(
                 builder -> builder.category(CapabilityItem.WeaponCategories.DAGGER)

@@ -1,16 +1,36 @@
 package net.forixaim.efm_ex.api;
 
+import net.forixaim.efm_ex.api.events.ExCapMovesetRegistryEvent;
 import net.forixaim.efm_ex.api.events.ExCapWeaponRegistryEvent;
+import net.forixaim.efm_ex.api.events.MoveSetDefinitionRegistryEvent;
 import net.minecraftforge.fml.ModLoader;
 
 public class Registries
 {
+    public static void registerMovesets()
+    {
+        final MoveSetDefinitionRegistryEvent moveSetRegistryEvent = new MoveSetDefinitionRegistryEvent();
+
+        ModLoader.get().postEvent(moveSetRegistryEvent);
+
+        moveSetRegistryEvent.getMoveSets().forEach(
+                (moveSet, registryEvent) -> registryEvent.run()
+        );
+    }
+
     /**
      * This is to be called after everything has been loaded
      */
-    public static void registerAll()
+    public static void registerCapabilities()
     {
-        final ExCapWeaponRegistryEvent registryEvent = new ExCapWeaponRegistryEvent();
+        final ExCapMovesetRegistryEvent registryEvent = new ExCapMovesetRegistryEvent();
+        final ExCapWeaponRegistryEvent exCapWeaponRegistryEvent = new ExCapWeaponRegistryEvent();
+
+        ModLoader.get().postEvent(exCapWeaponRegistryEvent);
+
+        exCapWeaponRegistryEvent.getExCapWeapons().forEach(
+                (s, runnable) -> runnable.run()
+        );
 
         ModLoader.get().postEvent(registryEvent);
 
@@ -20,10 +40,7 @@ public class Registries
         );
         registryEvent.getMoveSetRegistryMap().forEach(
                 (coreCapability, styleMoveSetMap) ->
-                        styleMoveSetMap.forEach(
-                                (style, moveSet) ->
-                                        coreCapability.getAttackSets().put(style, moveSet)
-                        )
+                        coreCapability.getAttackSets().putAll(styleMoveSetMap)
         );
     }
 

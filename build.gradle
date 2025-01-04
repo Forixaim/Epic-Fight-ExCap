@@ -80,7 +80,7 @@ minecraft {
 
         server {
             property 'forge.enabledGameTestNamespaces', mod_id
-            args '--nogui'
+            args ''
         }
 
         // This run config launches GameTestServer and runs all registered gametests, then exits.
@@ -140,13 +140,15 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     implementation fg.deobf("curse.maven:epic-fight-mod-405076:5856683")
-    implementation fg.deobf("curse.maven:battle-arts-api-1091499:5940607")
+    implementation fg.deobf("libs:BattleArtsAPI:20.9.5.2")
 
     runtimeOnly fg.deobf("curse.maven:caelus-308989:4581481")
     runtimeOnly fg.deobf("curse.maven:playeranimator-658587:4587214")
     implementation fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}")
     runtimeOnly fg.deobf("curse.maven:curios-309927:5266541")
     implementation fg.deobf("curse.maven:epic-fight-dual-spears-1069105:5664704")
+
+    runtimeOnly fg.deobf("curse.maven:epic-fight-indestructible-915201:5717023")
 
     compileOnly fg.deobf("curse.maven:mna-406360:${mna_version}")
 

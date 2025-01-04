@@ -117,7 +117,7 @@ public class MoveSet
 
         public MoveSetBuilder easyAddGuardAnimations(Skill guardSkill, Map<GuardSkill.BlockType, StaticAnimation> animations)
         {
-            animations.forEach((blockType, animation) -> this.addGuardAnimations((GuardSkill) guardSkill, blockType, animation));
+            animations.forEach((blockType, animation) -> this.addGuardAnimations(guardSkill, blockType, animation));
             return this;
         }
 

@@ -32,8 +32,8 @@ import yesman.epicfight.world.capabilities.item.WeaponCategory;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * A custom implementation of the original WeaponCapability class with a focus on modularity with a conditional passive skill provider.
@@ -47,6 +47,7 @@ public class EXWeaponCapability extends WeaponCapability
 	protected final Map<Style, Map<LivingMotion, AnimationProvider<?>>> battleModeAnimations;
 	protected final Map<Style, AnimationProvider<?>> battleTransitionAnimations;
 	protected final Map<Style, Map<GuardSkill, Map<GuardSkill.BlockType, List<AnimationProvider<?>>>>> guardAnimations;
+	protected final Map<Style, Map<LivingMotion, AnimationProvider<?>>> ExCapMotions;
 
 	protected EXWeaponCapability(CapabilityItem.Builder builder)
 	{
@@ -58,6 +59,7 @@ public class EXWeaponCapability extends WeaponCapability
 		this.chantAnimations = efbsBuilder.chantAnimations;
 		this.guardAnimations = efbsBuilder.guardAnimations;
 		this.weaponPassiveSkill = efbsBuilder.weaponPassiveSkill;
+		this.ExCapMotions = efbsBuilder.ExCapLMMs;
 	}
 
 	public Map<Style, AnimationProvider<?>> getBattleTransitionAnimations()
@@ -109,7 +111,15 @@ public class EXWeaponCapability extends WeaponCapability
 
 	@Override
 	public Map<LivingMotion, AnimationProvider<?>> getLivingMotionModifier(LivingEntityPatch<?> player, InteractionHand hand) {
-		return super.getLivingMotionModifier(player, hand);
+		if (this.ExCapMotions != null && hand != InteractionHand.OFF_HAND) {
+			Map<LivingMotion, AnimationProvider<?>> motions = this.ExCapMotions.getOrDefault(this.getStyle(player), Maps.newHashMap());
+			Map<LivingMotion, AnimationProvider<?>> var10000 = this.ExCapMotions.getOrDefault(Styles.COMMON, Maps.newHashMap());
+			Objects.requireNonNull(motions);
+			var10000.forEach(motions::putIfAbsent);
+			return motions;
+		} else {
+			return super.getLivingMotionModifier(player, hand);
+		}
 	}
 
 	@Override
@@ -149,6 +159,7 @@ public class EXWeaponCapability extends WeaponCapability
 		protected final Map<Style, Map<Object, AnimationProvider<?>>>  chantAnimations;
 		protected Map<Style, Map<LivingMotion, AnimationProvider<?>>> battleModeAnimations;
 		protected final Map<Style, AnimationProvider<?>> battleTransitionAnimations;
+		protected final Map<Style, Map<LivingMotion, AnimationProvider<?>>> ExCapLMMs;
 		protected final Map<Style, Skill> weaponPassiveSkill;
 
 		//Utilizing the getGuardMotion method in EXWeaponCapability, guardAnimations can define a custom set of guard animations for each guard skill and block type.
@@ -164,6 +175,7 @@ public class EXWeaponCapability extends WeaponCapability
 			chantAnimations = Maps.newHashMap();
 			guardAnimations = Maps.newHashMap();
 			weaponPassiveSkill = Maps.newHashMap();
+			ExCapLMMs = Maps.newHashMap();
 		}
 
 		public Builder addGuardMotion(Style wieldStyle, GuardSkill guardSkill, GuardSkill.BlockType blockType, StaticAnimation... animation)
@@ -172,12 +184,6 @@ public class EXWeaponCapability extends WeaponCapability
 			guardAnimations.get(wieldStyle).computeIfAbsent(guardSkill, k -> Maps.newHashMap());
 			guardAnimations.get(wieldStyle).get(guardSkill).computeIfAbsent(blockType, k -> Lists.newArrayList());
 			guardAnimations.get(wieldStyle).get(guardSkill).get(blockType).addAll(Arrays.asList(animation));
-			return this;
-		}
-
-		public Builder quickAddGuardMotion(Style wieldStyle, GuardSkill guardSkill, Supplier<Map<GuardSkill.BlockType, StaticAnimation>> animations)
-		{
-			animations.get().forEach((blockType, animation) -> addGuardMotion(wieldStyle, guardSkill, blockType, animation));
 			return this;
 		}
 
@@ -264,9 +270,10 @@ public class EXWeaponCapability extends WeaponCapability
 			return (Builder) super.canBePlacedOffhand(canBePlacedOffhand);
 		}
 
-		@Override
-		public Builder livingMotionModifier(Style wieldStyle, LivingMotion livingMotion, StaticAnimation animation) {
-			return (Builder) super.livingMotionModifier(wieldStyle, livingMotion, animation);
+		public Builder exCapLMMs(Style wieldStyle, LivingMotion livingMotion, AnimationProvider<?> animation) {
+			ExCapLMMs.computeIfAbsent(wieldStyle, k -> Maps.newHashMap());
+			ExCapLMMs.get(wieldStyle).put(livingMotion, animation);
+			return this;
 		}
 
 		@Override
@@ -302,7 +309,7 @@ public class EXWeaponCapability extends WeaponCapability
 		public void addMoveset(Style style, MoveSet moveSet)
 		{
 			newStyleCombo(style, moveSet.getAutoAttackAnimations().toArray(StaticAnimation[]::new));
-			moveSet.getLivingMotionModifiers().forEach((motion, animation) -> livingMotionModifier(style, motion, animation));
+			moveSet.getLivingMotionModifiers().forEach((motion, animation) -> exCapLMMs(style, motion, animation));
 			moveSet.getGuardAnimations().forEach((guardSkill, blockTypeListMap) -> blockTypeListMap.forEach(((blockType, animationProviders) -> addGuardMotion(style, guardSkill, blockType, animationProviders.toArray(StaticAnimation[]::new)))));
 			innateSkill(style, moveSet.getWeaponInnateSkill());
 			weaponPassiveSkill.put(style, moveSet.getWeaponPassiveSkill());
