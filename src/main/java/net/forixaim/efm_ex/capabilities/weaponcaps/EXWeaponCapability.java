@@ -178,13 +178,12 @@ public class EXWeaponCapability extends WeaponCapability
 			ExCapLMMs = Maps.newHashMap();
 		}
 
-		public Builder addGuardMotion(Style wieldStyle, GuardSkill guardSkill, GuardSkill.BlockType blockType, StaticAnimation... animation)
+		public void addGuardMotion(Style wieldStyle, GuardSkill guardSkill, GuardSkill.BlockType blockType, StaticAnimation... animation)
 		{
 			guardAnimations.computeIfAbsent(wieldStyle, k -> Maps.newHashMap());
 			guardAnimations.get(wieldStyle).computeIfAbsent(guardSkill, k -> Maps.newHashMap());
 			guardAnimations.get(wieldStyle).get(guardSkill).computeIfAbsent(blockType, k -> Lists.newArrayList());
 			guardAnimations.get(wieldStyle).get(guardSkill).get(blockType).addAll(Arrays.asList(animation));
-			return this;
 		}
 
 
@@ -270,10 +269,9 @@ public class EXWeaponCapability extends WeaponCapability
 			return (Builder) super.canBePlacedOffhand(canBePlacedOffhand);
 		}
 
-		public Builder exCapLMMs(Style wieldStyle, LivingMotion livingMotion, AnimationProvider<?> animation) {
+		public void exCapLMMs(Style wieldStyle, LivingMotion livingMotion, AnimationProvider<?> animation) {
 			ExCapLMMs.computeIfAbsent(wieldStyle, k -> Maps.newHashMap());
 			ExCapLMMs.get(wieldStyle).put(livingMotion, animation);
-			return this;
 		}
 
 		@Override
@@ -309,7 +307,7 @@ public class EXWeaponCapability extends WeaponCapability
 		public void addMoveset(Style style, MoveSet moveSet)
 		{
 			newStyleCombo(style, moveSet.getAutoAttackAnimations().toArray(StaticAnimation[]::new));
-			moveSet.getLivingMotionModifiers().forEach((motion, animation) -> exCapLMMs(style, motion, animation));
+			moveSet.getLivingMotionModifiers().forEach((motion, animation) -> exCapLMMs(style, motion, () -> animation));
 			moveSet.getGuardAnimations().forEach((guardSkill, blockTypeListMap) -> blockTypeListMap.forEach(((blockType, animationProviders) -> addGuardMotion(style, guardSkill, blockType, animationProviders.toArray(StaticAnimation[]::new)))));
 			innateSkill(style, moveSet.getWeaponInnateSkill());
 			weaponPassiveSkill.put(style, moveSet.getWeaponPassiveSkill());
