@@ -3,6 +3,8 @@ package net.forixaim.efm_ex;
 import com.mojang.logging.LogUtils;
 import net.forixaim.efm_ex.api.Registries;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.server.ServerStartedEvent;
+import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -29,10 +31,9 @@ public class EpicFightEXCapability {
         modEventBus.addListener(EpicFightEXCapability::onComplete);
     }
 
-    public static void onComplete(FMLLoadCompleteEvent event)
+    public static void onComplete(FMLCommonSetupEvent event)
     {
         event.enqueueWork(Registries::registerMovesets);
         event.enqueueWork(Registries::registerCapabilities);
     }
-
 }
