@@ -307,7 +307,7 @@ public class EXWeaponCapability extends WeaponCapability
 		public void addMoveset(Style style, MoveSet moveSet)
 		{
 			newStyleCombo(style, moveSet.getAutoAttackAnimations().toArray(StaticAnimation[]::new));
-			moveSet.getLivingMotionModifiers().forEach((motion, animation) -> exCapLMMs(style, motion, () -> animation));
+			moveSet.getLivingMotionModifiers().forEach((motion, animation) -> exCapLMMs(style, motion, animation));
 			moveSet.getGuardAnimations().forEach((guardSkill, blockTypeListMap) -> blockTypeListMap.forEach(((blockType, animationProviders) -> addGuardMotion(style, guardSkill, blockType, animationProviders.toArray(StaticAnimation[]::new)))));
 			innateSkill(style, moveSet.getWeaponInnateSkill());
 			weaponPassiveSkill.put(style, moveSet.getWeaponPassiveSkill());

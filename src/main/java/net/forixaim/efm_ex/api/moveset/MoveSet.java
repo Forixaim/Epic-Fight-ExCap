@@ -16,11 +16,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class MoveSet 
 {
     private final List<StaticAnimation> AutoAttackAnimations;
-    private final Map<LivingMotion, StaticAnimation> LivingMotionModifiers;
+    private final Map<LivingMotion, AnimationProvider<?>> LivingMotionModifiers;
     private final Function<ItemStack, Skill> WeaponInnateSkill;
     private final Map<GuardSkill, Map<GuardSkill.BlockType, List<StaticAnimation>>> GuardAnimations;
     private final Skill WeaponPassiveSkill;
@@ -55,14 +56,14 @@ public class MoveSet
         return AutoAttackAnimations;
     }
 
-    public Map<LivingMotion, StaticAnimation> getLivingMotionModifiers() {
+    public Map<LivingMotion, AnimationProvider<?>> getLivingMotionModifiers() {
         return LivingMotionModifiers;
     }
 
     public static class MoveSetBuilder
     {
         protected final List<StaticAnimation> AutoAttackAnimations;
-        protected final Map<LivingMotion, StaticAnimation> LivingMotionModifiers;
+        protected final Map<LivingMotion, AnimationProvider<?>> LivingMotionModifiers;
         protected Function<ItemStack, Skill> WeaponInnateSkill;
         protected final Map<GuardSkill, Map<GuardSkill.BlockType, List<StaticAnimation>>>  GuardAnimations;
         protected Skill WeaponPassiveSkill;
@@ -88,9 +89,9 @@ public class MoveSet
             return this;
         }
 
-        public MoveSetBuilder addLivingMotionModifier(LivingMotion livingMotion, StaticAnimation animation)
+        public MoveSetBuilder addLivingMotionModifier(LivingMotion livingMotion, Supplier<StaticAnimation> animation)
         {
-            LivingMotionModifiers.put(livingMotion, animation);
+            LivingMotionModifiers.put(livingMotion, animation.get());
             return this;
         }
 
@@ -100,11 +101,11 @@ public class MoveSet
             return this;
         }
 
-        public MoveSetBuilder addLivingMotionsRecursive(StaticAnimation animation, LivingMotion... motions)
+        public MoveSetBuilder addLivingMotionsRecursive(Supplier<StaticAnimation> animation, LivingMotion... motions)
         {
             for (LivingMotion livingMotion : motions)
             {
-                LivingMotionModifiers.put(livingMotion, animation);
+                LivingMotionModifiers.put(livingMotion, animation.get());
             }
             return this;
         }

@@ -3,17 +3,25 @@ package net.forixaim.efm_ex.api;
 import net.forixaim.efm_ex.api.events.ExCapMovesetRegistryEvent;
 import net.forixaim.efm_ex.api.events.ExCapWeaponRegistryEvent;
 import net.forixaim.efm_ex.api.events.MoveSetDefinitionRegistryEvent;
+import net.forixaim.efm_ex.api.moveset.MoveSet;
 import net.minecraftforge.fml.ModLoader;
+
+import javax.swing.text.Style;
+import java.util.Map;
+import java.util.Objects;
 
 public class Registries
 {
+    private static ExCapWeaponRegistryEvent event;
+    private static MoveSetDefinitionRegistryEvent event2;
+    private static ExCapMovesetRegistryEvent event3;
     public static void registerMovesets()
     {
-        final MoveSetDefinitionRegistryEvent moveSetRegistryEvent = new MoveSetDefinitionRegistryEvent();
+        event2 = new MoveSetDefinitionRegistryEvent();
 
-        ModLoader.get().postEvent(moveSetRegistryEvent);
+        ModLoader.get().postEvent(event2);
 
-        moveSetRegistryEvent.getMoveSets().forEach(
+        event2.getMoveSets().forEach(
                 (moveSet, registryEvent) -> registryEvent.run()
         );
     }
@@ -23,26 +31,33 @@ public class Registries
      */
     public static void registerCapabilities()
     {
-        final ExCapMovesetRegistryEvent registryEvent = new ExCapMovesetRegistryEvent();
-        final ExCapWeaponRegistryEvent exCapWeaponRegistryEvent = new ExCapWeaponRegistryEvent();
+        event3 = new ExCapMovesetRegistryEvent();
+        event = new ExCapWeaponRegistryEvent();
 
-        ModLoader.get().postEvent(exCapWeaponRegistryEvent);
+        ModLoader.get().postEvent(event);
 
-        exCapWeaponRegistryEvent.getExCapWeapons().forEach(
+        event.getExCapWeapons().forEach(
                 (s, runnable) -> runnable.run()
         );
 
-        ModLoader.get().postEvent(registryEvent);
+        ModLoader.get().postEvent(event3);
 
-        registryEvent.getCoreCapabilityConditionalMap().forEach(
+        event3.getCoreCapabilityConditionalMap().forEach(
                 (coreCapability, conditionals) ->
                         coreCapability.getStyleComboProviderRegistry().addAll(conditionals)
         );
-        registryEvent.getMoveSetRegistryMap().forEach(
+        event3.getMoveSetRegistryMap().forEach(
                 (coreCapability, styleMoveSetMap) ->
                         coreCapability.getAttackSets().putAll(styleMoveSetMap)
         );
     }
 
+    private static void validate(Map<Style, MoveSet> setMap)
+    {
+        //Validate Animations
+        setMap.forEach((style, moveSet) -> moveSet.getAutoAttackAnimations().forEach(
+                animation -> Objects.requireNonNull(animation, "Animation must not be null")
+        ));
+    }
 
 }

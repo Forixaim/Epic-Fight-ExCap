@@ -10,6 +10,7 @@ import yesman.epicfight.skill.guard.GuardSkill;
 
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class CastingMoveSet extends MoveSet
 {
@@ -53,7 +54,7 @@ public class CastingMoveSet extends MoveSet
             return (MoveSetBuilder) super.addAutoAttacks(attackAnimations);
         }
 
-        public MoveSetBuilder addLivingMotionModifier(LivingMotion livingMotion, StaticAnimation animation)
+        public MoveSetBuilder addLivingMotionModifier(LivingMotion livingMotion, Supplier<StaticAnimation> animation)
         {
             return (MoveSetBuilder) super.addLivingMotionModifier(livingMotion, animation);
         }
@@ -63,7 +64,7 @@ public class CastingMoveSet extends MoveSet
             return (MoveSetBuilder) super.addInnateSkill(weaponInnateSkill);
         }
 
-        public MoveSetBuilder addLivingMotionsRecursive(StaticAnimation animation, LivingMotion... motions)
+        public MoveSetBuilder addLivingMotionsRecursive(Supplier<StaticAnimation> animation, LivingMotion... motions)
         {
             return (MoveSetBuilder) super.addLivingMotionsRecursive(animation, motions);
         }
