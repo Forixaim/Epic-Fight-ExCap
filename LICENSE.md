@@ -1,5 +1,5 @@
 
-# The MIT License (MIT)
+<div align="center"> The MIT License (MIT) </div>
 ## Copyright (c) Forixaim 2024 
 
 ---
