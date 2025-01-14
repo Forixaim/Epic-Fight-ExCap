@@ -1,6 +1,8 @@
 
-<div align="center"> The MIT License (MIT) </div>
-## Copyright (c) Forixaim 2024 
+<div align="center"> 
+  <h1>The MIT License (MIT)</h1> 
+  <h2>Copyright (c) Forixaim 2024 </h2>
+</div>
 
 ---
 
