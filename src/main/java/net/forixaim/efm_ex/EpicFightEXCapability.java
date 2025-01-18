@@ -28,19 +28,5 @@ public class EpicFightEXCapability {
 
         MinecraftForge.EVENT_BUS.register(this);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-        modEventBus.addListener(EpicFightEXCapability::onComplete);
-        modEventBus.addListener(EpicFightEXCapability::onComplete1);
-    }
-
-    public static void onComplete(FMLLoadCompleteEvent event)
-    {
-        event.enqueueWork(Registries::registerMovesets);
-        event.enqueueWork(Registries::registerCapabilities);
-    }
-
-    public static void onComplete1(FMLDedicatedServerSetupEvent event)
-    {
-        event.enqueueWork(Registries::registerMovesets);
-        event.enqueueWork(Registries::registerCapabilities);
     }
 }

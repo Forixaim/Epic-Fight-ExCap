@@ -24,6 +24,7 @@ public class MovesetMappings
 
         event.addMoveset(ExCapWeapons.LONGSWORD, TWO_HAND, longsword2HMS);
         event.addMoveset(ExCapWeapons.LONGSWORD, ONE_HAND, longsword1HMS);
+        event.addMoveset(ExCapWeapons.LONGSWORD, OCHS, LiechtenauerMS);
         event.addMoveset(ExCapWeapons.LONGSWORD, MOUNT, mountedSwordMS);
 
         event.addMoveset(ExCapWeapons.SPEAR, TWO_HAND, spear2HMS);

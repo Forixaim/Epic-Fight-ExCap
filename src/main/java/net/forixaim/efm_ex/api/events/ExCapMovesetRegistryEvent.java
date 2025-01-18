@@ -16,7 +16,7 @@ import java.util.Map;
 public class ExCapMovesetRegistryEvent extends Event implements IModBusEvent
 {
     private final Map<CoreCapability, List<ProviderConditional>> CoreCapabilityConditionalMap;
-    private final Map<CoreCapability, Map<Style, MoveSet>> MoveSetRegistryMap;
+    private final Map<CoreCapability, Map<Style, MoveSet.MoveSetBuilder>> MoveSetRegistryMap;
 
     public ExCapMovesetRegistryEvent()
     {
@@ -24,7 +24,7 @@ public class ExCapMovesetRegistryEvent extends Event implements IModBusEvent
         MoveSetRegistryMap = Maps.newHashMap();
     }
 
-    public Map<CoreCapability, Map<Style, MoveSet>> getMoveSetRegistryMap() {
+    public Map<CoreCapability, Map<Style, MoveSet.MoveSetBuilder>> getMoveSetRegistryMap() {
         return MoveSetRegistryMap;
     }
 
@@ -37,13 +37,7 @@ public class ExCapMovesetRegistryEvent extends Event implements IModBusEvent
         CoreCapabilityConditionalMap.computeIfAbsent(ExCapWeapon, (key) -> Lists.newArrayList()).addAll(Arrays.asList(ProviderConditionals));
     }
 
-    public void addMSEZ(CoreCapability ExCapWeapon, Map<Style, MoveSet> MoveSetRegistry)
-    {
-        if (MoveSetRegistry == null) return;
-        MoveSetRegistry.forEach((style, moveSet) -> addMoveset(ExCapWeapon, style, moveSet));
-    }
-
-    public void addMoveset(CoreCapability ExCapWeapon, Style Style, MoveSet MoveSet)
+    public void addMoveset(CoreCapability ExCapWeapon, Style Style, MoveSet.MoveSetBuilder MoveSet)
     {
         MoveSetRegistryMap.computeIfAbsent(
                 ExCapWeapon, (key) -> Maps.newHashMap()

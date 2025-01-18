@@ -48,7 +48,9 @@ public class Registries
         );
         event3.getMoveSetRegistryMap().forEach(
                 (coreCapability, styleMoveSetMap) ->
-                        coreCapability.getAttackSets().putAll(styleMoveSetMap)
+                        styleMoveSetMap.forEach(
+                                (style, moveSet) -> coreCapability.getAttackSets().put(style, moveSet.build())
+                        )
         );
     }
 

@@ -7,6 +7,7 @@ import net.forixaim.efm_ex.api.events.ExCapMovesetRegistryEvent;
 import net.forixaim.efm_ex.capabilities.weapon_presets.MovesetMappings;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import yesman.epicfight.api.data.reloader.ItemCapabilityReloadListener;
 
 import static net.forixaim.efm_ex.capabilities.weapon_presets.ExCapWeapons.*;
 import static net.forixaim.efm_ex.capabilities.weapon_presets.MainConditionals.*;
@@ -26,7 +27,7 @@ public class WeaponModificationRegistry
 		event.addProvider(BOW, default2HWieldStyle);
 		event.addProvider(AXE, default1HWieldStyle);
 		event.addProvider(SPELL, default1HWieldStyle);
-		event.addProvider(SPEAR, default1HWieldStyle);
+		event.addProvider(SPEAR, default2HWieldStyle, SwordShieldLS);
 		event.addProvider(DAGGER, default1HWieldStyle);
 
 		MovesetMappings.addMovesets(event);

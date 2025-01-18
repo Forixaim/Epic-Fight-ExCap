@@ -21,24 +21,24 @@ import java.util.function.Supplier;
 @Mod.EventBusSubscriber(modid = EpicFightEXCapability.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CoreMovesets
 {
-	public static MoveSet mountedSwordMS;
-	public static MoveSet greatsword2HMS;
-	public static MoveSet axeOneHandMS;
-	public static MoveSet rangedMoveSet;
-	public static MoveSet mountedSpearMS;
-	public static MoveSet longsword2HMS;
-	public static MoveSet longsword1HMS;
-	public static MoveSet LiechtenauerMS;
-	public static MoveSet dagger1HMS;
-	public static MoveSet dagger2HMS;
-	public static MoveSet baseSpellMS;
-	public static MoveSet spear2HMS;
-	public static MoveSet spear1HMS;
-	public static MoveSet sword1HMS;
-	public static MoveSet sword2HMS;
-	public static MoveSet tachi2HMS;
-	public static MoveSet UchigatanaBase;
-	public static MoveSet UchigatanaSheathed;
+	public static MoveSet.MoveSetBuilder mountedSwordMS;
+	public static MoveSet.MoveSetBuilder greatsword2HMS;
+	public static MoveSet.MoveSetBuilder axeOneHandMS;
+	public static MoveSet.MoveSetBuilder rangedMoveSet;
+	public static MoveSet.MoveSetBuilder mountedSpearMS;
+	public static MoveSet.MoveSetBuilder longsword2HMS;
+	public static MoveSet.MoveSetBuilder longsword1HMS;
+	public static MoveSet.MoveSetBuilder LiechtenauerMS;
+	public static MoveSet.MoveSetBuilder dagger1HMS;
+	public static MoveSet.MoveSetBuilder dagger2HMS;
+	public static MoveSet.MoveSetBuilder baseSpellMS;
+	public static MoveSet.MoveSetBuilder spear2HMS;
+	public static MoveSet.MoveSetBuilder spear1HMS;
+	public static MoveSet.MoveSetBuilder sword1HMS;
+	public static MoveSet.MoveSetBuilder sword2HMS;
+	public static MoveSet.MoveSetBuilder tachi2HMS;
+	public static MoveSet.MoveSetBuilder UchigatanaBase;
+	public static MoveSet.MoveSetBuilder UchigatanaSheathed;
 
 	@SubscribeEvent
 	public static void registerMovesets(MoveSetDefinitionRegistryEvent event)
@@ -49,8 +49,7 @@ public class CoreMovesets
 	public static void build()
 	{
 		mountedSwordMS = MoveSet.builder()
-				.addAutoAttacks(Animations.SWORD_MOUNT_ATTACK)
-				.build();
+				.addAutoAttacks(Animations.SWORD_MOUNT_ATTACK);
 
 		greatsword2HMS = MoveSet.builder()
 				.addLivingMotionsRecursive(() -> Animations.BIPED_HOLD_GREATSWORD,
@@ -67,8 +66,7 @@ public class CoreMovesets
 						Animations.GREATSWORD_DASH,
 						Animations.GREATSWORD_AIR_SLASH
 				)
-				.addInnateSkill(itemstack -> EpicFightSkills.STEEL_WHIRLWIND)
-				.build();
+				.addInnateSkill(itemstack -> EpicFightSkills.STEEL_WHIRLWIND);
 
 		axeOneHandMS = MoveSet.builder()
 				.addLivingMotionModifier(LivingMotions.BLOCK, () -> Animations.SWORD_GUARD)
@@ -78,22 +76,19 @@ public class CoreMovesets
 						Animations.AXE_DASH,
 						Animations.AXE_AIRSLASH
 				)
-				.addInnateSkill(itemStack -> EpicFightSkills.GUILLOTINE_AXE)
-				.build();
+				.addInnateSkill(itemStack -> EpicFightSkills.GUILLOTINE_AXE);
 
 		rangedMoveSet = RangedMoveSet.builder()
 				.addRangedAttackModifier(LivingMotions.SHOT, Animations.BIPED_BOW_SHOT)
 				.addRangedAttackModifier(LivingMotions.AIM, Animations.BIPED_BOW_AIM)
 				.addRangedAttackModifier(LivingMotions.WALK, Animations.BIPED_WALK)
 				.addRangedAttackModifier(LivingMotions.IDLE, Animations.BIPED_IDLE)
-				.addAutoAttacks(Animations.FIST_AUTO1, Animations.FIST_AUTO2, Animations.FIST_AUTO3, Animations.FIST_DASH, Animations.FIST_AIR_SLASH)
-				.build();
+				.addAutoAttacks(Animations.FIST_AUTO1, Animations.FIST_AUTO2, Animations.FIST_AUTO3, Animations.FIST_DASH, Animations.FIST_AIR_SLASH);
 
 		mountedSpearMS = MoveSet.builder()
 				.addAutoAttacks(
 						Animations.SPEAR_MOUNT_ATTACK
-				)
-				.build();
+				);
 
 		longsword2HMS = MoveSet.builder()
 				.addLivingMotionsRecursive(() -> Animations.BIPED_HOLD_LONGSWORD,
@@ -110,8 +105,7 @@ public class CoreMovesets
 						Animations.LONGSWORD_DASH,
 						Animations.LONGSWORD_AIR_SLASH
 				)
-				.addInnateSkill(itemStack -> EpicFightSkills.LIECHTENAUER)
-				.build();
+				.addInnateSkill(itemStack -> EpicFightSkills.LIECHTENAUER);
 
 		longsword1HMS = MoveSet.builder()
 				.addLivingMotionsRecursive(() -> Animations.BIPED_HOLD_LONGSWORD,
@@ -126,8 +120,7 @@ public class CoreMovesets
 						Animations.LONGSWORD_AUTO2, Animations.LONGSWORD_AUTO3,
 						Animations.LONGSWORD_DASH, Animations.LONGSWORD_AIR_SLASH
 				)
-				.addInnateSkill(itemStack -> EpicFightSkills.SHARP_STAB)
-				.build();
+				.addInnateSkill(itemStack -> EpicFightSkills.SHARP_STAB);
 
 		LiechtenauerMS = MoveSet.builder()
 				.addLivingMotionsRecursive(() -> Animations.BIPED_HOLD_LIECHTENAUER,
@@ -144,8 +137,7 @@ public class CoreMovesets
 						Animations.LONGSWORD_DASH,
 						Animations.LONGSWORD_AIR_SLASH
 				)
-				.addInnateSkill(itemStack -> EpicFightSkills.SHARP_STAB)
-				.build();
+				.addInnateSkill(itemStack -> EpicFightSkills.SHARP_STAB);
 
 		dagger1HMS = MoveSet.builder()
 				.addAutoAttacks(
@@ -155,8 +147,7 @@ public class CoreMovesets
 						Animations.DAGGER_DASH,
 						Animations.DAGGER_AIR_SLASH
 				)
-				.addInnateSkill(itemStack -> EpicFightSkills.EVISCERATE)
-				.build();
+				.addInnateSkill(itemStack -> EpicFightSkills.EVISCERATE);
 
 		dagger2HMS = MoveSet.builder()
 				.addAutoAttacks(
@@ -171,8 +162,7 @@ public class CoreMovesets
 						LivingMotions.IDLE, LivingMotions.KNEEL, LivingMotions.WALK, LivingMotions.CHASE,
 						LivingMotions.SNEAK, LivingMotions.SWIM, LivingMotions.FLOAT, LivingMotions.FALL)
 				.addLivingMotionModifier(LivingMotions.RUN, () -> Animations.BIPED_RUN_DUAL)
-				.addInnateSkill(itemStack -> EpicFightSkills.BLADE_RUSH)
-				.build();
+				.addInnateSkill(itemStack -> EpicFightSkills.BLADE_RUSH);
 
 		if (ModList.get().isLoaded(ManaAndArtificeMod.ID)) {
 			baseSpellMS = CastingMoveSet.builder()
@@ -184,8 +174,7 @@ public class CoreMovesets
 							Animations.FIST_AIR_SLASH
 					)
 					.addSpellAnimations(Shapes.PROJECTILE, Animations.FIST_AUTO1)
-					.addInnateSkill(itemStack -> EpicFightSkills.RELENTLESS_COMBO)
-					.build();
+					.addInnateSkill(itemStack -> EpicFightSkills.RELENTLESS_COMBO);
 		} else {
 			baseSpellMS = null;
 		}
@@ -202,8 +191,7 @@ public class CoreMovesets
 						Animations.SPEAR_DASH,
 						Animations.SPEAR_TWOHAND_AIR_SLASH
 				)
-				.addInnateSkill(itemStack -> EpicFightSkills.GRASPING_SPIRE)
-				.build();
+				.addInnateSkill(itemStack -> EpicFightSkills.GRASPING_SPIRE);
 
 		spear1HMS = MoveSet.builder()
 				.addLivingMotionModifier(LivingMotions.RUN, () -> Animations.BIPED_RUN_SPEAR)
@@ -212,8 +200,7 @@ public class CoreMovesets
 						Animations.SPEAR_DASH,
 						Animations.SPEAR_ONEHAND_AIR_SLASH
 				)
-				.addInnateSkill(itemStack -> EpicFightSkills.HEARTPIERCER)
-				.build();
+				.addInnateSkill(itemStack -> EpicFightSkills.HEARTPIERCER);
 
 		sword1HMS = MoveSet.builder()
 				.addAutoAttacks(
@@ -221,8 +208,7 @@ public class CoreMovesets
 						Animations.SWORD_AUTO2, Animations.SWORD_AUTO3,
 						Animations.SWORD_DASH, Animations.SWORD_AIR_SLASH
 				)
-				.addInnateSkill(itemStack -> EpicFightSkills.SWEEPING_EDGE)
-				.build();
+				.addInnateSkill(itemStack -> EpicFightSkills.SWEEPING_EDGE);
 
 		sword2HMS = MoveSet.builder()
 				.addLivingMotionModifier(LivingMotions.BLOCK, () -> Animations.SWORD_DUAL_GUARD)
@@ -235,8 +221,7 @@ public class CoreMovesets
 						Animations.SWORD_DUAL_AUTO2, Animations.SWORD_DUAL_AUTO3,
 						Animations.SWORD_DUAL_DASH, Animations.SWORD_DUAL_AIR_SLASH
 				)
-				.addInnateSkill(itemStack -> EpicFightSkills.DANCING_EDGE)
-				.build();
+				.addInnateSkill(itemStack -> EpicFightSkills.DANCING_EDGE);
 
 		tachi2HMS = MoveSet.builder()
 				.addLivingMotionsRecursive(() -> Animations.BIPED_HOLD_TACHI,
@@ -251,8 +236,7 @@ public class CoreMovesets
 						Animations.TACHI_DASH,
 						Animations.LONGSWORD_AIR_SLASH
 				)
-				.addInnateSkill(itemStack -> EpicFightSkills.RUSHING_TEMPO)
-				.build();
+				.addInnateSkill(itemStack -> EpicFightSkills.RUSHING_TEMPO);
 
 		UchigatanaBase = MoveSet.builder()
 				.addAutoAttacks(Animations.UCHIGATANA_AUTO1, Animations.UCHIGATANA_AUTO2,
@@ -267,8 +251,7 @@ public class CoreMovesets
 				.addLivingMotionModifier(LivingMotions.RUN, () -> Animations.BIPED_RUN_UCHIGATANA)
 				.addLivingMotionModifier(LivingMotions.BLOCK, () -> Animations.UCHIGATANA_GUARD)
 				.addInnateSkill(itemStack -> EpicFightSkills.BATTOJUTSU)
-				.setPassiveSkill(EpicFightSkills.BATTOJUTSU_PASSIVE)
-				.build();
+				.setPassiveSkill(EpicFightSkills.BATTOJUTSU_PASSIVE);
 
 		UchigatanaSheathed = MoveSet.builder()
 				.addAutoAttacks(Animations.UCHIGATANA_SHEATHING_AUTO,
@@ -281,7 +264,6 @@ public class CoreMovesets
 				.addLivingMotionModifier(LivingMotions.WALK, () -> Animations.BIPED_WALK_UCHIGATANA_SHEATHING)
 				.addLivingMotionModifier(LivingMotions.RUN, () -> Animations.BIPED_RUN_UCHIGATANA_SHEATHING)
 				.addInnateSkill(itemStack -> EpicFightSkills.BATTOJUTSU)
-				.setPassiveSkill(EpicFightSkills.BATTOJUTSU_PASSIVE)
-				.build();
+				.setPassiveSkill(EpicFightSkills.BATTOJUTSU_PASSIVE);
 	}
 }
