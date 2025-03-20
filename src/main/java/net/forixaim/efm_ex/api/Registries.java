@@ -12,12 +12,9 @@ import java.util.Objects;
 
 public class Registries
 {
-    private static ExCapWeaponRegistryEvent event;
-    private static MoveSetDefinitionRegistryEvent event2;
-    private static ExCapMovesetRegistryEvent event3;
     public static void registerMovesets()
     {
-        event2 = new MoveSetDefinitionRegistryEvent();
+        MoveSetDefinitionRegistryEvent event2 = new MoveSetDefinitionRegistryEvent();
 
         ModLoader.get().postEvent(event2);
 
@@ -31,8 +28,8 @@ public class Registries
      */
     public static void registerCapabilities()
     {
-        event3 = new ExCapMovesetRegistryEvent();
-        event = new ExCapWeaponRegistryEvent();
+        ExCapMovesetRegistryEvent event3 = new ExCapMovesetRegistryEvent();
+        ExCapWeaponRegistryEvent event = new ExCapWeaponRegistryEvent();
 
         ModLoader.get().postEvent(event);
 

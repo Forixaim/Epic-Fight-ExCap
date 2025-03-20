@@ -1,32 +1,26 @@
 package net.forixaim.efm_ex.skill;
 
-import com.mojang.datafixers.util.Pair;
 import net.forixaim.bs_api.BattleArtsAPI;
 import net.forixaim.bs_api.battle_arts_skills.BattleArtsSkillSlots;
 import net.forixaim.bs_api.battle_arts_skills.battle_style.BattleStyle;
 import net.minecraft.world.InteractionHand;
 import net.minecraftforge.fml.ModList;
-import yesman.epicfight.api.animation.AnimationProvider;
-import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.gameasset.EpicFightSkills;
-import yesman.epicfight.skill.Skill;
-import yesman.epicfight.skill.SkillCategories;
-import yesman.epicfight.skill.SkillContainer;
-import yesman.epicfight.skill.SkillSlots;
+import yesman.epicfight.skill.*;
+import yesman.epicfight.skill.weaponinnate.BladeRushSkill;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
-import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
 public class ExCapWeaponPassive extends Skill
 {
 
-	public ExCapWeaponPassive(Builder<? extends Skill> builder)
+	public ExCapWeaponPassive(SkillBuilder<? extends Skill> builder)
 	{
 		super(builder);
 	}
 
-	public static Builder<Skill> createBuilder()
+	public static SkillBuilder<Skill> createBuilder()
 	{
-		return new Skill.Builder<>().setCategory(SkillCategories.WEAPON_PASSIVE);
+		return new SkillBuilder<>().setCategory(SkillCategories.WEAPON_PASSIVE);
 	}
 
 	/**
@@ -38,8 +32,8 @@ public class ExCapWeaponPassive extends Skill
 	{
 		if (ModList.get().isLoaded(BattleArtsAPI.MOD_ID))
 		{
-			SkillContainer battleStyleContainer = container.getExecuter().getSkill(BattleArtsSkillSlots.BATTLE_STYLE);
-			if (container.getExecuter() instanceof ServerPlayerPatch playerPatch && !battleStyleContainer.isEmpty())
+			SkillContainer battleStyleContainer = container.getExecutor().getSkill(BattleArtsSkillSlots.BATTLE_STYLE);
+			if (container.getExecutor() instanceof ServerPlayerPatch playerPatch && !battleStyleContainer.isEmpty())
 			{
 				if (battleStyleContainer.getSkill() instanceof BattleStyle battleStyle)
 				{
@@ -49,10 +43,11 @@ public class ExCapWeaponPassive extends Skill
 					}
 					if (!battleStyle.getWeaponDrawAnimations().isEmpty())
 					{
-						if (battleStyle.getWeaponDrawAnimations().get(container.getExecuter().getHoldingItemCapability(InteractionHand.MAIN_HAND).getWeaponCategory()) != null)
+						if (battleStyle.getWeaponDrawAnimations().get(container.getExecutor().getHoldingItemCapability(InteractionHand.MAIN_HAND).getWeaponCategory()) != null)
 						{
-							container.getExecuter().playAnimationSynchronized(battleStyle.getWeaponDrawAnimations()
-									.get(container.getExecuter().getHoldingItemCapability(InteractionHand.MAIN_HAND).getWeaponCategory()).get(), 0);
+							container.getExecutor().playAnimationSynchronized(battleStyle.getWeaponDrawAnimations().get(
+									container.getExecutor().getHoldingItemCapability(InteractionHand.MAIN_HAND).getWeaponCategory()
+							), 0);
 						}
 					}
 				}
@@ -63,17 +58,17 @@ public class ExCapWeaponPassive extends Skill
 	@Override
 	public void onRemoved(SkillContainer container)
 	{
-		if (container.getExecuter().isLogicalClient())
+		if (container.getExecutor().isLogicalClient())
 		{
 			super.onRemoved(container);
 		}
-		if (!container.getExecuter().getSkill(SkillSlots.BASIC_ATTACK).hasSkill(EpicFightSkills.BASIC_ATTACK))
+		if (!container.getExecutor().getSkill(SkillSlots.BASIC_ATTACK).hasSkill(EpicFightSkills.BASIC_ATTACK))
 		{
-			container.getExecuter().getSkill(SkillSlots.BASIC_ATTACK).setSkill(EpicFightSkills.BASIC_ATTACK);
+			container.getExecutor().getSkill(SkillSlots.BASIC_ATTACK).setSkill(EpicFightSkills.BASIC_ATTACK);
 		}
-		if (!container.getExecuter().getSkill(SkillSlots.AIR_ATTACK).hasSkill(EpicFightSkills.AIR_ATTACK))
+		if (!container.getExecutor().getSkill(SkillSlots.AIR_ATTACK).hasSkill(EpicFightSkills.AIR_ATTACK))
 		{
-			container.getExecuter().getSkill(SkillSlots.AIR_ATTACK).setSkill(EpicFightSkills.AIR_ATTACK);
+			container.getExecutor().getSkill(SkillSlots.AIR_ATTACK).setSkill(EpicFightSkills.AIR_ATTACK);
 		}
 	}
 }

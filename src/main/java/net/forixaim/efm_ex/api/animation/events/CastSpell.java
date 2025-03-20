@@ -13,6 +13,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.ModList;
 import yesman.epicfight.api.animation.property.AnimationEvent;
+import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 import com.mna.api.sound.SFX.Spell.Cast;
 
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class CastSpell
 {
-	public static final AnimationEvent.AnimationEventConsumer castMNASpell = ((livingEntityPatch, staticAnimation, objects) -> {
+	public static final AnimationEvent.E0 castMNASpell = ((livingEntityPatch, staticAnimation, objects) -> {
 		if (ModList.get().isLoaded(ManaAndArtificeMod.ID))
 		{
 			final List<Shape> ALLOWED_SHAPES = Lists.newArrayList(
@@ -44,7 +45,7 @@ public class CastSpell
 		}
 	});
 
-	public static final AnimationEvent.AnimationEventConsumer castIronsSpell = ((livingEntityPatch, staticAnimation, objects) -> {
+	public static final AnimationEvent.E0 castIronsSpell = ((livingEntityPatch, staticAnimation, objects) -> {
 		if (ModList.get().isLoaded(IronsSpellbooks.MODID))
 		{
 			if (livingEntityPatch instanceof ServerPlayerPatch playerPatch)

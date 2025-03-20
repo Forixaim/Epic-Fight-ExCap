@@ -19,6 +19,8 @@ public class MovesetMappings
         event.addMoveset(ExCapWeapons.AXE, ONE_HAND, axeOneHandMS);
         event.addMoveset(ExCapWeapons.AXE, MOUNT, mountedSwordMS);
 
+        event.addMoveset(ExCapWeapons.GLOVE, ONE_HAND, glove);
+
         event.addMoveset(ExCapWeapons.TACHI, TWO_HAND, tachi2HMS);
         event.addMoveset(ExCapWeapons.TACHI, MOUNT, mountedSwordMS);
 

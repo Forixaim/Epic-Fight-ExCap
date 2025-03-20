@@ -26,7 +26,7 @@ public class MixinGuard
 	@Inject(method = "lambda$onInitiate$18", at = @At("HEAD"), remap = false)
 	private void onInitiate(SkillContainer container, MovementInputEvent event, CallbackInfo ci)
 	{
-		if (container.getExecuter().getOriginal().isUsingItem() && container.getExecuter().getHoldingItemCapability(InteractionHand.MAIN_HAND) instanceof EXWeaponCapability weaponCapability)
+		if (container.getExecutor().getOriginal().isUsingItem() && container.getExecutor().getHoldingItemCapability(InteractionHand.MAIN_HAND) instanceof EXWeaponCapability weaponCapability)
 		{
 			if (weaponCapability.getGuardMotion(epicFight_EXCapability$self, GuardSkill.BlockType.GUARD, event.getPlayerPatch()) != null)
 			{

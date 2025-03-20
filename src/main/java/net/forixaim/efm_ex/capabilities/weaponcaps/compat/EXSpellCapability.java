@@ -10,8 +10,9 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
-import yesman.epicfight.api.animation.AnimationProvider;
+import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.LivingMotion;
+import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.collider.Collider;
 import yesman.epicfight.particle.HitParticleType;
@@ -26,7 +27,7 @@ import java.util.function.Function;
 
 public class EXSpellCapability extends EXWeaponCapability
 {
-	private Map<Shape, AnimationProvider<?>> castAnimations;
+	private Map<Shape, AnimationManager.AnimationAccessor<? extends StaticAnimation>> castAnimations;
 	
 	public EXSpellCapability(CapabilityItem.Builder builder)
 	{
@@ -34,7 +35,7 @@ public class EXSpellCapability extends EXWeaponCapability
 		castAnimations = ((Builder)builder).castAnimations;
 	}
 
-	public Map<Shape, AnimationProvider<?>> getCastAnimations(LivingEntityPatch<?> entityPatch)
+	public Map<Shape, AnimationManager.AnimationAccessor<? extends StaticAnimation>> getCastAnimations(LivingEntityPatch<?> entityPatch)
 	{
 		return castAnimations;
 	}
@@ -45,7 +46,7 @@ public class EXSpellCapability extends EXWeaponCapability
 	
 	public static class Builder extends EXWeaponCapability.Builder
 	{
-		protected final Map<Shape, AnimationProvider<?>> castAnimations;
+		protected final Map<Shape, AnimationManager.AnimationAccessor<? extends StaticAnimation>> castAnimations;
 
 		public Builder()
 		{
@@ -54,13 +55,13 @@ public class EXSpellCapability extends EXWeaponCapability
 			castAnimations = Maps.newHashMap();
 		}
 
-		public Builder addTransitionAnimation(Style wieldStyle, StaticAnimation transitionAnimations)
+		public Builder addTransitionAnimation(Style wieldStyle, AnimationManager.AnimationAccessor<? extends StaticAnimation> transitionAnimations)
 		{
 			battleTransitionAnimations.put(wieldStyle, transitionAnimations);
 			return this;
 		}
 
-		public Builder battleMotionModifier(Style wieldStyle, LivingMotion livingMotion, StaticAnimation animation) {
+		public Builder battleMotionModifier(Style wieldStyle, LivingMotion livingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation> animation) {
 			if (this.battleModeAnimations == null) {
 				this.battleModeAnimations = Maps.newHashMap();
 			}
@@ -73,7 +74,7 @@ public class EXSpellCapability extends EXWeaponCapability
 			return this;
 		}
 
-		public Builder addMNACastAnim(Style style, Shape shape, AnimationProvider<?> animation)
+		public Builder addMNACastAnim(Style style, Shape shape, AnimationManager.AnimationAccessor<? extends StaticAnimation> animation)
 		{
 			if (!castAnimations.containsKey(shape))
 			{
@@ -85,21 +86,6 @@ public class EXSpellCapability extends EXWeaponCapability
 		public Builder addMNACastAnimations(Style style, Function<Pair<Style, EXSpellCapability.Builder>, EXSpellCapability.Builder> castAnimations)
 		{
 			return castAnimations.apply(Pair.of(style, this));
-		}
-		@Override
-		public Builder initialSetup(WeaponCategory category, SoundEvent swingSound, SoundEvent hitSound)
-		{
-			this.category(category);
-			this.swingSound(swingSound);
-			this.hitSound(hitSound);
-			return this;
-		}
-
-		@Override
-		public Builder passiveProvider(Function<LivingEntityPatch<?>, Skill> passiveSkillProvider)
-		{
-			this.passiveSkillProvider = passiveSkillProvider;
-			return this;
 		}
 
 		@Override
@@ -148,7 +134,7 @@ public class EXSpellCapability extends EXWeaponCapability
 		}
 
 		@Override
-		public Builder livingMotionModifier(Style wieldStyle, LivingMotion livingMotion, StaticAnimation animation) {
+		public Builder livingMotionModifier(Style wieldStyle, LivingMotion livingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation> animation) {
 			return (Builder) super.livingMotionModifier(wieldStyle, livingMotion, animation);
 		}
 
@@ -157,8 +143,8 @@ public class EXSpellCapability extends EXWeaponCapability
 			return (Builder) super.addStyleAttibutes(style, attributePair);
 		}
 
-		@Override
-		public Builder newStyleCombo(Style style, StaticAnimation... animation) {
+		@SafeVarargs
+        public final Builder newSpellStyleCombo(Style style, AnimationManager.AnimationAccessor<? extends AttackAnimation>... animation) {
 			return (Builder) super.newStyleCombo(style, animation);
 		}
 

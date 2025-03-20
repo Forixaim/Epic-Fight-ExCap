@@ -1,3 +1,12 @@
 {
-	"type": "efm_ex:tachi"
+	"attributes":
+	{
+		"common":
+		{
+			"armor_negation":10.0,
+			"impact":2.6,
+			"max_strikes":2
+		}
+	},
+	"type":"efm_ex:tachi"
 }

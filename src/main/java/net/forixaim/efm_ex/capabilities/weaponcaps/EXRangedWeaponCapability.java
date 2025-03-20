@@ -4,8 +4,10 @@ import com.google.common.collect.Maps;
 import net.forixaim.efm_ex.api.moveset.MoveSet;
 import net.forixaim.efm_ex.api.moveset.RangedMoveSet;
 import net.minecraft.world.InteractionHand;
-import yesman.epicfight.api.animation.AnimationProvider;
+import net.minecraft.world.item.UseAnim;
+import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.LivingMotion;
+import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.Style;
@@ -14,7 +16,7 @@ import java.util.Map;
 
 public class EXRangedWeaponCapability extends EXWeaponCapability
 {
-	protected final Map<Style, Map<LivingMotion, AnimationProvider<?>>> rangeAnimationModifiers;
+	protected final Map<Style, Map<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>>> rangeAnimationModifiers;
 
 	public EXRangedWeaponCapability(CapabilityItem.Builder builder) {
 		super(builder);
@@ -22,11 +24,12 @@ public class EXRangedWeaponCapability extends EXWeaponCapability
 		this.rangeAnimationModifiers = rangedBuilder.rangeAnimationModifiers;
 	}
 
-	public void setConfigFileAttribute(double armorNegation1, double impact1, int maxStrikes1, double armorNegation2, double impact2, int maxStrikes2) {
-		this.addStyleAttributes(Styles.RANGED, armorNegation1, impact1, maxStrikes1);
+	@Override
+	public UseAnim getUseAnimation(LivingEntityPatch<?> playerpatch) {
+		return super.getUseAnimation(playerpatch);
 	}
 
-	public Map<LivingMotion, AnimationProvider<?>> getLivingMotionModifier(LivingEntityPatch<?> playerdata, InteractionHand hand) {
+	public Map<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>> getLivingMotionModifier(LivingEntityPatch<?> playerdata, InteractionHand hand) {
 		return hand == InteractionHand.MAIN_HAND ?
 				this.rangeAnimationModifiers.computeIfAbsent(getStyle(playerdata),
 						style -> this.rangeAnimationModifiers.get(Styles.COMMON))
@@ -51,7 +54,7 @@ public class EXRangedWeaponCapability extends EXWeaponCapability
 	}
 
 	public static class Builder extends EXWeaponCapability.Builder {
-		private final Map<Style, Map<LivingMotion, AnimationProvider<?>>> rangeAnimationModifiers;
+		private final Map<Style, Map<LivingMotion,AnimationManager.AnimationAccessor<? extends StaticAnimation>>> rangeAnimationModifiers;
 
 		protected Builder() {
 			category(CapabilityItem.WeaponCategories.RANGED);
@@ -59,7 +62,7 @@ public class EXRangedWeaponCapability extends EXWeaponCapability
 			this.rangeAnimationModifiers = Maps.newHashMap();
 		}
 
-		public EXRangedWeaponCapability.Builder addAnimationsModifier(Style wieldStyle, LivingMotion livingMotion, AnimationProvider<?> animations) {
+		public EXRangedWeaponCapability.Builder addAnimationsModifier(Style wieldStyle, LivingMotion livingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation> animations) {
 			this.rangeAnimationModifiers.computeIfAbsent(wieldStyle, style -> Maps.newHashMap());
 			this.rangeAnimationModifiers.get(wieldStyle).put(livingMotion, animations);
 			return this;

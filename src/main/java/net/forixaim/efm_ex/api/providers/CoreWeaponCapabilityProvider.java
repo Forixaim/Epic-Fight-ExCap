@@ -44,9 +44,9 @@ public class CoreWeaponCapabilityProvider
      */
     public Function<LivingEntityPatch<?>, Style> exportStyle()
     {
-        sortByPriority();
 	    return entityPatch ->
         {
+            sortByPriority();
             for (ProviderConditional conditional : conditionals)
             {
                 if (conditional.testConditionalStyle(entityPatch) != null)
@@ -64,9 +64,9 @@ public class CoreWeaponCapabilityProvider
      */
     public Function<LivingEntityPatch<?>, Boolean> exportCombination()
     {
-        sortByPriority();
 	    return entityPatch ->
         {
+            sortByPriority();
             for (ProviderConditional conditional : conditionals)
             {
                 if (conditional.testConditionalCombo(entityPatch) != null)

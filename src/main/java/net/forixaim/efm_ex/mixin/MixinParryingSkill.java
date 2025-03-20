@@ -1,7 +1,6 @@
 package net.forixaim.efm_ex.mixin;
 
 
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.server.level.ServerPlayer;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -9,8 +8,10 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.skill.Skill;
+import yesman.epicfight.skill.SkillContainer;
 import yesman.epicfight.skill.SkillDataKeys;
 import yesman.epicfight.skill.SkillDataManager;
 import yesman.epicfight.skill.guard.GuardSkill;
@@ -26,15 +27,13 @@ public abstract class MixinParryingSkill
 
     @Shadow @Final private static int PARRY_WINDOW;
 
-    @Shadow @Nullable protected abstract StaticAnimation getGuardMotion(PlayerPatch<?> playerpatch, CapabilityItem itemCapability, GuardSkill.BlockType blockType);
-
     @Inject(method = "getGuardMotion", at = @At(value = "RETURN"))
-    private void getGuardMotion(PlayerPatch<?> playerpatch, CapabilityItem itemCapability, GuardSkill.BlockType blockType, CallbackInfoReturnable<StaticAnimation> cir)
+    private void getGuardMotion(SkillContainer container, PlayerPatch<?> playerpatch, CapabilityItem itemCapability, GuardSkill.BlockType blockType, CallbackInfoReturnable<AnimationManager.AnimationAccessor<? extends StaticAnimation>> cir)
     {
         Skill thisSkill = (Skill) (Object) this;
         SkillDataManager dm = playerpatch.getSkill(thisSkill).getDataManager();
 
-        StaticAnimation animation = itemCapability.getGuardMotion((GuardSkill) thisSkill, blockType, playerpatch);
+        AnimationManager.AnimationAccessor<?> animation = itemCapability.getGuardMotion((GuardSkill) thisSkill, blockType, playerpatch);
 
         if (animation != null)
         {
@@ -45,11 +44,5 @@ public abstract class MixinParryingSkill
                 }
             }
         }
-
-
     }
-
-
-
-
 }

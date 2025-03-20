@@ -139,19 +139,15 @@ dependencies {
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    implementation fg.deobf("curse.maven:epic-fight-mod-405076:5922122")
-    implementation fg.deobf("libs:BattleArtsAPI:20.9.5.2")
+    implementation fg.deobf("libs:EpicFight:20.10.1")
+    implementation fg.deobf("libs:BattleArtsAPI:20.10.7.5")
 
     runtimeOnly fg.deobf("curse.maven:caelus-308989:4581481")
     runtimeOnly fg.deobf("curse.maven:playeranimator-658587:4587214")
     implementation fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}")
     runtimeOnly fg.deobf("curse.maven:curios-309927:5266541")
-    implementation fg.deobf("curse.maven:epic-fight-dual-spears-1069105:5664704")
-
-    runtimeOnly fg.deobf("curse.maven:epic-fight-indestructible-915201:5717023")
 
     compileOnly fg.deobf("curse.maven:mna-406360:${mna_version}")
-
     // GeckoLib
     runtimeOnly fg.deobf("curse.maven:geckolib-388172:5188427")
 

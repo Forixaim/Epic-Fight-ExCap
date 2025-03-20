@@ -13,7 +13,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
-import yesman.epicfight.api.animation.AnimationProvider;
+import yesman.epicfight.api.animation.AnimationManager;
+import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
@@ -23,11 +24,11 @@ import java.util.Map;
 public class MagicEvents
 {
 
-	private static Map<CastType, AnimationProvider<?>> castMap(Map<Object, AnimationProvider<?>> entry)
+	private static Map<CastType, AnimationManager.AnimationAccessor<? extends StaticAnimation>> castMap(Map<Object, AnimationManager.AnimationAccessor<? extends StaticAnimation>> entry)
 	{
 		if (ModList.get().isLoaded(IronsSpellbooks.MODID))
 		{
-			Map<CastType, AnimationProvider<?>> castMap = Maps.newHashMap();
+			Map<CastType, AnimationManager.AnimationAccessor<? extends StaticAnimation>> castMap = Maps.newHashMap();
 			for (Object castType : entry.keySet())
 			{
 				if (castType instanceof CastType ct)
@@ -47,11 +48,11 @@ public class MagicEvents
 			ServerPlayerPatch playerPatch = EpicFightCapabilities.getEntityPatch(player, ServerPlayerPatch.class);
 			if (playerPatch.getHoldingItemCapability(InteractionHand.MAIN_HAND) instanceof EXWeaponCapability ewc)
 			{
-				Map<CastType, AnimationProvider<?>> castMap = castMap(ewc.getCastAnimations().get(ewc.getStyle(playerPatch)));
-				AnimationProvider<?> aP = castMap.get(spell.getCastType());
+				Map<CastType, AnimationManager.AnimationAccessor<? extends StaticAnimation>> castMap = castMap(ewc.getCastAnimations().get(ewc.getStyle(playerPatch)));
+				AnimationManager.AnimationAccessor<? extends StaticAnimation> aP = castMap.get(spell.getCastType());
 				if (aP != null)
 				{
-					playerPatch.playAnimationSynchronized(aP.get(), 0);
+					playerPatch.playAnimationSynchronized(aP, 0);
 				}
 			}
 		}

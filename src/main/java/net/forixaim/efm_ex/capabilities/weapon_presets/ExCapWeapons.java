@@ -4,12 +4,15 @@ import net.forixaim.efm_ex.EpicFightEXCapability;
 import net.forixaim.efm_ex.api.events.ExCapWeaponRegistryEvent;
 import net.forixaim.efm_ex.capabilities.CoreCapability;
 import net.forixaim.efm_ex.capabilities.weaponcaps.EXBowWeaponCapability;
+import net.forixaim.efm_ex.capabilities.weaponcaps.EXGloveCapability;
 import net.forixaim.efm_ex.capabilities.weaponcaps.compat.EXSpellCapability;
+import net.forixaim.efm_ex.registry.ItemRegistry;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import yesman.epicfight.gameasset.ColliderPreset;
 import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
+import yesman.epicfight.world.item.EpicFightItems;
 
 @Mod.EventBusSubscriber(modid = EpicFightEXCapability.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ExCapWeapons
@@ -20,6 +23,7 @@ public class ExCapWeapons
     public static CoreCapability LONGSWORD;
     public static CoreCapability BOW;
     public static CoreCapability GREATSWORD;
+    public static CoreCapability GLOVE;
     public static CoreCapability SPEAR;
     public static CoreCapability SPELL;
     public static CoreCapability TACHI;
@@ -34,6 +38,15 @@ public class ExCapWeapons
 
     public static void build()
     {
+        GLOVE = CoreCapability.quickStart(
+                builder -> builder
+                        .constructor(EXGloveCapability::new)
+                        .category(CapabilityItem.WeaponCategories.FIST)
+                        .collider(ColliderPreset.FIST)
+                        .swingSound(EpicFightSounds.WHOOSH.get())
+                        .hitSound(EpicFightSounds.BLUNT_HIT.get())
+        );
+
         DAGGER = CoreCapability.quickStart(
                 builder -> builder.category(CapabilityItem.WeaponCategories.DAGGER)
                         .collider(ColliderPreset.DAGGER)
@@ -61,6 +74,8 @@ public class ExCapWeapons
                         .swingSound(EpicFightSounds.WHOOSH.get())
                         .hitSound(EpicFightSounds.BLADE_HIT.get())
         );
+        CoreCapability.addSheath(EpicFightItems.IRON_LONGSWORD.get(), ItemRegistry.IRON_LONGSWORD_SHEATH.get());
+        CoreCapability.addSheath(EpicFightItems.GOLDEN_LONGSWORD.get(), ItemRegistry.IRON_LONGSWORD_SHEATH.get());
 
         GREATSWORD = CoreCapability.quickStart(
                 builder -> builder.category(CapabilityItem.WeaponCategories.GREATSWORD)

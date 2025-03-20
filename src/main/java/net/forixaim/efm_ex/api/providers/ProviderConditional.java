@@ -16,6 +16,7 @@ import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
 import javax.annotation.Nullable;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class ProviderConditional
 {
@@ -32,9 +33,9 @@ public class ProviderConditional
 	private final SkillSlot slot;
 	private final SkillDataKey<Boolean> key;
 	private final InteractionHand hand;
-	private final Function<LivingEntityPatch<?>, Boolean> customFunction;
+	private final Predicate<LivingEntityPatch<?>> customFunction;
 
-	private ProviderConditional(ProviderConditionalType type, Style style, Skill skillToCheck, WeaponCategory category, Item weapon, InteractionHand hand, SkillSlot slot, SkillDataKey<Boolean> key, Boolean combination, Function<LivingEntityPatch<?>, Boolean> customFunction, ProviderConditional[] providerConditionals) {
+	private ProviderConditional(ProviderConditionalType type, Style style, Skill skillToCheck, WeaponCategory category, Item weapon, InteractionHand hand, SkillSlot slot, SkillDataKey<Boolean> key, Boolean combination, Predicate<LivingEntityPatch<?>> customFunction, ProviderConditional[] providerConditionals) {
 		this.type = type;
 		this.style = style;
 		this.skillToCheck = skillToCheck;
@@ -126,7 +127,7 @@ public class ProviderConditional
 		if (type.equals(ProviderConditionalType.CUSTOM))
 		{
 			assert this.customFunction != null;
-			if (this.customFunction.apply(entityPatch))
+			if (this.customFunction.test(entityPatch))
 			{
 				return true;
 			}
@@ -183,7 +184,7 @@ public class ProviderConditional
 		if (type.equals(ProviderConditionalType.CUSTOM))
 		{
 			assert this.customFunction != null;
-			if (this.customFunction.apply(entityPatch))
+			if (this.customFunction.test(entityPatch))
 			{
 				return style;
 			}
@@ -242,7 +243,7 @@ public class ProviderConditional
 		if (type.equals(ProviderConditionalType.CUSTOM))
 		{
 			assert this.customFunction != null;
-			if (this.customFunction.apply(entityPatch))
+			if (this.customFunction.test(entityPatch))
 			{
 				return combination;
 			}
@@ -311,7 +312,7 @@ public class ProviderConditional
 		private SkillSlot slot;
 		private SkillDataKey<Boolean> key;
 		private InteractionHand hand;
-		private Function<LivingEntityPatch<?>, Boolean> customFunction;
+		private Predicate<LivingEntityPatch<?>> customFunction;
 
 		public ProviderConditionalBuilder()
 		{
@@ -384,7 +385,7 @@ public class ProviderConditional
 			return this;
 		}
 
-		public ProviderConditionalBuilder setCustomFunction(Function<LivingEntityPatch<?>, Boolean> customFunction) {
+		public ProviderConditionalBuilder setCustomFunction(Predicate<LivingEntityPatch<?>> customFunction) {
 			this.customFunction = customFunction;
 			return this;
 		}

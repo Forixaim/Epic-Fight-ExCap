@@ -2,19 +2,19 @@ package net.forixaim.efm_ex.api.moveset;
 
 import com.google.common.collect.Maps;
 import net.minecraft.world.item.ItemStack;
-import yesman.epicfight.api.animation.AnimationProvider;
+import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.LivingMotion;
+import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.guard.GuardSkill;
 
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class RangedMoveSet extends MoveSet
 {
-    protected final Map<LivingMotion, AnimationProvider<?>> rangedAttackModifiers;
+    protected final Map<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>> rangedAttackModifiers;
 
     public RangedMoveSet(MoveSetBuilder builder) {
         super(builder);
@@ -26,21 +26,21 @@ public class RangedMoveSet extends MoveSet
         return new MoveSetBuilder();
     }
 
-    public Map<LivingMotion, AnimationProvider<?>> getRangedAttackModifiers()
+    public Map<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>> getRangedAttackModifiers()
     {
         return rangedAttackModifiers;
     }
 
     public static class MoveSetBuilder extends MoveSet.MoveSetBuilder
     {
-        protected final Map<LivingMotion, AnimationProvider<?>> rangedAttackModifiers;
+        protected final Map<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>> rangedAttackModifiers;
         public MoveSetBuilder()
         {
             super();
             rangedAttackModifiers = Maps.newHashMap();
         }
 
-        public MoveSetBuilder addRangedAttackModifier(LivingMotion livingMotion, AnimationProvider<?> provider)
+        public MoveSetBuilder addRangedAttackModifier(LivingMotion livingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation> provider)
         {
             rangedAttackModifiers.put(livingMotion, provider);
             return this;
@@ -51,12 +51,12 @@ public class RangedMoveSet extends MoveSet
             return (MoveSetBuilder) super.setPassiveSkill(newPassiveSkill);
         }
 
-        public MoveSetBuilder addAutoAttacks(StaticAnimation... attackAnimations)
+        public MoveSetBuilder addAutoAttacks(AnimationManager.AnimationAccessor<? extends AttackAnimation>... attackAnimations)
         {
             return (MoveSetBuilder) super.addAutoAttacks(attackAnimations);
         }
 
-        public MoveSetBuilder addLivingMotionModifier(LivingMotion livingMotion, Supplier<StaticAnimation> animation)
+        public MoveSetBuilder addLivingMotionModifier(LivingMotion livingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation> animation)
         {
             return (MoveSetBuilder) super.addLivingMotionModifier(livingMotion, animation);
         }
@@ -66,12 +66,12 @@ public class RangedMoveSet extends MoveSet
             return (MoveSetBuilder) super.addInnateSkill(weaponInnateSkill);
         }
 
-        public MoveSetBuilder addLivingMotionsRecursive(Supplier<StaticAnimation> animation, LivingMotion... motions)
+        public MoveSetBuilder addLivingMotionsRecursive(AnimationManager.AnimationAccessor<? extends StaticAnimation> animation, LivingMotion... motions)
         {
             return (MoveSetBuilder) super.addLivingMotionsRecursive(animation, motions);
         }
 
-        public MoveSetBuilder addGuardAnimations(GuardSkill guardSkill, GuardSkill.BlockType blockType, StaticAnimation... animation)
+        public MoveSetBuilder addGuardAnimations(GuardSkill guardSkill, GuardSkill.BlockType blockType, AnimationManager.AnimationAccessor<? extends StaticAnimation>... animation)
         {
             return (MoveSetBuilder) super.addGuardAnimations(guardSkill, blockType, animation);
         }

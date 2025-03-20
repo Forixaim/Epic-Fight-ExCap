@@ -3,7 +3,9 @@ package net.forixaim.efm_ex.api.moveset;
 import com.google.common.collect.Maps;
 import com.mna.api.spells.parts.Shape;
 import net.minecraft.world.item.ItemStack;
+import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.LivingMotion;
+import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.guard.GuardSkill;
@@ -14,7 +16,7 @@ import java.util.function.Supplier;
 
 public class CastingMoveSet extends MoveSet
 {
-    protected final Map<Shape, StaticAnimation> spellAnimations;
+    protected final Map<Shape, AnimationManager.AnimationAccessor<? extends StaticAnimation>> spellAnimations;
     public CastingMoveSet(MoveSetBuilder builder) {
         super(builder);
         spellAnimations = builder.spellAnimations;
@@ -25,20 +27,20 @@ public class CastingMoveSet extends MoveSet
         return new CastingMoveSet.MoveSetBuilder();
     }
 
-    public Map<Shape, StaticAnimation> getSpellAnimations() {
+    public Map<Shape, AnimationManager.AnimationAccessor<? extends StaticAnimation>> getSpellAnimations() {
         return spellAnimations;
     }
 
     public static class MoveSetBuilder extends MoveSet.MoveSetBuilder
     {
-        protected final Map<Shape, StaticAnimation> spellAnimations;
+        protected final Map<Shape, AnimationManager.AnimationAccessor<? extends StaticAnimation>> spellAnimations;
         public MoveSetBuilder()
         {
             super();
             spellAnimations = Maps.newHashMap();
         }
 
-        public MoveSetBuilder addSpellAnimations(Shape shape, StaticAnimation animation)
+        public MoveSetBuilder addSpellAnimations(Shape shape, AnimationManager.AnimationAccessor<? extends StaticAnimation> animation)
         {
             spellAnimations.put(shape, animation);
             return this;
@@ -49,12 +51,12 @@ public class CastingMoveSet extends MoveSet
             return (MoveSetBuilder) super.setPassiveSkill(newPassiveSkill);
         }
 
-        public MoveSetBuilder addAutoAttacks(StaticAnimation... attackAnimations)
+        public MoveSetBuilder addAutoAttacks(AnimationManager.AnimationAccessor<? extends AttackAnimation>... attackAnimations)
         {
             return (MoveSetBuilder) super.addAutoAttacks(attackAnimations);
         }
 
-        public MoveSetBuilder addLivingMotionModifier(LivingMotion livingMotion, Supplier<StaticAnimation> animation)
+        public MoveSetBuilder addLivingMotionModifier(LivingMotion livingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation> animation)
         {
             return (MoveSetBuilder) super.addLivingMotionModifier(livingMotion, animation);
         }
@@ -64,12 +66,13 @@ public class CastingMoveSet extends MoveSet
             return (MoveSetBuilder) super.addInnateSkill(weaponInnateSkill);
         }
 
-        public MoveSetBuilder addLivingMotionsRecursive(Supplier<StaticAnimation> animation, LivingMotion... motions)
+        public MoveSetBuilder addLivingMotionsRecursive(AnimationManager.AnimationAccessor<? extends StaticAnimation> animation, LivingMotion... motions)
         {
             return (MoveSetBuilder) super.addLivingMotionsRecursive(animation, motions);
         }
 
-        public MoveSetBuilder addGuardAnimations(GuardSkill guardSkill, GuardSkill.BlockType blockType, StaticAnimation... animation)
+        @SafeVarargs
+        public final MoveSetBuilder addGuardAnimations(GuardSkill guardSkill, GuardSkill.BlockType blockType, AnimationManager.AnimationAccessor<? extends StaticAnimation>... animation)
         {
             return (MoveSetBuilder) super.addGuardAnimations(guardSkill, blockType, animation);
         }

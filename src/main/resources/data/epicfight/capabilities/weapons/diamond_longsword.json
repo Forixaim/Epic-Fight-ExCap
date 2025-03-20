@@ -1,5 +1,4 @@
 {
-	"type": "efm_ex:longsword",
 	"attributes":
 	{
 		"common":
@@ -7,5 +6,6 @@
 			"impact":2.5,
 			"max_strikes":2
 		}
-	}
+	},
+	"type":"efm_ex:longsword"
 }

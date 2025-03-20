@@ -14,10 +14,12 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.entity.PartEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.Joint;
 import yesman.epicfight.api.animation.property.AnimationProperty;
 import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.EntityState;
+import yesman.epicfight.api.asset.AssetAccessor;
 import yesman.epicfight.api.collider.Collider;
 import yesman.epicfight.api.model.Armature;
 import yesman.epicfight.api.utils.AttackResult;
@@ -38,30 +40,26 @@ import java.util.*;
  */
 public class KnockbackAttackAnimation extends AttackAnimation
 {
-	public KnockbackAttackAnimation(float convertTime, float antic, float preDelay, float contact, float recovery, @Nullable Collider collider, Joint colliderJoint, String path, Armature armature
-			, float horizontalDegree, float verticalDegree)
-	{
-		super(convertTime, path, armature, new KnockbackPhase(0.0F, antic, preDelay, contact, recovery, Float.MAX_VALUE, colliderJoint, collider, horizontalDegree, verticalDegree, false));
+
+
+	public KnockbackAttackAnimation(float transitionTime, float antic, float preDelay, float contact, float recovery, @Nullable Collider collider, Joint colliderJoint, AnimationManager.AnimationAccessor<? extends AttackAnimation> accessor, AssetAccessor<? extends Armature> armature) {
+		super(transitionTime, antic, preDelay, contact, recovery, collider, colliderJoint, accessor, armature);
 	}
 
-	public KnockbackAttackAnimation(float convertTime, float antic, float preDelay, float contact, float recovery, InteractionHand hand, @Nullable Collider collider, Joint colliderJoint, String path, Armature armature, float horizontalDegree, float verticalDegree)
-	{
-		super(convertTime, path, armature, new KnockbackPhase(0.0F, antic, preDelay, contact, recovery, Float.MAX_VALUE, hand, colliderJoint, collider, horizontalDegree, verticalDegree, false));
+	public KnockbackAttackAnimation(float transitionTime, float antic, float preDelay, float contact, float recovery, InteractionHand hand, @Nullable Collider collider, Joint colliderJoint, AnimationManager.AnimationAccessor<? extends AttackAnimation> accessor, AssetAccessor<? extends Armature> armature) {
+		super(transitionTime, antic, preDelay, contact, recovery, hand, collider, colliderJoint, accessor, armature);
 	}
 
-	public KnockbackAttackAnimation(float convertTime, float antic, float preDelay, float contact, float recovery, InteractionHand hand, @Nullable Collider collider, Joint colliderJoint, String path, Armature armature, boolean noRegister, float horizontalDegree, float verticalDegree)
-	{
-		super(convertTime, path, armature, noRegister, new KnockbackPhase(0.0F, antic, preDelay, contact, recovery, Float.MAX_VALUE, hand, colliderJoint, collider, horizontalDegree, verticalDegree, false));
+	public KnockbackAttackAnimation(float transitionTime, AnimationManager.AnimationAccessor<? extends AttackAnimation> accessor, AssetAccessor<? extends Armature> armature, Phase... phases) {
+		super(transitionTime, accessor, armature, phases);
 	}
 
-	public KnockbackAttackAnimation(float convertTime, String path, Armature armature, float horizontalDegree, float verticalDegree, Phase... phases)
-	{
+	public KnockbackAttackAnimation(float convertTime, float antic, float preDelay, float contact, float recovery, InteractionHand hand, @Nullable Collider collider, Joint colliderJoint, String path, AssetAccessor<? extends Armature> armature) {
+		super(convertTime, antic, preDelay, contact, recovery, hand, collider, colliderJoint, path, armature);
+	}
+
+	public KnockbackAttackAnimation(float convertTime, String path, AssetAccessor<? extends Armature> armature, Phase... phases) {
 		super(convertTime, path, armature, phases);
-	}
-
-	public KnockbackAttackAnimation(float convertTime, String path, Armature armature, boolean noRegister, float horizontalDegree, float verticalDegree, Phase... phases)
-	{
-		super(convertTime, path, armature, noRegister, phases);
 	}
 
 	@Override
