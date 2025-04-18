@@ -35,11 +35,11 @@ public class EpicFightEXCapability {
     private static final Logger LOGGER = LogUtils.getLogger();
 
 
-    public EpicFightEXCapability() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public EpicFightEXCapability(FMLJavaModLoadingContext context) {
+        IEventBus modEventBus = context.getModEventBus();
         ItemRegistry.ITEMS.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(this);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         modEventBus.addListener(EpicFightEXCapability::onFMLLoadComplete);
     }
 

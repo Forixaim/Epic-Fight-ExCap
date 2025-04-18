@@ -261,18 +261,18 @@ public class CapabilityRegistry
 	@SubscribeEvent
 	public static void Register(WeaponCapabilityPresetRegistryEvent Event)
 	{
-		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "bokken"), BOKKEN);
-		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "sword"), SWORD);
-		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "longsword"), LONGSWORD);
-		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "greatsword"), GREATSWORD);
-		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "tachi"), TACHI);
-		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "dagger"), DAGGER);
-		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "spear"), SPEAR);
-		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "spell"), SPELL);
-		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "bow"), BOW);
-		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "axe"), AXE);
-		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "uchigatana"), UCHIGATANA);
-		Event.getTypeEntry().put(new ResourceLocation(EpicFightEXCapability.MODID, "fist"), FIST);
+		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "bokken"), BOKKEN);
+		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "sword"), SWORD);
+		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "longsword"), LONGSWORD);
+		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "greatsword"), GREATSWORD);
+		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "tachi"), TACHI);
+		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "dagger"), DAGGER);
+		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "spear"), SPEAR);
+		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "spell"), SPELL);
+		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "bow"), BOW);
+		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "axe"), AXE);
+		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "uchigatana"), UCHIGATANA);
+		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "fist"), FIST);
 
 	}
 }

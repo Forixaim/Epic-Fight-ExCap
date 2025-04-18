@@ -29,8 +29,8 @@ import java.util.function.Predicate;
 public class MoveSet 
 {
     private static final HashMultimap<Class<?>, MoveSet> MOVESETS = HashMultimap.create();
-    private static final ResourceLocation CLASS_TO_MOVESET = new ResourceLocation(EpicFightEXCapability.MODID, "class_to_moveset");
-    private static final ResourceLocation MOVESET_TO_ID = new ResourceLocation(EpicFightEXCapability.MODID, "moveset_to_id");
+    private static final ResourceLocation CLASS_TO_MOVESET = ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "class_to_moveset");
+    private static final ResourceLocation MOVESET_TO_ID = ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "moveset_to_id");
 
     private final List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> AutoAttackAnimations;
     private final Map<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>> LivingMotionModifiers;
