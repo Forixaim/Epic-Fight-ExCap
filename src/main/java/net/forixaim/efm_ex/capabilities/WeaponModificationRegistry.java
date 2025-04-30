@@ -30,7 +30,7 @@ public class WeaponModificationRegistry
 		event.addProvider(AXE, default1HWieldStyle);
 		event.addProvider(SPELL, default1HWieldStyle);
 		event.addProvider(SPEAR, default2HWieldStyle, SwordShieldLS);
-		event.addProvider(DAGGER, default1HWieldStyle);
+		event.addProvider(DAGGER, DualDaggers, default1HWieldStyle);
 		event.addProvider(GLOVE, default1HWieldStyle);
 
 		MovesetMappings.addMovesets(event);
