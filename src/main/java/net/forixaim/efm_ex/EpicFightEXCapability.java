@@ -2,6 +2,7 @@ package net.forixaim.efm_ex;
 
 import com.mojang.logging.LogUtils;
 import net.forixaim.efm_ex.api.Registries;
+import net.forixaim.efm_ex.capabilities.ExCapCategories;
 import net.forixaim.efm_ex.registry.ItemRegistry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
@@ -22,6 +23,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 import org.slf4j.Logger;
 import yesman.epicfight.main.EpicFightMod;
+import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
 import java.nio.file.Path;
 
@@ -39,6 +41,7 @@ public class EpicFightEXCapability {
         IEventBus modEventBus = context.getModEventBus();
         ItemRegistry.ITEMS.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(this);
+        WeaponCategory.ENUM_MANAGER.registerEnumCls(MODID, ExCapCategories.class);
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         modEventBus.addListener(EpicFightEXCapability::onFMLLoadComplete);
     }

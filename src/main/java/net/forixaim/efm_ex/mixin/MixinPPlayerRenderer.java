@@ -17,12 +17,12 @@ import yesman.epicfight.world.capabilities.item.CapabilityItem;
 public class MixinPPlayerRenderer
 {
 
-    @Inject(method = "getMeshProvider(Lyesman/epicfight/client/world/capabilites/entitypatch/player/AbstractClientPlayerPatch;)Lyesman/epicfight/api/asset/AssetAccessor;", at = @At("RETURN"), remap = false, cancellable = true)
-    public void getMeshProvider(AbstractClientPlayerPatch<AbstractClientPlayer> entityPatch, CallbackInfoReturnable<AssetAccessor<HumanoidMesh>> cir)
-    {
-        if (entityPatch.getHoldingItemCapability(InteractionHand.MAIN_HAND).getWeaponCategory() == CapabilityItem.WeaponCategories.AXE)
-        {
-            cir.setReturnValue(Meshes.BIPED);
-        }
-    }
+//    @Inject(method = "getMeshProvider(Lyesman/epicfight/client/world/capabilites/entitypatch/player/AbstractClientPlayerPatch;)Lyesman/epicfight/api/asset/AssetAccessor;", at = @At("RETURN"), remap = false, cancellable = true)
+//    public void getMeshProvider(AbstractClientPlayerPatch<AbstractClientPlayer> entityPatch, CallbackInfoReturnable<AssetAccessor<HumanoidMesh>> cir)
+//    {
+//        if (entityPatch.getHoldingItemCapability(InteractionHand.MAIN_HAND).getWeaponCategory() == CapabilityItem.WeaponCategories.AXE)
+//        {
+//            cir.setReturnValue(Meshes.BIPED);
+//        }
+//    }
 }

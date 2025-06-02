@@ -240,6 +240,8 @@ public class CapabilityRegistry
 	public static final Function<Item, CapabilityItem.Builder> BOW = item -> {
 		CapabilityItem.Builder builder0;
 
+		LogUtils.getLogger().debug("item : {} with Bow Capability", item.getDescriptionId());
+
 		try
 		{
 			builder0 = ExCapWeapons.BOW.export();

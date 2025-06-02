@@ -3,6 +3,7 @@ package net.forixaim.efm_ex.capabilities.weapon_presets;
 import net.forixaim.efm_ex.EpicFightEXCapability;
 import net.forixaim.efm_ex.api.events.ExCapWeaponRegistryEvent;
 import net.forixaim.efm_ex.capabilities.CoreCapability;
+import net.forixaim.efm_ex.capabilities.ExCapCategories;
 import net.forixaim.efm_ex.capabilities.weaponcaps.EXBowWeaponCapability;
 import net.forixaim.efm_ex.capabilities.weaponcaps.EXGloveCapability;
 import net.forixaim.efm_ex.capabilities.weaponcaps.compat.EXSpellCapability;
@@ -91,8 +92,8 @@ public class ExCapWeapons
                         .hitSound(EpicFightSounds.BLADE_HIT.get())
         );
 
-        BOW = CoreCapability.quickStart(
-                builder -> builder.category(CapabilityItem.WeaponCategories.RANGED)
+        BOW = CoreCapability.quickStartBow(
+                builder -> builder.category(ExCapCategories.BOW)
                         .collider(ColliderPreset.FIST)
                         .swingSound(EpicFightSounds.WHOOSH.get())
                         .hitSound(EpicFightSounds.BLUNT_HIT.get())

@@ -5,6 +5,7 @@ import com.mojang.datafixers.util.Pair;
 import net.forixaim.efm_ex.api.providers.ProviderConditional;
 import net.forixaim.efm_ex.api.providers.CoreWeaponCapabilityProvider;
 import net.forixaim.efm_ex.api.moveset.MoveSet;
+import net.forixaim.efm_ex.capabilities.weaponcaps.EXBowWeaponCapability;
 import net.forixaim.efm_ex.capabilities.weaponcaps.EXWeaponCapability;
 import net.minecraft.world.item.Item;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
@@ -20,7 +21,7 @@ import java.util.function.Function;
 public class CoreCapability
 {
 	protected final List<ProviderConditional> styleComboProviderRegistry = new ArrayList<>();
-	protected final List<Pair<Style, Function<Pair<Style, EXWeaponCapability.Builder>, EXWeaponCapability.Builder>>> attackCombinationRegistry = new ArrayList<>();
+	protected final Map<Style, Function<Pair<Style, EXWeaponCapability.Builder>, EXWeaponCapability.Builder>> attackCombinationRegistry = Maps.newHashMap();
 	protected final CoreWeaponCapabilityProvider provider = new CoreWeaponCapabilityProvider();
 	protected static final Map<Item, Item> sheathes = Maps.newHashMap();
 
@@ -36,10 +37,7 @@ public class CoreCapability
 
 	protected void registerAttackCombo()
 	{
-		for (Pair<Style, Function<Pair<Style, EXWeaponCapability.Builder>, EXWeaponCapability.Builder>> weaponCombo : attackCombinationRegistry)
-		{
-			builder.createStyleCategory(weaponCombo.getFirst(), weaponCombo.getSecond());
-		}
+		attackCombinationRegistry.forEach((style, pairBuilderFunction) -> builder.createStyleCategory(style, pairBuilderFunction));
 	}
 
 	protected void registerProviderConditionals()
@@ -57,6 +55,11 @@ public class CoreCapability
 	public static CoreCapability quickStart(Consumer<EXWeaponCapability.Builder> quickStart)
 	{
 		return new CoreCapability().start(quickStart);
+	}
+
+	public static CoreCapability quickStartBow(Consumer<EXBowWeaponCapability.Builder> quickStart)
+	{
+		return new CoreBowCapability().start(quickStart);
 	}
 
 	private CoreCapability start(Consumer<EXWeaponCapability.Builder> qs)

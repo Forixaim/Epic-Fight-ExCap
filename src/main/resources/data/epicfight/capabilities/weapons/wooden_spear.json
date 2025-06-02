@@ -1,0 +1,18 @@
+{
+	"attributes":
+	{
+		"one_hand":
+		{
+			"armor_negation":4.0,
+			"impact":1.5,
+			"max_strikes":1
+		},
+		"two_hand":
+		{
+			"armor_negation":0.0,
+			"impact":1.0,
+			"max_strikes":3
+		}
+	},
+	"type":"efm_ex:spear"
+}
