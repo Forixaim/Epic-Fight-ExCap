@@ -22,6 +22,13 @@ public class MainConditionals
             .setWieldStyle(CapabilityItem.Styles.TWO_HAND)
             .build();
 
+    public static ProviderConditional defaultRanged = ProviderConditional.builder()
+            .setType(ProviderConditionalType.DEFAULT)
+            .isVisibleOffHand(false)
+            .setWieldStyle(CapabilityItem.Styles.RANGED)
+            .build();
+
+
     public static ProviderConditional SwordShieldLS = ProviderConditional.builder()
             .setType(ProviderConditionalType.WEAPON_CATEGORY)
             .setHand(InteractionHand.OFF_HAND)

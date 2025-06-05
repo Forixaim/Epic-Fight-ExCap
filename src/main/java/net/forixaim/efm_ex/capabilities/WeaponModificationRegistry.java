@@ -26,7 +26,7 @@ public class WeaponModificationRegistry
 		event.addProvider(UCHIGATANA, UchigatanaSheathed, default2HWieldStyle);
 		event.addProvider(GREATSWORD, default2HWieldStyle);
 		event.addProvider(TACHI, default2HWieldStyle);
-		event.addProvider(BOW, default2HWieldStyle);
+		event.addProvider(BOW, defaultRanged);
 		event.addProvider(AXE, default1HWieldStyle);
 		event.addProvider(SPELL, default1HWieldStyle);
 		event.addProvider(SPEAR, default2HWieldStyle, SwordShieldLS);

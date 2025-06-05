@@ -98,6 +98,7 @@ public class ExCapWeapons
                         .swingSound(EpicFightSounds.WHOOSH.get())
                         .hitSound(EpicFightSounds.BLUNT_HIT.get())
                         .constructor(EXBowWeaponCapability::new)
+                        .zoomInType(CapabilityItem.ZoomInType.USE_TICK)
         );
 
         SPEAR = CoreCapability.quickStart(

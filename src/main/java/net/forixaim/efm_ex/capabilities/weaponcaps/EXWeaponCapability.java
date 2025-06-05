@@ -244,7 +244,6 @@ public class EXWeaponCapability extends WeaponCapability
 		}
 
 
-
 		@SafeVarargs
         public final void addGuardMotion(Style wieldStyle, Skill guardSkill, GuardSkill.BlockType blockType, AnimationManager.AnimationAccessor<? extends StaticAnimation>... animation)
 		{
@@ -399,6 +398,11 @@ public class EXWeaponCapability extends WeaponCapability
 			{
 				addRevelationAnimation(style, moveSet.getRevelation());
 			}
+		}
+
+		@Override
+		public Builder zoomInType(ZoomInType zoomInType) {
+			return (Builder) super.zoomInType(zoomInType);
 		}
 	}
 }

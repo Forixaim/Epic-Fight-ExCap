@@ -81,6 +81,7 @@ public class CoreMovesets
 				)
 				.addInnateSkill(itemStack -> EpicFightSkills.GUILLOTINE_AXE);
 
+
 		rangedMoveSet = RangedMoveSet.builder()
 				.addRangedAttackModifier(LivingMotions.SHOT, Animations.BIPED_BOW_SHOT)
 				.addRangedAttackModifier(LivingMotions.AIM, Animations.BIPED_BOW_AIM)

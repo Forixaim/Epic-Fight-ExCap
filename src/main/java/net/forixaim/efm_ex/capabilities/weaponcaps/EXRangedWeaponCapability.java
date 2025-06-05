@@ -14,7 +14,7 @@ import yesman.epicfight.world.capabilities.item.Style;
 
 import java.util.Map;
 
-public class EXRangedWeaponCapability extends EXWeaponCapability
+public class EXRangedWeaponCapability extends EXWeaponCapability implements RangedWeapon
 {
 	protected final Map<Style, Map<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>>> rangeAnimationModifiers;
 

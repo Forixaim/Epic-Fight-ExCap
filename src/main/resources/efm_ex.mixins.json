@@ -5,14 +5,16 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "efm_ex.refmap.json",
   "mixins": [
-    "MixinParryingSkill"
+    "MixinParryingSkill",
+    "MixinProjectilePatch"
   ],
   "server": [
     "MixinRevelationSkill"
   ],
   "client": [
     "MixinGuard",
-    "MixinPPlayerRenderer"
+    "MixinPPlayerRenderer",
+    "MixinRenderEngine"
   ],
   "injectors": {
     "defaultRequire": 1
