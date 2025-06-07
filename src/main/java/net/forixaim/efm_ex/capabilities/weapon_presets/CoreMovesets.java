@@ -83,11 +83,12 @@ public class CoreMovesets
 
 
 		rangedMoveSet = RangedMoveSet.builder()
-				.addRangedAttackModifier(LivingMotions.SHOT, Animations.BIPED_BOW_SHOT)
-				.addRangedAttackModifier(LivingMotions.AIM, Animations.BIPED_BOW_AIM)
-				.addRangedAttackModifier(LivingMotions.WALK, Animations.BIPED_WALK)
-				.addRangedAttackModifier(LivingMotions.IDLE, Animations.BIPED_IDLE)
-				.addAutoAttacks(Animations.FIST_AUTO1, Animations.FIST_AUTO2, Animations.FIST_AUTO3, Animations.FIST_DASH, Animations.FIST_AIR_SLASH);
+				.addLivingMotionModifier(LivingMotions.SHOT, Animations.BIPED_BOW_SHOT)
+				.addLivingMotionModifier(LivingMotions.AIM, Animations.BIPED_BOW_AIM)
+				.addLivingMotionModifier(LivingMotions.WALK, Animations.BIPED_WALK)
+				.addLivingMotionModifier(LivingMotions.IDLE, Animations.BIPED_IDLE)
+				.addAutoAttacks(Animations.FIST_AUTO1, Animations.FIST_AUTO2, Animations.FIST_AUTO3, Animations.FIST_DASH, Animations.FIST_AIR_SLASH)
+				.addInnateSkill(itemStack -> EpicFightSkills.RELENTLESS_COMBO);
 
 		mountedSpearMS = MoveSet.builder()
 				.addAutoAttacks(

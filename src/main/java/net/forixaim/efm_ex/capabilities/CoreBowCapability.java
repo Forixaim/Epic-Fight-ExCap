@@ -10,9 +10,9 @@ public class CoreBowCapability extends CoreCapability
 {
     protected EXWeaponCapability.Builder builder = EXBowWeaponCapability.builder();
 
-    CoreCapability start(Consumer<EXBowWeaponCapability.Builder> qs)
+    CoreBowCapability start(Consumer<EXBowWeaponCapability.Builder> qs)
     {
-        qs.accept((EXRangedWeaponCapability.Builder) this.builder);
+        qs.accept(this.builder);
         return this;
     }
 

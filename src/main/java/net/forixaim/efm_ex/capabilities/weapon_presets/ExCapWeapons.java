@@ -2,6 +2,7 @@ package net.forixaim.efm_ex.capabilities.weapon_presets;
 
 import net.forixaim.efm_ex.EpicFightEXCapability;
 import net.forixaim.efm_ex.api.events.ExCapWeaponRegistryEvent;
+import net.forixaim.efm_ex.capabilities.CoreBowCapability;
 import net.forixaim.efm_ex.capabilities.CoreCapability;
 import net.forixaim.efm_ex.capabilities.ExCapCategories;
 import net.forixaim.efm_ex.capabilities.weaponcaps.EXBowWeaponCapability;
@@ -92,12 +93,11 @@ public class ExCapWeapons
                         .hitSound(EpicFightSounds.BLADE_HIT.get())
         );
 
-        BOW = CoreCapability.quickStartBow(
+        BOW = CoreCapability.quickStart(
                 builder -> builder.category(ExCapCategories.BOW)
                         .collider(ColliderPreset.FIST)
                         .swingSound(EpicFightSounds.WHOOSH.get())
                         .hitSound(EpicFightSounds.BLUNT_HIT.get())
-                        .constructor(EXBowWeaponCapability::new)
                         .zoomInType(CapabilityItem.ZoomInType.USE_TICK)
         );
 

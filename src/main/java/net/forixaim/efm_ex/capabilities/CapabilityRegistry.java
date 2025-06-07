@@ -242,15 +242,7 @@ public class CapabilityRegistry
 
 		LogUtils.getLogger().debug("item : {} with Bow Capability", item.getDescriptionId());
 
-		try
-		{
-			builder0 = ExCapWeapons.BOW.export();
-		}
-		catch (NoSuchMethodError e)
-		{
-			LogUtils.getLogger().warn(e.getMessage());
-			builder0 = ExCapWeapons.BOW.export(true);
-		}
+		builder0 = ExCapWeapons.BOW.export();
 
 		if (item instanceof TieredItem tieredItem && builder0 instanceof WeaponCapability.Builder builder) {
 			builder.hitSound(tieredItem.getTier() == Tiers.WOOD ? EpicFightSounds.BLUNT_HIT.get() : EpicFightSounds.BLADE_HIT.get());

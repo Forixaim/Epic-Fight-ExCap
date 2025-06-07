@@ -23,6 +23,11 @@ public class Registries
         );
     }
 
+    public static void registerMaterials()
+    {
+
+    }
+
     /**
      * This is to be called after everything has been loaded
      */

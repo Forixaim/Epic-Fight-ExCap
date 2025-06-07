@@ -4,17 +4,21 @@ package net.forixaim.efm_ex.capabilities.weaponcaps;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
+import com.mojang.logging.LogUtils;
 import io.redspace.ironsspellbooks.IronsSpellbooks;
 import net.forixaim.efm_ex.api.moveset.MoveSet;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
 import net.minecraftforge.fml.ModList;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.LivingMotion;
+import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.collider.Collider;
@@ -56,7 +60,13 @@ public class EXWeaponCapability extends WeaponCapability
 	protected final Map<Item, Item> sheath;
 	protected final Map<Style, AnimationManager.AnimationAccessor<? extends AttackAnimation>> punishmentAnimation;
 
-
+	@Override
+	public LivingMotion getLivingMotion(LivingEntityPatch<?> entitypatch, InteractionHand hand) {
+		if (entitypatch.getOriginal().isUsingItem() && entitypatch.getOriginal().getUseItem().getUseAnimation() == UseAnim.BOW) {
+			return LivingMotions.AIM;
+		}
+		return super.getLivingMotion(entitypatch, hand);
+	}
 
 	protected EXWeaponCapability(CapabilityItem.Builder builder)
 	{
@@ -85,6 +95,7 @@ public class EXWeaponCapability extends WeaponCapability
 			return EpicFightItems.UCHIGATANA_SHEATH.get();
 		return sheath.get(target);
 	}
+
 
 	public Predicate<LivingEntityPatch<?>> getSheathRenderer(Style style)
 	{
@@ -191,6 +202,8 @@ public class EXWeaponCapability extends WeaponCapability
                 .swingSound(copyFrom.swingSoundCopy)
                 .hitSound(copyFrom.hitSoundCopy);
 	}
+
+
 
 	public static enum ClashType
 	{

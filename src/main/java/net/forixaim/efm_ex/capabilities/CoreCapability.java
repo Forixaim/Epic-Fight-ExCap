@@ -57,7 +57,7 @@ public class CoreCapability
 		return new CoreCapability().start(quickStart);
 	}
 
-	public static CoreCapability quickStartBow(Consumer<EXBowWeaponCapability.Builder> quickStart)
+	public static CoreBowCapability quickStartBow(Consumer<EXBowWeaponCapability.Builder> quickStart)
 	{
 		return new CoreBowCapability().start(quickStart);
 	}

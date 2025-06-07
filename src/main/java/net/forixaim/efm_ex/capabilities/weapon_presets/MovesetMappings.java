@@ -43,7 +43,7 @@ public class MovesetMappings
         event.addMoveset(ExCapWeapons.DAGGER, ONE_HAND, dagger1HMS);
         event.addMoveset(ExCapWeapons.DAGGER, MOUNT, mountedSwordMS);
 
-        event.addMoveset(ExCapWeapons.BOW, TWO_HAND, rangedMoveSet);
+        event.addMoveset(ExCapWeapons.BOW, RANGED, rangedMoveSet);
 
         event.addMoveset(ExCapWeapons.BOKKEN, ONE_HAND, sword1HMS);
         event.addMoveset(ExCapWeapons.BOKKEN, TWO_HAND, sword2HMS);
