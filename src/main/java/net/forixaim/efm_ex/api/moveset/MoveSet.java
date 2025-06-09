@@ -33,6 +33,8 @@ public class MoveSet
     private static final ResourceLocation MOVESET_TO_ID = ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "moveset_to_id");
 
     private final List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> AutoAttackAnimations;
+    private final List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> MountAttackAnimations;
+
     private final Map<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>> LivingMotionModifiers;
     private final Function<ItemStack, Skill> WeaponInnateSkill;
     private final Map<Skill, Map<GuardSkill.BlockType, List<AnimationManager.AnimationAccessor<? extends StaticAnimation>>>> GuardAnimations;
@@ -70,6 +72,7 @@ public class MoveSet
 
     public MoveSet(MoveSetBuilder builder)
     {
+        this.MountAttackAnimations = builder.MountAttackAnimations;
         this.sheathRender = builder.sheathRender;
         this.AutoAttackAnimations = builder.AutoAttackAnimations;
         this.LivingMotionModifiers = builder.LivingMotionModifiers;
@@ -98,6 +101,11 @@ public class MoveSet
         return WeaponPassiveSkill;
     }
 
+    public List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> getMountAttackAnimations()
+    {
+        return MountAttackAnimations;
+    }
+
     public Function<ItemStack, Skill> getWeaponInnateSkill() {
         return WeaponInnateSkill;
     }
@@ -117,6 +125,7 @@ public class MoveSet
     public static class MoveSetBuilder
     {
         protected final List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> AutoAttackAnimations;
+        protected final List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> MountAttackAnimations;
         protected final Map<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>> LivingMotionModifiers;
         protected Function<ItemStack, Skill> WeaponInnateSkill;
         protected final Map<Skill, Map<GuardSkill.BlockType, List<AnimationManager.AnimationAccessor<? extends StaticAnimation>>>>  GuardAnimations;
@@ -126,6 +135,7 @@ public class MoveSet
 
         public MoveSetBuilder()
         {
+            MountAttackAnimations = Lists.newArrayList();
             sheathRender = livingEntityPatch -> false;
             AutoAttackAnimations = Lists.newArrayList();
             LivingMotionModifiers = Maps.newHashMap();
@@ -141,6 +151,8 @@ public class MoveSet
             return this;
         }
 
+
+
         public MoveSetBuilder shouldRenderSheath(Predicate<LivingEntityPatch<?>> sheathRender)
         {
             this.sheathRender = sheathRender;
@@ -150,6 +162,13 @@ public class MoveSet
         public MoveSetBuilder setPassiveSkill(Skill newPassiveSkill)
         {
             this.WeaponPassiveSkill = newPassiveSkill;
+            return this;
+        }
+
+        @SafeVarargs
+        public final MoveSetBuilder addMountAttacks(AnimationManager.AnimationAccessor<? extends AttackAnimation>... attackAnimations)
+        {
+            MountAttackAnimations.addAll(Arrays.asList(attackAnimations));
             return this;
         }
 

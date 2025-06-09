@@ -1,9 +1,15 @@
 package net.forixaim.efm_ex.api;
 
+import com.google.common.collect.Maps;
+import com.mojang.logging.LogUtils;
+import net.forixaim.efm_ex.api.events.ExCapMaterialRegistryEvent;
 import net.forixaim.efm_ex.api.events.ExCapMovesetRegistryEvent;
 import net.forixaim.efm_ex.api.events.ExCapWeaponRegistryEvent;
 import net.forixaim.efm_ex.api.events.MoveSetDefinitionRegistryEvent;
+import net.forixaim.efm_ex.api.material.MaterialProperties;
 import net.forixaim.efm_ex.api.moveset.MoveSet;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.Tiers;
 import net.minecraftforge.fml.ModLoader;
 
 import javax.swing.text.Style;
@@ -25,7 +31,20 @@ public class Registries
 
     public static void registerMaterials()
     {
+        Map<Tier, MaterialProperties> properties = Map.ofEntries(
+                Map.entry(Tiers.WOOD, new MaterialProperties(0f, 1f, 1)),
+                Map.entry(Tiers.STONE, new MaterialProperties(0f, 2f, 1)),
+                Map.entry(Tiers.IRON, new MaterialProperties(5f, 3f, 1)),
+                Map.entry(Tiers.GOLD, new MaterialProperties(0f, 2f, 2)),
+                Map.entry(Tiers.DIAMOND, new MaterialProperties(7f, 3f, 2)),
+                Map.entry(Tiers.NETHERITE, new MaterialProperties(10f, 3f, 3))
+        );
 
+        MaterialPropertyManager.addAll(properties);
+
+        ExCapMaterialRegistryEvent event = new ExCapMaterialRegistryEvent();
+        ModLoader.get().postEvent(event);
+        event.getModMap().values().forEach(MaterialPropertyManager::addAll);
     }
 
     /**

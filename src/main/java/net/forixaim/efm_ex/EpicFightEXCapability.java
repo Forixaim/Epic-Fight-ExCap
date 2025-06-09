@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.forixaim.efm_ex.api.Registries;
 import net.forixaim.efm_ex.capabilities.ExCapCategories;
 import net.forixaim.efm_ex.registry.ItemRegistry;
+import net.forixaim.efm_ex.skill.ExCapDatakeys;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.PathPackResources;
@@ -39,6 +40,7 @@ public class EpicFightEXCapability {
 
     public EpicFightEXCapability(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
+        ExCapDatakeys.DATA_KEYS.register(modEventBus);
         ItemRegistry.ITEMS.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(this);
         WeaponCategory.ENUM_MANAGER.registerEnumCls(MODID, ExCapCategories.class);

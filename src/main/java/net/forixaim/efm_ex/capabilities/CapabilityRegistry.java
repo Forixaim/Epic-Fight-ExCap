@@ -3,6 +3,7 @@ package net.forixaim.efm_ex.capabilities;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.logging.LogUtils;
 import net.forixaim.efm_ex.EpicFightEXCapability;
+import net.forixaim.efm_ex.api.MaterialPropertyManager;
 import net.forixaim.efm_ex.capabilities.weapon_presets.ExCapWeapons;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;

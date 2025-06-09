@@ -6,10 +6,12 @@
   "refmap": "efm_ex.refmap.json",
   "mixins": [
     "MixinParryingSkill",
-    "MixinProjectilePatch"
+    "MixinProjectilePatch",
+    "MixinBasicAttack"
   ],
   "server": [
     "MixinRevelationSkill"
+
   ],
   "client": [
     "MixinGuard",

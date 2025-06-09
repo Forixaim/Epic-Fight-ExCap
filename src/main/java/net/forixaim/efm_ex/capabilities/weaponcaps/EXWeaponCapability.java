@@ -20,6 +20,7 @@ import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.LivingMotion;
 import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.api.animation.types.AttackAnimation;
+import yesman.epicfight.api.animation.types.MountAttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.collider.Collider;
 import yesman.epicfight.gameasset.ColliderPreset;
@@ -58,6 +59,7 @@ public class EXWeaponCapability extends WeaponCapability
 	protected final Map<Style, Map<GuardSkill, Map<GuardSkill.BlockType, List<AnimationManager.AnimationAccessor<? extends StaticAnimation>>>>> guardAnimations;
 	protected final Map<Style, Predicate<LivingEntityPatch<?>>> shouldRenderSheath;
 	protected final Map<Item, Item> sheath;
+	protected final Map<Style, List<AnimationManager.AnimationAccessor<? extends AttackAnimation>>> mountAttackAnimations;
 	protected final Map<Style, AnimationManager.AnimationAccessor<? extends AttackAnimation>> punishmentAnimation;
 
 	@Override
@@ -66,6 +68,14 @@ public class EXWeaponCapability extends WeaponCapability
 			return LivingMotions.AIM;
 		}
 		return super.getLivingMotion(entitypatch, hand);
+	}
+
+	public List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> getMountAttackEX(Style style)
+	{
+		if (mountAttackAnimations.get(style) == null) {
+			return getMountAttackMotion();
+		}
+		return mountAttackAnimations.get(style);
 	}
 
 	protected EXWeaponCapability(CapabilityItem.Builder builder)
@@ -79,6 +89,7 @@ public class EXWeaponCapability extends WeaponCapability
 		this.castAnimations = efbsBuilder.castAnimations;
 		this.chantAnimations = efbsBuilder.chantAnimations;
 		this.guardAnimations = efbsBuilder.guardAnimations;
+		this.mountAttackAnimations = efbsBuilder.mountAttackAnimation;
 		this.weaponPassiveSkill = efbsBuilder.weaponPassiveSkill;
 		this.sheath = efbsBuilder.sheath;
 		this.clashes = efbsBuilder.clashes;
@@ -95,7 +106,6 @@ public class EXWeaponCapability extends WeaponCapability
 			return EpicFightItems.UCHIGATANA_SHEATH.get();
 		return sheath.get(target);
 	}
-
 
 	public Predicate<LivingEntityPatch<?>> getSheathRenderer(Style style)
 	{
@@ -227,6 +237,7 @@ public class EXWeaponCapability extends WeaponCapability
 		protected final Map<Style, Predicate<LivingEntityPatch<?>>> shouldRenderSheath;
 		protected final Map<Item, Item> sheath;
 		protected final Map<Style, AnimationManager.AnimationAccessor<? extends AttackAnimation>> punishmentAnimation;
+		protected final Map<Style, List<AnimationManager.AnimationAccessor<? extends AttackAnimation>>> mountAttackAnimation;
 
 		//Fields that are primarily there to be used when this object is copied.
 		protected Function<CapabilityItem.Builder, CapabilityItem> copyConstructor = EXWeaponCapability::new;
@@ -243,6 +254,7 @@ public class EXWeaponCapability extends WeaponCapability
 		protected Builder()
 		{
 			super();
+			mountAttackAnimation = Maps.newHashMap();
 			punishmentAnimation = Maps.newHashMap();
             this.shouldRenderSheath = Maps.newHashMap();
             this.constructor(EXWeaponCapability::new);
@@ -254,6 +266,11 @@ public class EXWeaponCapability extends WeaponCapability
 			guardAnimations = Maps.newHashMap();
 			weaponPassiveSkill = Maps.newHashMap();
 			sheath = Maps.newHashMap();
+		}
+
+		public void addMountAttacks(Style style, AnimationManager.AnimationAccessor<? extends AttackAnimation>... mountAttacks)
+		{
+			mountAttackAnimation.put(style, Arrays.asList(mountAttacks));
 		}
 
 
@@ -407,6 +424,9 @@ public class EXWeaponCapability extends WeaponCapability
 			moveSet.getGuardAnimations().forEach((guardSkill, blockTypeListMap) -> blockTypeListMap.forEach(((blockType, animationProviders) -> addGuardMotion(style, guardSkill, blockType, animationProviders.toArray(AnimationManager.AnimationAccessor[]::new)))));
 			innateSkill(style, moveSet.getWeaponInnateSkill());
 			weaponPassiveSkill.put(style, moveSet.getWeaponPassiveSkill());
+			if (!moveSet.getMountAttackAnimations().isEmpty()) {
+				addMountAttacks(style, moveSet.getMountAttackAnimations().toArray(AnimationManager.AnimationAccessor[]::new));
+			}
 			if (moveSet.getRevelation() != null)
 			{
 				addRevelationAnimation(style, moveSet.getRevelation());
