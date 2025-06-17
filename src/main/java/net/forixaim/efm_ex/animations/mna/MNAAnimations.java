@@ -20,19 +20,16 @@ public class MNAAnimations
 	public static void Build(AnimationManager.AnimationBuilder event)
 	{
 		MNAAnimations.SPELL_AUTO1 = event.nextAccessor("spell/auto1", access -> new BasicAttackAnimation(0.3f, 0.0f, 0.5f, 0.55f, 0.6f, ColliderPreset.FIST, Armatures.BIPED.get().toolR, access, Armatures.BIPED)
-				.addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, EpicFightSounds.NO_SOUND.get())
 				.addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, (dynamicAnimation, livingEntityPatch, v, v1, v2) -> 1.3f)
 				.addEvents(AnimationEvent.InTimeEvent.create(0.5f, CastSpell.castMNASpell, AnimationEvent.Side.SERVER)));
 
 		MNAAnimations.SPELL_AUTO1 = event.nextAccessor("spell/auto2", access -> new BasicAttackAnimation(
 				0.2f, 0.0f, 0.25f, 0.3f, 0.6f, ColliderPreset.FIST, Armatures.BIPED.get().toolR, access, Armatures.BIPED)
-				.addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, EpicFightSounds.NO_SOUND.get())
 				.addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, (dynamicAnimation, livingEntityPatch, v, v1, v2) -> 1.3f)
 				.addEvents(AnimationEvent.InTimeEvent.create(0.25f, CastSpell.castMNASpell, AnimationEvent.Side.SERVER)));
 
 		MNAAnimations.SPELL_AUTO1 = event.nextAccessor("spell/auto3", access -> new BasicAttackAnimation(
 				0.2f, 0.0f, 0.9f, 0.95f, 1f, ColliderPreset.FIST, Armatures.BIPED.get().toolR, access, Armatures.BIPED)
-				.addProperty(AnimationProperty.AttackPhaseProperty.SWING_SOUND, EpicFightSounds.NO_SOUND.get())
 				.addProperty(AnimationProperty.StaticAnimationProperty.PLAY_SPEED_MODIFIER, (dynamicAnimation, livingEntityPatch, v, v1, v2) -> 1.3f)
 				.addEvents(AnimationEvent.InTimeEvent.create(0.9f, CastSpell.castMNASpell, AnimationEvent.Side.SERVER)));
 

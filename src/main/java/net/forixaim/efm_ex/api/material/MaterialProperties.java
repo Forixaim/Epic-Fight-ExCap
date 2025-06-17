@@ -1,29 +1,8 @@
 package net.forixaim.efm_ex.api.material;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 
-import yesman.epicfight.api.utils.math.ValueModifier;
+import java.util.Map;
 
-public class MaterialProperties
-{
-    private final float armorNegationModifier;
-    private final float impactModifier;
-    private final int maxStrikesModifier;
+public record MaterialProperties(Map<Attribute, Double> attributeModifier) {
 
-    public MaterialProperties(float armorNegationModifier, float impactModifier, int maxStrikesModifier)
-    {
-        this.armorNegationModifier = armorNegationModifier;
-        this.impactModifier = impactModifier;
-        this.maxStrikesModifier = maxStrikesModifier;
-    }
-
-    public float getArmorNegationModifier() {
-        return armorNegationModifier;
-    }
-
-    public float getImpactModifier() {
-        return impactModifier;
-    }
-
-    public int getMaxStrikesModifier() {
-        return maxStrikesModifier;
-    }
 }

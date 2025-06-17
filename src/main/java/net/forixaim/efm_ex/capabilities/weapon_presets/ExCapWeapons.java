@@ -2,10 +2,8 @@ package net.forixaim.efm_ex.capabilities.weapon_presets;
 
 import net.forixaim.efm_ex.EpicFightEXCapability;
 import net.forixaim.efm_ex.api.events.ExCapWeaponRegistryEvent;
-import net.forixaim.efm_ex.capabilities.CoreBowCapability;
 import net.forixaim.efm_ex.capabilities.CoreCapability;
 import net.forixaim.efm_ex.capabilities.ExCapCategories;
-import net.forixaim.efm_ex.capabilities.weaponcaps.EXBowWeaponCapability;
 import net.forixaim.efm_ex.capabilities.weaponcaps.EXGloveCapability;
 import net.forixaim.efm_ex.capabilities.weaponcaps.compat.EXSpellCapability;
 import net.forixaim.efm_ex.registry.ItemRegistry;
@@ -46,7 +44,8 @@ public class ExCapWeapons
                         .category(CapabilityItem.WeaponCategories.FIST)
                         .collider(ColliderPreset.FIST)
                         .swingSound(EpicFightSounds.WHOOSH.get())
-                        .hitSound(EpicFightSounds.BLUNT_HIT.get())
+                        .hitSound(EpicFightSounds.BLUNT_HIT.get()),
+                1, 1, 1
         );
 
         DAGGER = CoreCapability.quickStart(
@@ -54,6 +53,8 @@ public class ExCapWeapons
                         .collider(ColliderPreset.DAGGER)
                         .swingSound(EpicFightSounds.WHOOSH_SMALL.get())
                         .hitSound(EpicFightSounds.BLUNT_HIT.get())
+                ,
+                1, 1, 1
         );
 
         BOKKEN = CoreCapability.quickStart(
@@ -61,6 +62,8 @@ public class ExCapWeapons
                         .collider(ColliderPreset.SWORD)
                         .swingSound(EpicFightSounds.WHOOSH.get())
                         .hitSound(EpicFightSounds.BLUNT_HIT.get())
+                ,
+                1, 1, 1
         );
 
         SWORD = CoreCapability.quickStart(
@@ -68,6 +71,8 @@ public class ExCapWeapons
                         .collider(ColliderPreset.SWORD)
                         .swingSound(EpicFightSounds.WHOOSH.get())
                         .hitSound(EpicFightSounds.BLADE_HIT.get())
+                ,
+                1, 1, 1
         );
 
         LONGSWORD = CoreCapability.quickStart(
@@ -75,6 +80,8 @@ public class ExCapWeapons
                         .collider(ColliderPreset.LONGSWORD)
                         .swingSound(EpicFightSounds.WHOOSH.get())
                         .hitSound(EpicFightSounds.BLADE_HIT.get())
+                ,
+                1, 1, 1
         );
         CoreCapability.addSheath(EpicFightItems.IRON_LONGSWORD.get(), ItemRegistry.IRON_LONGSWORD_SHEATH.get());
         CoreCapability.addSheath(EpicFightItems.GOLDEN_LONGSWORD.get(), ItemRegistry.IRON_LONGSWORD_SHEATH.get());
@@ -83,14 +90,16 @@ public class ExCapWeapons
                 builder -> builder.category(CapabilityItem.WeaponCategories.GREATSWORD)
                         .collider(ColliderPreset.GREATSWORD)
                         .swingSound(EpicFightSounds.WHOOSH_BIG.get())
-                        .hitSound(EpicFightSounds.BLADE_HIT.get())
+                        .hitSound(EpicFightSounds.BLADE_HIT.get()),
+                1, 1, 1
         );
 
         AXE = CoreCapability.quickStart(
                 builder -> builder.category(CapabilityItem.WeaponCategories.AXE)
                         .collider(ColliderPreset.TOOLS)
                         .swingSound(EpicFightSounds.WHOOSH.get())
-                        .hitSound(EpicFightSounds.BLADE_HIT.get())
+                        .hitSound(EpicFightSounds.BLADE_HIT.get()),
+                1, 1, 1
         );
 
         BOW = CoreCapability.quickStart(
@@ -98,28 +107,32 @@ public class ExCapWeapons
                         .collider(ColliderPreset.FIST)
                         .swingSound(EpicFightSounds.WHOOSH.get())
                         .hitSound(EpicFightSounds.BLUNT_HIT.get())
-                        .zoomInType(CapabilityItem.ZoomInType.USE_TICK)
+                        .zoomInType(CapabilityItem.ZoomInType.USE_TICK),
+                1, 1, 1
         );
 
         SPEAR = CoreCapability.quickStart(
                 builder -> builder.category(CapabilityItem.WeaponCategories.SPEAR)
                         .collider(ColliderPreset.SPEAR)
                         .swingSound(EpicFightSounds.WHOOSH.get())
-                        .hitSound(EpicFightSounds.BLADE_HIT.get())
+                        .hitSound(EpicFightSounds.BLADE_HIT.get()),
+                1, 1, 1
         );
 
         TACHI = CoreCapability.quickStart(
                 builder -> builder.category(CapabilityItem.WeaponCategories.TACHI)
                         .collider(ColliderPreset.TACHI)
                         .swingSound(EpicFightSounds.WHOOSH.get())
-                        .hitSound(EpicFightSounds.BLADE_HIT.get())
+                        .hitSound(EpicFightSounds.BLADE_HIT.get()),
+                1, 1, 1
         );
 
         UCHIGATANA = CoreCapability.quickStart(
                 builder -> builder.category(CapabilityItem.WeaponCategories.UCHIGATANA)
                         .collider(ColliderPreset.UCHIGATANA)
                         .swingSound(EpicFightSounds.WHOOSH.get())
-                        .hitSound(EpicFightSounds.BLADE_HIT.get())
+                        .hitSound(EpicFightSounds.BLADE_HIT.get()),
+                1, 0.7f, 1
         );
 
         SPELL = CoreCapability.quickStart(
@@ -127,7 +140,8 @@ public class ExCapWeapons
                         .collider(ColliderPreset.FIST)
                         .swingSound(EpicFightSounds.WHOOSH.get())
                         .hitSound(EpicFightSounds.BLUNT_HIT.get())
-                        .constructor(EXSpellCapability::new)
+                        .constructor(EXSpellCapability::new),
+                1, 1, 1
         );
     }
 }

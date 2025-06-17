@@ -1,6 +1,5 @@
 package net.forixaim.efm_ex.skill;
 
-import net.forixaim.battle_arts.core_assets.skills.base_attack.MountedBasicAttack;
 import net.forixaim.efm_ex.EpicFightEXCapability;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.DeferredRegister;

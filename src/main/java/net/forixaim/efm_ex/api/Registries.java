@@ -11,6 +11,7 @@ import net.forixaim.efm_ex.api.moveset.MoveSet;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraftforge.fml.ModLoader;
+import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
 
 import javax.swing.text.Style;
 import java.util.Map;
@@ -29,15 +30,24 @@ public class Registries
         );
     }
 
+    public static MaterialProperties quickRegister(float pierce, float impact, float maxStrikes)
+    {
+        return new MaterialProperties(Map.ofEntries(
+                Map.entry(EpicFightAttributes.ARMOR_NEGATION.get(), (double)pierce),
+                Map.entry(EpicFightAttributes.IMPACT.get(), (double)impact),
+                Map.entry(EpicFightAttributes.MAX_STRIKES.get(), (double)maxStrikes)
+        ));
+    }
+
     public static void registerMaterials()
     {
         Map<Tier, MaterialProperties> properties = Map.ofEntries(
-                Map.entry(Tiers.WOOD, new MaterialProperties(0f, 1f, 1)),
-                Map.entry(Tiers.STONE, new MaterialProperties(0f, 2f, 1)),
-                Map.entry(Tiers.IRON, new MaterialProperties(5f, 3f, 1)),
-                Map.entry(Tiers.GOLD, new MaterialProperties(0f, 2f, 2)),
-                Map.entry(Tiers.DIAMOND, new MaterialProperties(7f, 3f, 2)),
-                Map.entry(Tiers.NETHERITE, new MaterialProperties(10f, 3f, 3))
+                Map.entry(Tiers.WOOD, quickRegister(0f, 1f, 1)),
+                Map.entry(Tiers.STONE, quickRegister(0f, 2f, 1)),
+                Map.entry(Tiers.IRON, quickRegister(5f, 3f, 1)),
+                Map.entry(Tiers.GOLD, quickRegister(0f, 2f, 2)),
+                Map.entry(Tiers.DIAMOND, quickRegister(7f, 3f, 2)),
+                Map.entry(Tiers.NETHERITE, quickRegister(10f, 3f, 3))
         );
 
         MaterialPropertyManager.addAll(properties);

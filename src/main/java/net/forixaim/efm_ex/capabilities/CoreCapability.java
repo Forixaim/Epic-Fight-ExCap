@@ -1,16 +1,19 @@
 package net.forixaim.efm_ex.capabilities;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 import net.forixaim.efm_ex.api.providers.ProviderConditional;
 import net.forixaim.efm_ex.api.providers.CoreWeaponCapabilityProvider;
 import net.forixaim.efm_ex.api.moveset.MoveSet;
-import net.forixaim.efm_ex.capabilities.weaponcaps.EXBowWeaponCapability;
 import net.forixaim.efm_ex.capabilities.weaponcaps.EXWeaponCapability;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
+import yesman.epicfight.api.utils.math.ValueModifier;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCapability;
+import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +28,18 @@ public class CoreCapability
 	protected final CoreWeaponCapabilityProvider provider = new CoreWeaponCapabilityProvider();
 	protected static final Map<Item, Item> sheathes = Maps.newHashMap();
 
+	protected final Map<Attribute, ValueModifier> attModifiers = Maps.newHashMap();
+
 	protected Map<Style, MoveSet> AttackSets = Maps.newHashMap();
 	protected EXWeaponCapability.Builder builder = EXWeaponCapability.builder();
+
+	CoreCapability(float pierceModifier, float impactModifier, float aoeModifier)
+	{
+		attModifiers.put(EpicFightAttributes.ARMOR_NEGATION.get(), ValueModifier.multiplier(pierceModifier));
+		attModifiers.put(EpicFightAttributes.IMPACT.get(),  ValueModifier.multiplier(impactModifier));
+		attModifiers.put(EpicFightAttributes.MAX_STRIKES.get(),  ValueModifier.multiplier(aoeModifier));
+
+	}
 
 	public static void addSheath(Item target, Item sheath)
 	{
@@ -48,18 +61,23 @@ public class CoreCapability
 		}
 	}
 
+	public Map<Attribute, ValueModifier> getAttModifiers() {
+		return ImmutableMap.copyOf(attModifiers);
+	}
+
 	public Map<Style, MoveSet> getAttackSets() {
 		return AttackSets;
 	}
 
+	@Deprecated(forRemoval = true)
 	public static CoreCapability quickStart(Consumer<EXWeaponCapability.Builder> quickStart)
 	{
-		return new CoreCapability().start(quickStart);
+		return quickStart(quickStart, 1f, 1f, 1f);
 	}
 
-	public static CoreBowCapability quickStartBow(Consumer<EXBowWeaponCapability.Builder> quickStart)
+	public static CoreCapability quickStart(Consumer<EXWeaponCapability.Builder> quickStart, float pierceModifier, float impactModifier, float aoeModifier)
 	{
-		return new CoreBowCapability().start(quickStart);
+		return new CoreCapability(pierceModifier, impactModifier, aoeModifier).start(quickStart);
 	}
 
 	private CoreCapability start(Consumer<EXWeaponCapability.Builder> qs)
