@@ -35,6 +35,7 @@ public class EpicFightEXCapability {
 
     public EpicFightEXCapability(FMLJavaModLoadingContext context) {
         IEventBus modEventBus = context.getModEventBus();
+        modEventBus.addListener(this::addPackFindersEvent);
         ExCapDatakeys.DATA_KEYS.register(modEventBus);
         ItemRegistry.ITEMS.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(this);
