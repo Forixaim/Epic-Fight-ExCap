@@ -24,10 +24,6 @@ public class EntityEvents
             if (attackerPatch.getHoldingItemCapability(InteractionHand.MAIN_HAND) instanceof EXWeaponCapability attackerWeapon && victimPatch.getHoldingItemCapability(InteractionHand.MAIN_HAND) instanceof EXWeaponCapability victimWeapon && attackerPatch.getAnimator().getEntityState().attacking() && victimPatch.getAnimator().getEntityState().attacking())
             {
                 float damage = event.getAmount();
-                if (attackerWeapon.getClashAnimation(EXWeaponCapability.ClashType.BLADE, attackerPatch) != null)
-                {
-                    attackerPatch.playAnimationSynchronized(attackerWeapon.getClashAnimation(EXWeaponCapability.ClashType.BLADE, attackerPatch), 0);
-                }
                 damage *= 0.3f;
                 event.setAmount(damage);
             }
