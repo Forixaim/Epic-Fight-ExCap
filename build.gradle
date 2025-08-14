@@ -139,9 +139,9 @@ dependencies {
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    implementation fg.deobf("libs:epicfight:20.12.1")
-    implementation fg.deobf("libs:epicskills:20.12.1")
-    implementation fg.deobf("curse.maven:battle-arts-api-1091499:6609941")
+    implementation fg.deobf("curse.maven:epic-fight-mod-405076:6854306")
+    implementation fg.deobf("curse.maven:battle-arts-api-1091499:6881162")
+    implementation fg.deobf("curse.maven:epic-fight-skill-tree-1295882:6854381")
     runtimeOnly fg.deobf("curse.maven:caelus-308989:4581481")
     runtimeOnly fg.deobf("curse.maven:playeranimator-658587:4587214")
     implementation fg.deobf("io.redspace.ironsspellbooks:irons_spellbooks:${irons_spells_version}")
