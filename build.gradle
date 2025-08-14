@@ -129,6 +129,19 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven {
+        url = "https://maven.architectury.dev"
+        content {
+            includeGroup "dev.architectury"
+        }
+    }
+
+    maven {
+        url = "https://maven.latvian.dev/releases"
+        content {
+            includeGroup "dev.latvian.mods"
+        }
+    }
 }
 
 dependencies {
@@ -149,6 +162,10 @@ dependencies {
     compileOnly fg.deobf("curse.maven:mna-406360:${mna_version}")
     // GeckoLib
     runtimeOnly fg.deobf("curse.maven:geckolib-388172:5188427")
+    // KubeJS compatibility
+    implementation fg.deobf("dev.latvian.mods:kubejs-forge:${kubejs_version}")
+    implementation fg.deobf("dev.latvian.mods:rhino-forge:${rhino_version}")
+    implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
