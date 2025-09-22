@@ -2,11 +2,15 @@ package net.forixaim.ex_cap.capabilities.weapon_presets;
 
 import net.forixaim.ex_cap.EpicFightEXCapability;
 import net.forixaim.ex_cap.api.events.ExCapWeaponRegistryEvent;
+import net.forixaim.ex_cap.api.moveset.MoveSet;
 import net.forixaim.ex_cap.capabilities.CoreCapability;
 import net.forixaim.ex_cap.capabilities.ExCapCategories;
 import net.forixaim.ex_cap.capabilities.weaponcaps.EXGloveCapability;
 import net.forixaim.ex_cap.capabilities.weaponcaps.compat.EXSpellCapability;
 import net.forixaim.ex_cap.registry.ItemRegistry;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import yesman.epicfight.gameasset.ColliderPreset;
@@ -17,8 +21,11 @@ import yesman.epicfight.world.item.EpicFightItems;
 @Mod.EventBusSubscriber(modid = EpicFightEXCapability.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ExCapWeapons
 {
+    public static final ResourceKey<Registry<CoreCapability>> REGISTRY_KEY = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "weapons"));
+
     public static CoreCapability BOKKEN = null;
     public static CoreCapability SWORD;
+    public static CoreCapability SHIELD;
     public static CoreCapability AXE;
     public static CoreCapability LONGSWORD;
     public static CoreCapability BOW;
@@ -47,6 +54,16 @@ public class ExCapWeapons
                         .hitSound(EpicFightSounds.BLUNT_HIT.get()),
                 1, 1, 1
         );
+
+        SHIELD = CoreCapability.quickStart(
+                builder -> builder
+                        .category(CapabilityItem.WeaponCategories.SHIELD)
+                        .swingSound(EpicFightSounds.WHOOSH.get())
+                        .hitSound(EpicFightSounds.BLUNT_HIT.get())
+                        .collider(ColliderPreset.FIST)
+                , 1, 1, 1
+        );
+
 
         DAGGER = CoreCapability.quickStart(
                 builder -> builder.category(CapabilityItem.WeaponCategories.DAGGER)
@@ -114,7 +131,7 @@ public class ExCapWeapons
         SPEAR = CoreCapability.quickStart(
                 builder -> builder.category(CapabilityItem.WeaponCategories.SPEAR)
                         .collider(ColliderPreset.SPEAR)
-                        .swingSound(EpicFightSounds.WHOOSH.get())
+                        .swingSound(EpicFightSounds.WHOOSH_ROD.get())
                         .hitSound(EpicFightSounds.BLADE_HIT.get()),
                 1, 1, 1
         );

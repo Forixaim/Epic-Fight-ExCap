@@ -1,6 +1,11 @@
 package net.forixaim.ex_cap.api.providers;
 
 import net.forixaim.battle_arts_api.battle_arts_skills.BattleArtsSkillSlots;
+import net.forixaim.ex_cap.EpicFightEXCapability;
+import net.forixaim.ex_cap.api.moveset.MoveSet;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.fml.ModList;
@@ -17,20 +22,22 @@ import java.util.function.Predicate;
 
 public class ProviderConditional
 {
+	public static final ResourceKey<Registry<ProviderConditional>> REGISTRY_KEY = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "conditional"));
+
 	//Identifiers
-	private final ProviderConditionalType type;
+	protected final ProviderConditionalType type;
 	//Output
-	private final Style style;
-	private final Boolean combination;
+	protected final Style style;
+	protected final Boolean combination;
 	//Input
-	private final Skill skillToCheck;
-	private final WeaponCategory category;
-	private final Item weapon;
-	private final ProviderConditional[] providerConditionals;
-	private final SkillSlot slot;
-	private final SkillDataKey<Boolean> key;
-	private final InteractionHand hand;
-	private final Predicate<LivingEntityPatch<?>> customFunction;
+	protected final Skill skillToCheck;
+	protected final WeaponCategory category;
+	protected final Item weapon;
+	protected final ProviderConditional[] providerConditionals;
+	protected final SkillSlot slot;
+	protected final SkillDataKey<Boolean> key;
+	protected final InteractionHand hand;
+	protected final Predicate<LivingEntityPatch<?>> customFunction;
 
 	private ProviderConditional(ProviderConditionalType type, Style style, Skill skillToCheck, WeaponCategory category, Item weapon, InteractionHand hand, SkillSlot slot, SkillDataKey<Boolean> key, Boolean combination, Predicate<LivingEntityPatch<?>> customFunction, ProviderConditional[] providerConditionals) {
 		this.type = type;

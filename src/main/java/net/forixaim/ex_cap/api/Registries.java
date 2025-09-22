@@ -5,15 +5,12 @@ import net.forixaim.ex_cap.api.events.ExCapMovesetRegistryEvent;
 import net.forixaim.ex_cap.api.events.ExCapWeaponRegistryEvent;
 import net.forixaim.ex_cap.api.events.MoveSetDefinitionRegistryEvent;
 import net.forixaim.ex_cap.api.material.MaterialProperties;
-import net.forixaim.ex_cap.api.moveset.MoveSet;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.Tiers;
 import net.minecraftforge.fml.ModLoader;
 import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
 
-import javax.swing.text.Style;
 import java.util.Map;
-import java.util.Objects;
 
 public class Registries
 {
@@ -54,7 +51,6 @@ public class Registries
         ModLoader.get().postEvent(event);
         event.getModMap().values().forEach(MaterialPropertyManager::addAll);
     }
-
     /**
      * This is to be called after everything has been loaded
      */
@@ -82,13 +78,4 @@ public class Registries
                         )
         );
     }
-
-    private static void validate(Map<Style, MoveSet> setMap)
-    {
-        //Validate Animations
-        setMap.forEach((style, moveSet) -> moveSet.getAutoAttackAnimations().forEach(
-                animation -> Objects.requireNonNull(animation, "Animation must not be null")
-        ));
-    }
-
 }

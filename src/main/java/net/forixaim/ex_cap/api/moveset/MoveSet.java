@@ -4,6 +4,8 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.forixaim.ex_cap.EpicFightEXCapability;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -29,6 +31,8 @@ public class MoveSet
     private static final HashMultimap<Class<?>, MoveSet> MOVESETS = HashMultimap.create();
     private static final ResourceLocation CLASS_TO_MOVESET = ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "class_to_moveset");
     private static final ResourceLocation MOVESET_TO_ID = ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "moveset_to_id");
+    public static final ResourceKey<Registry<MoveSet>> REGISTRY_KEY = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "moveset"));
+
 
     private final List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> AutoAttackAnimations;
     private final List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> MountAttackAnimations;
@@ -120,6 +124,9 @@ public class MoveSet
         return LivingMotionModifiers;
     }
 
+    /**
+     * Allows for
+     */
     public static class MoveSetBuilder
     {
         protected final List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> AutoAttackAnimations;

@@ -2,7 +2,12 @@ package net.forixaim.ex_cap.kjs.moveset;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import dev.latvian.mods.kubejs.registry.BuilderBase;
+import dev.latvian.mods.kubejs.registry.RegistryInfo;
+import dev.latvian.mods.kubejs.typings.Info;
 import net.forixaim.ex_cap.api.moveset.MoveSet;
+import net.forixaim.ex_cap.kjs.ExCapKubeJSPlugin;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.LivingMotion;
@@ -21,14 +26,14 @@ import java.util.function.Predicate;
 @SuppressWarnings("unchecked")
 public class CustomMoveSet extends MoveSet
 {
-    private final String id;
+    private final ResourceLocation id;
     // storage
     private final List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> autoAttackAnimations;
     private final List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> mountAttackAnimations;
     private final Map<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>> livingMotionModifiers;
     private Function<ItemStack, Skill> weaponInnateSkill;
     private final Map<Skill, Map<GuardSkill.BlockType, List<AnimationManager.AnimationAccessor<? extends StaticAnimation>>>> guardAnimations;
-    private Skill weaponPassiveSkill;
+    private final Skill weaponPassiveSkill;
     private Predicate<LivingEntityPatch<?>> sheathRender;
     private AnimationManager.AnimationAccessor<? extends AttackAnimation> revelationAnimation;
 
@@ -46,13 +51,14 @@ public class CustomMoveSet extends MoveSet
         this.revelationAnimation = builder.revelationAnimation;
     }
 
-    public String getId()
+    public ResourceLocation getId()
     {
         return id;
     }
 
-    public static class CustomMoveSetBuilder {
-        private final String id;
+    public static class CustomMoveSetBuilder extends BuilderBase<MoveSet>
+    {
+        private final ResourceLocation id;
         // storage
         private final List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> autoAttackAnimations;
         private final List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> mountAttackAnimations;
@@ -63,8 +69,9 @@ public class CustomMoveSet extends MoveSet
         private Predicate<LivingEntityPatch<?>> sheathRender;
         private AnimationManager.AnimationAccessor<? extends AttackAnimation> revelationAnimation;
 
-        public CustomMoveSetBuilder(String id)
+        public CustomMoveSetBuilder(ResourceLocation id)
         {
+            super(id);
             this.id = id;
             autoAttackAnimations = Lists.newArrayList();
             mountAttackAnimations = Lists.newArrayList();
@@ -88,6 +95,9 @@ public class CustomMoveSet extends MoveSet
             return this;
         }
 
+        @Info("""
+                So this is the passive skill
+                """)
         public CustomMoveSetBuilder setPassiveSkill(Skill newPassiveSkill)
         {
             this.weaponPassiveSkill = newPassiveSkill;
@@ -144,6 +154,18 @@ public class CustomMoveSet extends MoveSet
 
         public CustomMoveSet build() {
             return new CustomMoveSet(this);
+        }
+
+        @Override
+        public RegistryInfo<MoveSet> getRegistryType()
+        {
+            return ExCapKubeJSPlugin.MOVESET_REGISTRY;
+        }
+
+        @Override
+        public MoveSet createObject()
+        {
+            return this.build();
         }
     }
 }

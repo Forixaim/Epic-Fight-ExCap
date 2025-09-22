@@ -28,6 +28,46 @@ import java.util.function.Function;
 @Mod.EventBusSubscriber(modid = EpicFightEXCapability.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CapabilityRegistry
 {
+	public static final Function<Item, CapabilityItem.Builder> SHIELD = item ->
+	{
+		CapabilityItem.Builder builder0;
+
+		try
+		{
+			builder0 = ExCapWeapons.SHIELD.export();
+		}
+		catch (NoSuchMethodError e)
+		{
+			LogUtils.getLogger().warn(e.getMessage());
+			builder0 = ExCapWeapons.SHIELD.export(true);
+		}
+
+		Map<Attribute, ValueModifier> attributeModifier = ExCapWeapons.SHIELD.getAttModifiers();
+
+		if (item instanceof TieredItem tieredItem && builder0 instanceof WeaponCapability.Builder builder) {
+			if (MaterialPropertyManager.getProperties().containsKey(tieredItem.getTier()))
+			{
+				MaterialProperties properties = MaterialPropertyManager.getProperties().get(tieredItem.getTier());
+				attributeModifier.forEach((attribute, modifier) -> {
+
+					double finalValue = ValueModifier.calculator().attach(modifier).getResult(properties.attributeModifier().get(attribute).floatValue());
+					builder.addStyleAttibutes(CapabilityItem.Styles.COMMON, Pair.of(attribute, new AttributeModifier("ex_cap_attribute", finalValue, AttributeModifier.Operation.ADDITION)));
+				});
+			}
+			else
+			{
+				MaterialProperties properties = Registries.quickRegister(1, 1, 1);
+				attributeModifier.forEach((attribute, modifier) -> {
+					double finalValue = ValueModifier.calculator().attach(modifier).getResult(properties.attributeModifier().get(attribute).floatValue());
+					builder.addStyleAttibutes(CapabilityItem.Styles.COMMON, Pair.of(attribute, new AttributeModifier("ex_cap_attribute", finalValue, AttributeModifier.Operation.ADDITION)));
+				});
+			}
+			builder.hitSound(tieredItem.getTier() == Tiers.WOOD ? EpicFightSounds.BLUNT_HIT.get() : EpicFightSounds.BLADE_HIT.get());
+		}
+
+		return builder0;
+	};
+
 	public static final Function<Item, CapabilityItem.Builder> AXE = item ->
 	{
 		CapabilityItem.Builder builder0;
@@ -191,7 +231,7 @@ public class CapabilityRegistry
 	};
 
 	public static final Function<Item, CapabilityItem.Builder> GREATSWORD = item -> {
-		CapabilityItem.Builder builder0 = ExCapWeapons.GREATSWORD.export();
+		CapabilityItem.Builder builder0;
 
 		try
 		{
@@ -481,6 +521,7 @@ public class CapabilityRegistry
 		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "spear"), SPEAR);
 		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "spell"), SPELL);
 		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "bow"), BOW);
+		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "shield"), SHIELD);
 		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "axe"), AXE);
 		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "uchigatana"), UCHIGATANA);
 		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "fist"), FIST);
