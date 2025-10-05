@@ -12,9 +12,9 @@ public class MovesetMappings
 {
     public static void addMovesets(ExCapMovesetRegistryEvent event)
     {
-        event.addMoveset(ExCapWeapons.SWORD, ONE_HAND, sword1HMS);
-        event.addMoveset(ExCapWeapons.SWORD, TWO_HAND, sword2HMS);
-        event.addMoveset(ExCapWeapons.SWORD, MOUNT, mountedSwordMS);
+        event.addMoveset(ExCapWeapons.SWORD.get(), ONE_HAND, sword1HMS);
+        event.addMoveset(ExCapWeapons.SWORD.get(), TWO_HAND, sword2HMS);
+        event.addMoveset(ExCapWeapons.SWORD.get(), MOUNT, mountedSwordMS);
 
         event.addMoveset(ExCapWeapons.AXE, ONE_HAND, axeOneHandMS);
         event.addMoveset(ExCapWeapons.AXE, MOUNT, mountedSwordMS);
@@ -45,9 +45,9 @@ public class MovesetMappings
 
         event.addMoveset(ExCapWeapons.BOW, RANGED, rangedMoveSet);
 
-        event.addMoveset(ExCapWeapons.BOKKEN, ONE_HAND, sword1HMS);
-        event.addMoveset(ExCapWeapons.BOKKEN, TWO_HAND, sword2HMS);
-        event.addMoveset(ExCapWeapons.BOKKEN, MOUNT, mountedSwordMS);
+        event.addMoveset(ExCapWeapons.BOKKEN.get(), ONE_HAND, sword1HMS);
+        event.addMoveset(ExCapWeapons.BOKKEN.get(), TWO_HAND, sword2HMS);
+        event.addMoveset(ExCapWeapons.BOKKEN.get(), MOUNT, mountedSwordMS);
     }
 
 }

@@ -3,6 +3,7 @@ package net.forixaim.ex_cap;
 import com.mojang.logging.LogUtils;
 import net.forixaim.ex_cap.api.Registries;
 import net.forixaim.ex_cap.capabilities.ExCapCategories;
+import net.forixaim.ex_cap.capabilities.weapon_presets.ExCapWeapons;
 import net.forixaim.ex_cap.registry.ItemRegistry;
 import net.forixaim.ex_cap.skill.ExCapDatakeys;
 import net.minecraft.network.chat.Component;
@@ -38,6 +39,7 @@ public class EpicFightEXCapability {
         modEventBus.addListener(this::addPackFindersEvent);
         ExCapDatakeys.DATA_KEYS.register(modEventBus);
         ItemRegistry.ITEMS.register(modEventBus);
+        ExCapWeapons.EX_CAP_WEAPONS.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(this);
         WeaponCategory.ENUM_MANAGER.registerEnumCls(MODID, ExCapCategories.class);
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);

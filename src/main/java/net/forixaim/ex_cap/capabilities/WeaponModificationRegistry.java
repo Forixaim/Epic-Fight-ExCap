@@ -17,9 +17,9 @@ public class WeaponModificationRegistry
 	@SubscribeEvent
 	public static void registerExCap(ExCapMovesetRegistryEvent event)
 	{
-		event.addProvider(BOKKEN, DualSwords, default1HWieldStyle);
+		event.addProvider(BOKKEN.get(), DualSwords, default1HWieldStyle);
 		event.addProvider(LONGSWORD, SwordShieldLS, default2HWieldStyle, LiechtenauerCondition);
-		event.addProvider(SWORD, DualSwords, default1HWieldStyle);
+		event.addProvider(SWORD.get(), DualSwords, default1HWieldStyle);
 		event.addProvider(UCHIGATANA, UchigatanaSheathed, default2HWieldStyle);
 		event.addProvider(GREATSWORD, default2HWieldStyle);
 		event.addProvider(TACHI, default2HWieldStyle);

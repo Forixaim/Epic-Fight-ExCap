@@ -72,8 +72,11 @@ public class MoveSet
         return MoveSetCallbacks.INSTANCE;
     }
 
+    public final ResourceLocation registryIdentifier;
+
     public MoveSet(MoveSetBuilder builder)
     {
+        registryIdentifier = builder.registryIdentifier;
         this.MountAttackAnimations = builder.MountAttackAnimations;
         this.sheathRender = builder.sheathRender;
         this.AutoAttackAnimations = builder.AutoAttackAnimations;
@@ -129,6 +132,7 @@ public class MoveSet
      */
     public static class MoveSetBuilder
     {
+        protected ResourceLocation registryIdentifier;
         protected final List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> AutoAttackAnimations;
         protected final List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> MountAttackAnimations;
         protected final Map<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>> LivingMotionModifiers;
@@ -140,6 +144,7 @@ public class MoveSet
 
         public MoveSetBuilder()
         {
+            registryIdentifier = ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "blank");
             MountAttackAnimations = Lists.newArrayList();
             sheathRender = livingEntityPatch -> false;
             AutoAttackAnimations = Lists.newArrayList();
@@ -148,6 +153,12 @@ public class MoveSet
             WeaponInnateSkill = null;
             WeaponPassiveSkill = null;
             revelationAnimation = null;
+        }
+
+        public MoveSetBuilder identifier(ResourceLocation identifier)
+        {
+            this.registryIdentifier = identifier;
+            return this;
         }
 
         public MoveSetBuilder revelationAttack(AnimationManager.AnimationAccessor<? extends AttackAnimation> attack)

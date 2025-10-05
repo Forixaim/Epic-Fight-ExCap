@@ -8,6 +8,7 @@ import net.forixaim.ex_cap.api.events.MoveSetDefinitionRegistryEvent;
 import net.forixaim.ex_cap.api.moveset.CastingMoveSet;
 import net.forixaim.ex_cap.api.moveset.MoveSet;
 import net.forixaim.ex_cap.api.moveset.RangedMoveSet;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
@@ -48,6 +49,7 @@ public class CoreMovesets
 	public static void build()
 	{
 		mountedSwordMS = MoveSet.builder()
+                .identifier(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "mounted_swords"))
 				.addAutoAttacks(Animations.SWORD_MOUNT_ATTACK);
 
 		glove = MoveSet.builder()

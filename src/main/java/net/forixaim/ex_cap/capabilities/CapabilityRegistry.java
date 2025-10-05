@@ -7,6 +7,8 @@ import net.forixaim.ex_cap.api.MaterialPropertyManager;
 import net.forixaim.ex_cap.api.Registries;
 import net.forixaim.ex_cap.api.material.MaterialProperties;
 import net.forixaim.ex_cap.capabilities.weapon_presets.ExCapWeapons;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -15,6 +17,9 @@ import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.Tiers;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegistryManager;
 import yesman.epicfight.api.forgeevent.WeaponCapabilityPresetRegistryEvent;
 import yesman.epicfight.api.utils.math.ValueModifier;
 import yesman.epicfight.gameasset.EpicFightSounds;
@@ -108,87 +113,7 @@ public class CapabilityRegistry
 
 		return builder0;
 	};
-	public static final Function<Item, CapabilityItem.Builder> BOKKEN = item ->
-	{
-		CapabilityItem.Builder builder0;
 
-		CoreCapability core = ExCapWeapons.BOKKEN;
-
-		try
-		{
-			builder0 = core.export();
-		}
-		catch (NoSuchMethodError e)
-		{
-			LogUtils.getLogger().warn(e.getMessage());
-			builder0 = core.export(true);
-		}
-
-		Map<Attribute, ValueModifier> attributeModifier = core.getAttModifiers();
-
-
-		if (item instanceof TieredItem tieredItem && builder0 instanceof WeaponCapability.Builder builder) {
-			if (MaterialPropertyManager.getProperties().containsKey(tieredItem.getTier()))
-			{
-				MaterialProperties properties = MaterialPropertyManager.getProperties().get(tieredItem.getTier());
-				attributeModifier.forEach((attribute, modifier) -> {
-					double finalValue = ValueModifier.calculator().attach(modifier).getResult(properties.attributeModifier().get(attribute).floatValue());
-					builder.addStyleAttibutes(CapabilityItem.Styles.COMMON, Pair.of(attribute, new AttributeModifier("ex_cap_attribute", finalValue, AttributeModifier.Operation.ADDITION)));
-				});
-			}
-			else
-			{
-				MaterialProperties properties = Registries.quickRegister(1, 1, 1);
-				attributeModifier.forEach((attribute, modifier) -> {
-					double finalValue = ValueModifier.calculator().attach(modifier).getResult(properties.attributeModifier().get(attribute).floatValue());
-					builder.addStyleAttibutes(CapabilityItem.Styles.COMMON, Pair.of(attribute, new AttributeModifier("ex_cap_attribute", finalValue, AttributeModifier.Operation.ADDITION)));
-				});
-			}
-			builder.hitSound(tieredItem.getTier() == Tiers.WOOD ? EpicFightSounds.BLUNT_HIT.get() : EpicFightSounds.BLADE_HIT.get());
-			builder.hitParticle(tieredItem.getTier() == Tiers.WOOD ? EpicFightParticles.HIT_BLUNT.get() : EpicFightParticles.HIT_BLADE.get());
-		}
-
-		return builder0;
-	};
-	public static final Function<Item, CapabilityItem.Builder> SWORD = item -> {
-		CapabilityItem.Builder builder0;
-
-		try
-		{
-			builder0 = ExCapWeapons.SWORD.export();
-		}
-		catch (NoSuchMethodError e)
-		{
-			LogUtils.getLogger().warn(e.getMessage());
-			builder0 = ExCapWeapons.SWORD.export(true);
-		}
-
-		Map<Attribute, ValueModifier> attributeModifier = ExCapWeapons.SWORD.getAttModifiers();
-
-
-		if (item instanceof TieredItem tieredItem && builder0 instanceof WeaponCapability.Builder builder) {
-			if (MaterialPropertyManager.getProperties().containsKey(tieredItem.getTier()))
-			{
-				MaterialProperties properties = MaterialPropertyManager.getProperties().get(tieredItem.getTier());
-				attributeModifier.forEach((attribute, modifier) -> {
-					double finalValue = ValueModifier.calculator().attach(modifier).getResult(properties.attributeModifier().get(attribute).floatValue());
-					builder.addStyleAttibutes(CapabilityItem.Styles.COMMON, Pair.of(attribute, new AttributeModifier("ex_cap_attribute", finalValue, AttributeModifier.Operation.ADDITION)));
-				});
-			}
-			else
-			{
-				MaterialProperties properties = Registries.quickRegister(1, 1, 1);
-				attributeModifier.forEach((attribute, modifier) -> {
-					double finalValue = ValueModifier.calculator().attach(modifier).getResult(properties.attributeModifier().get(attribute).floatValue());
-					builder.addStyleAttibutes(CapabilityItem.Styles.COMMON, Pair.of(attribute, new AttributeModifier("ex_cap_attribute", finalValue, AttributeModifier.Operation.ADDITION)));
-				});
-			}
-			builder.hitSound(tieredItem.getTier() == Tiers.WOOD ? EpicFightSounds.BLUNT_HIT.get() : EpicFightSounds.BLADE_HIT.get());
-			builder.hitParticle(tieredItem.getTier() == Tiers.WOOD ? EpicFightParticles.HIT_BLUNT.get() : EpicFightParticles.HIT_BLADE.get());
-		}
-
-		return builder0;
-	};
 
 	public static final Function<Item, CapabilityItem.Builder> LONGSWORD = item -> {
 		CapabilityItem.Builder builder0;
@@ -509,22 +434,57 @@ public class CapabilityRegistry
 		return builder0;
 	};
 
+    private static Function<Item, CapabilityItem.Builder> process(ExCapWeapon weapon)
+    {
+        return item ->
+        {
+            CapabilityItem.Builder builder0;
+
+            builder0 = weapon.export();
+
+            Map<Attribute, ValueModifier> attributeModifier = weapon.getAttModifiers();
+
+
+            if (item instanceof TieredItem tieredItem && builder0 instanceof WeaponCapability.Builder builder) {
+                if (MaterialPropertyManager.getProperties().containsKey(tieredItem.getTier()))
+                {
+                    MaterialProperties properties = MaterialPropertyManager.getProperties().get(tieredItem.getTier());
+                    attributeModifier.forEach((attribute, modifier) -> {
+                        double finalValue = ValueModifier.calculator().attach(modifier).getResult(properties.attributeModifier().get(attribute).floatValue());
+                        builder.addStyleAttibutes(CapabilityItem.Styles.COMMON, Pair.of(attribute, new AttributeModifier("ex_cap_attribute", finalValue, AttributeModifier.Operation.ADDITION)));
+                    });
+                }
+                else
+                {
+                    MaterialProperties properties = Registries.quickRegister(1, 1, 1);
+                    attributeModifier.forEach((attribute, modifier) -> {
+                        double finalValue = ValueModifier.calculator().attach(modifier).getResult(properties.attributeModifier().get(attribute).floatValue());
+                        builder.addStyleAttibutes(CapabilityItem.Styles.COMMON, Pair.of(attribute, new AttributeModifier("ex_cap_attribute", finalValue, AttributeModifier.Operation.ADDITION)));
+                    });
+                }
+                builder.hitSound(tieredItem.getTier() == Tiers.WOOD ? EpicFightSounds.BLUNT_HIT.get() : EpicFightSounds.BLADE_HIT.get());
+                builder.hitParticle(tieredItem.getTier() == Tiers.WOOD ? EpicFightParticles.HIT_BLUNT.get() : EpicFightParticles.HIT_BLADE.get());
+            }
+
+            return builder0;
+        };
+    }
+
 	@SubscribeEvent
-	public static void Register(WeaponCapabilityPresetRegistryEvent Event)
+	public static void Register(WeaponCapabilityPresetRegistryEvent event)
 	{
-		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "bokken"), BOKKEN);
-		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "sword"), SWORD);
-		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "longsword"), LONGSWORD);
-		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "greatsword"), GREATSWORD);
-		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "tachi"), TACHI);
-		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "dagger"), DAGGER);
-		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "spear"), SPEAR);
-		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "spell"), SPELL);
-		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "bow"), BOW);
-		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "shield"), SHIELD);
-		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "axe"), AXE);
-		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "uchigatana"), UCHIGATANA);
-		Event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "fist"), FIST);
+        ExCapWeapons.REGISTRY.get().forEach(item -> event.getTypeEntry().put(ExCapWeapons.REGISTRY.get().getKey(item), process(item)));
+		event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "longsword"), LONGSWORD);
+		event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "greatsword"), GREATSWORD);
+		event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "tachi"), TACHI);
+		event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "dagger"), DAGGER);
+		event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "spear"), SPEAR);
+		event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "spell"), SPELL);
+		event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "bow"), BOW);
+		event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "shield"), SHIELD);
+		event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "axe"), AXE);
+		event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "uchigatana"), UCHIGATANA);
+		event.getTypeEntry().put(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "fist"), FIST);
 
 	}
 }

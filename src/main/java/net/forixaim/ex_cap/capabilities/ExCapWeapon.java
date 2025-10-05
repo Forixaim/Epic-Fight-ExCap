@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class CoreCapability
+public class ExCapWeapon
 {
 	protected final List<ProviderConditional> styleComboProviderRegistry = new ArrayList<>();
 	protected final Map<Style, Function<Pair<Style, EXWeaponCapability.Builder>, EXWeaponCapability.Builder>> attackCombinationRegistry = Maps.newHashMap();
@@ -33,12 +33,11 @@ public class CoreCapability
 	protected Map<Style, MoveSet> AttackSets = Maps.newHashMap();
 	protected EXWeaponCapability.Builder builder = EXWeaponCapability.builder();
 
-	CoreCapability(float pierceModifier, float impactModifier, float aoeModifier)
+	ExCapWeapon(float pierceModifier, float impactModifier, float aoeModifier)
 	{
 		attModifiers.put(EpicFightAttributes.ARMOR_NEGATION.get(), ValueModifier.multiplier(pierceModifier));
 		attModifiers.put(EpicFightAttributes.IMPACT.get(),  ValueModifier.multiplier(impactModifier));
 		attModifiers.put(EpicFightAttributes.MAX_STRIKES.get(),  ValueModifier.multiplier(aoeModifier));
-
 	}
 
 	public static void addSheath(Item target, Item sheath)
@@ -70,17 +69,17 @@ public class CoreCapability
 	}
 
 	@Deprecated(forRemoval = true)
-	public static CoreCapability quickStart(Consumer<EXWeaponCapability.Builder> quickStart)
+	public static ExCapWeapon quickStart(Consumer<EXWeaponCapability.Builder> quickStart)
 	{
 		return quickStart(quickStart, 1f, 1f, 1f);
 	}
 
-	public static CoreCapability quickStart(Consumer<EXWeaponCapability.Builder> quickStart, float pierceModifier, float impactModifier, float aoeModifier)
+	public static ExCapWeapon quickStart(Consumer<EXWeaponCapability.Builder> quickStart, float pierceModifier, float impactModifier, float aoeModifier)
 	{
-		return new CoreCapability(pierceModifier, impactModifier, aoeModifier).start(quickStart);
+		return new ExCapWeapon(pierceModifier, impactModifier, aoeModifier).start(quickStart);
 	}
 
-	private CoreCapability start(Consumer<EXWeaponCapability.Builder> qs)
+	private ExCapWeapon start(Consumer<EXWeaponCapability.Builder> qs)
 	{
 		qs.accept(builder);
 		return this;
