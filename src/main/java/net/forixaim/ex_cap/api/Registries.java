@@ -2,7 +2,6 @@ package net.forixaim.ex_cap.api;
 
 import net.forixaim.ex_cap.api.events.ExCapMaterialRegistryEvent;
 import net.forixaim.ex_cap.api.events.ExCapMovesetRegistryEvent;
-import net.forixaim.ex_cap.api.events.ExCapWeaponRegistryEvent;
 import net.forixaim.ex_cap.api.events.MoveSetDefinitionRegistryEvent;
 import net.forixaim.ex_cap.api.material.MaterialProperties;
 import net.minecraft.world.item.Tier;
@@ -57,13 +56,6 @@ public class Registries
     public static void registerCapabilities()
     {
         ExCapMovesetRegistryEvent event3 = new ExCapMovesetRegistryEvent();
-        ExCapWeaponRegistryEvent event = new ExCapWeaponRegistryEvent();
-
-        ModLoader.get().postEvent(event);
-
-        event.getExCapWeapons().forEach(
-                (s, runnable) -> runnable.run()
-        );
 
         ModLoader.get().postEvent(event3);
 

@@ -112,6 +112,7 @@ public class CoreMovesets
 						Animations.LONGSWORD_DASH,
 						Animations.LONGSWORD_AIR_SLASH
 				)
+
 				.addInnateSkill(itemStack -> EpicFightSkills.LIECHTENAUER)
 				.shouldRenderSheath(livingEntityPatch -> true);
 

@@ -18,17 +18,17 @@ public class WeaponModificationRegistry
 	public static void registerExCap(ExCapMovesetRegistryEvent event)
 	{
 		event.addProvider(BOKKEN.get(), DualSwords, default1HWieldStyle);
-		event.addProvider(LONGSWORD, SwordShieldLS, default2HWieldStyle, LiechtenauerCondition);
+		event.addProvider(LONGSWORD.get(), SwordShieldLS, default2HWieldStyle, LiechtenauerCondition);
 		event.addProvider(SWORD.get(), DualSwords, default1HWieldStyle);
-		event.addProvider(UCHIGATANA, UchigatanaSheathed, default2HWieldStyle);
-		event.addProvider(GREATSWORD, default2HWieldStyle);
-		event.addProvider(TACHI, default2HWieldStyle);
-		event.addProvider(BOW, defaultRanged);
-		event.addProvider(AXE, default1HWieldStyle);
-		event.addProvider(SPELL, default1HWieldStyle);
-		event.addProvider(SPEAR, default2HWieldStyle, SwordShieldLS);
-		event.addProvider(DAGGER, DualDaggers, default1HWieldStyle);
-		event.addProvider(GLOVE, default1HWieldStyle);
+		event.addProvider(UCHIGATANA.get(), UchigatanaSheathed, default2HWieldStyle);
+		event.addProvider(GREATSWORD.get(), default2HWieldStyle);
+		event.addProvider(TACHI.get(), default2HWieldStyle);
+		event.addProvider(BOW.get(), defaultRanged);
+		event.addProvider(AXE.get(), default1HWieldStyle);
+		event.addProvider(SPELL.get(), default1HWieldStyle);
+		event.addProvider(SPEAR.get(), default2HWieldStyle, SwordShieldLS);
+		event.addProvider(DAGGER.get(), DualDaggers, default1HWieldStyle);
+		event.addProvider(GLOVE.get(), default1HWieldStyle);
 		MovesetMappings.addMovesets(event);
 	}
 }

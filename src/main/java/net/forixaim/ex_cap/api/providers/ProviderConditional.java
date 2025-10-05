@@ -269,7 +269,11 @@ public class ProviderConditional
 			}
 		}
 		return false;
+	}
 
+	public ProviderConditionalType getType()
+	{
+		return type;
 	}
 
 	private boolean checkSubConditionalsForDataKey()

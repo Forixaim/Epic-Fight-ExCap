@@ -2,6 +2,7 @@ package net.forixaim.ex_cap;
 
 import com.mojang.logging.LogUtils;
 import net.forixaim.ex_cap.api.Registries;
+import net.forixaim.ex_cap.api.moveset.ExCapWeaponReloadListener;
 import net.forixaim.ex_cap.capabilities.ExCapCategories;
 import net.forixaim.ex_cap.capabilities.weapon_presets.ExCapWeapons;
 import net.forixaim.ex_cap.registry.ItemRegistry;
@@ -13,6 +14,7 @@ import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddPackFindersEvent;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
@@ -40,11 +42,19 @@ public class EpicFightEXCapability {
         ExCapDatakeys.DATA_KEYS.register(modEventBus);
         ItemRegistry.ITEMS.register(modEventBus);
         ExCapWeapons.EX_CAP_WEAPONS.register(modEventBus);
+        MinecraftForge.EVENT_BUS.addListener(this::addResourceReloader);
         MinecraftForge.EVENT_BUS.register(this);
         WeaponCategory.ENUM_MANAGER.registerEnumCls(MODID, ExCapCategories.class);
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         modEventBus.addListener(EpicFightEXCapability::onFMLLoadComplete);
     }
+
+    private void addResourceReloader(AddReloadListenerEvent event)
+    {
+        event.addListener(new ExCapWeaponReloadListener());
+    }
+
+
 
     public void addPackFindersEvent(AddPackFindersEvent event) {
         if (event.getPackType() == PackType.CLIENT_RESOURCES) {

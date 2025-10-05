@@ -30,14 +30,15 @@ public class JsonUtils {
     public static Map<ResourceLocation, JsonElement> getJsonsForNamespace(ResourceManager manager, String namespace, String baseFolder) {
         Map<ResourceLocation, Resource> resources = getResourcesForNamespace(manager, namespace, baseFolder);
         Map<ResourceLocation, JsonElement> result = Maps.newHashMap();
-
-        resources.forEach((key, resource) -> {
-            result.put(key, parse(resource));
-        });
+        if (resources != null)
+        {
+            resources.forEach((key, resource) ->
+                    result.put(key, parse(resource)));
+        }
         return result;
     }
 
-    private static JsonElement parse(Resource resource) {
+    public static JsonElement parse(Resource resource) {
         try (Reader reader = resource.openAsReader())
         {
             return GsonHelper.parse(reader);
@@ -49,8 +50,11 @@ public class JsonUtils {
 
     private static Map<ResourceLocation, Resource> getResourcesForNamespace(ResourceManager manager, String namespace, String baseFolder) {
         // Typical implementation:
-        return manager.listResources(baseFolder,
-            rl -> rl.getNamespace().equals(namespace) && rl.getPath().endsWith(".json")
+        //Check if the directory even exists
+        Map<ResourceLocation, Resource> rsc = manager.listResources(baseFolder,
+                rl -> rl.getNamespace().equals(namespace) && rl.getPath().endsWith(".json")
         );
+
+        return rsc.isEmpty() ? null : rsc;
     }
 }

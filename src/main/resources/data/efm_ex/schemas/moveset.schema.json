@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ExCap Weapon Moveset Schema",
+  "description": "The ExCap movesets can be created from scratch or be imported, Importing takes priority over making your own so choose carefully. You cannot do both.",
+  "type": "object",
+  "properties": {
+    "import": {
+      "type": "object",
+      "description": "Used whether to import any existing Epic Fight weapon types. You must use one or the other, you are unable to use both.",
+      "properties": {
+        "styles": {
+          "type": "array",
+          "description": "A set of styles one uses from their imported animations, it must match the amount of styles that are in your weapon type.",
+          "items": {"type": "string"},
+          "uniqueItems": true
+        },
+        "parent": {
+          "description": "",
+          "type": "string"
+        }
+      }
+    },
+    "style": {
+      "type": "string"
+    },
+    "combo_attack": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minContains": 3,
+      "minItems": 3
+    }
+  },
+  "required": []
+}
