@@ -5,6 +5,7 @@
   "type": "object",
   "properties": {
     "import": {
+      "required": ["styles", "parent"],
       "type": "object",
       "description": "Used whether to import any existing Epic Fight weapon types. You must use one or the other, you are unable to use both.",
       "properties": {
@@ -15,7 +16,7 @@
           "uniqueItems": true
         },
         "parent": {
-          "description": "",
+          "description": "What the original Epic Fight weapon types are.",
           "type": "string"
         }
       }
@@ -25,9 +26,39 @@
     },
     "combo_attack": {
       "type": "array",
+      "description": "The basic combo attacks, the last two will be primarily for dash and jump attacks",
       "items": {"type": "string"},
       "minContains": 3,
       "minItems": 3
+    },
+    "mount_attack": {
+      "type": "array",
+      "description": "The mounted combo attacks",
+      "items": {"type": "string"},
+      "minContains": 1,
+      "minItems": 1
+    },
+    "weapon_passive": {
+      "description": "What weapon passive will be given to a style.",
+      "type": "string"
+    },
+    "innate_skill": {
+      "description": "The weapon innate skill that will be assigned",
+      "type": "string"
+    },
+    "revelation_attack": {
+      "description": "The ResourceLocation for the animation that does revelation attacks.",
+      "type": "string"
+    },
+    "living_animations":
+    {
+      "description": "The living motions that plays when holding the weapon, the schema is LivingMotion, AnimationPath",
+      "type": "object"
+    },
+    "guard_motions":
+    {
+      "description": "The custom guard motions that is required for custom block or parry attacks",
+      "type": "object"
     }
   },
   "required": []
