@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ExCap Style Provider Schema",
+  "description": "A schema to provide typedef and correction checking for making a Style Provider Conditional",
+  "type": "object",
+  "properties": {
+    "provider_type": {
+      "type": "string",
+      "enum": ["skill_existence", "skill_activation", "default", "weapon_category", "specific_weapon", "data_key"]
+    },
+    "style": {
+      "type": "string",
+      "title": "Wield Style",
+      "description": "What wield style the player is going to be."
+    },
+    "visible_offhand": {
+      "type": "boolean",
+      "title": "Offhand Visibility",
+      "description": "whether the weapon is visible off hand."
+    },
+    "skill": {
+      "type": "string",
+      "title": "Skill",
+      "description": "What skill to match for."
+    },
+    "slot": {
+      "type": "string",
+      "title": "Skill Slot",
+      "description": "What skill slot to check for matching skill"
+    },
+    "category": {
+      "type": "string",
+      "title": "Weapon Category",
+      "description": "What weapon category is used to match."
+    },
+    "weapon": {
+      "type": "string",
+      "title": "Specific Item",
+      "description": "What specific item id is used to check."
+    },
+    "hand": {
+      "type": "string",
+      "enum": ["main_hand", "off_hand"],
+      "title": "Interaction Hand",
+      "description": "Which hand to check for the correct weapon"
+    },
+    "boolean_key": {
+      "type": "string",
+      "title": "Boolean Data Key",
+      "description": "What boolean data key will be used that is linked to said skill."
+    }
+  },
+  "required": ["provider_type", "style", "visible_offhand"]
+}

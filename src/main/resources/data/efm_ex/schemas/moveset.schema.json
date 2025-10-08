@@ -5,26 +5,32 @@
   "type": "object",
   "properties": {
     "import": {
+      "title": "Import Moveset from Epic Fight's Weapon Type",
       "required": ["styles", "parent"],
       "type": "object",
       "description": "Used whether to import any existing Epic Fight weapon types. You must use one or the other, you are unable to use both.",
       "properties": {
         "styles": {
+          "title": "Remapped Styles",
           "type": "array",
           "description": "A set of styles one uses from their imported animations, it must match the amount of styles that are in your weapon type.",
           "items": {"type": "string"},
           "uniqueItems": true
         },
         "parent": {
+          "title": "Parent of Import",
           "description": "What the original Epic Fight weapon types are.",
           "type": "string"
         }
       }
     },
     "style": {
+      "title": "Wield Style",
+      "description": "What wield style will be used.",
       "type": "string"
     },
     "combo_attack": {
+      "title": "Basic Combo Attack",
       "type": "array",
       "description": "The basic combo attacks, the last two will be primarily for dash and jump attacks",
       "items": {"type": "string"},
@@ -32,6 +38,7 @@
       "minItems": 3
     },
     "mount_attack": {
+      "title": "Mounted Combo Attack",
       "type": "array",
       "description": "The mounted combo attacks",
       "items": {"type": "string"},
@@ -39,24 +46,29 @@
       "minItems": 1
     },
     "weapon_passive": {
+      "title": "Weapon Passive Skill",
       "description": "What weapon passive will be given to a style.",
       "type": "string"
     },
     "innate_skill": {
+      "title": "Weapon Innate Skill",
       "description": "The weapon innate skill that will be assigned",
       "type": "string"
     },
     "revelation_attack": {
+      "title": "Revelation Attack",
       "description": "The ResourceLocation for the animation that does revelation attacks.",
       "type": "string"
     },
     "living_animations":
     {
+      "title": "Living Animations",
       "description": "The living motions that plays when holding the weapon, the schema is LivingMotion, AnimationPath",
       "type": "object"
     },
     "guard_motions":
     {
+      "title": "Guard Animations",
       "description": "The custom guard motions that is required for custom block or parry attacks",
       "type": "object"
     }

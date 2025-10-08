@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import net.forixaim.ex_cap.api.Registries;
 import net.forixaim.ex_cap.api.moveset.ExCapWeaponReloadListener;
 import net.forixaim.ex_cap.capabilities.ExCapCategories;
+import net.forixaim.ex_cap.capabilities.ExCapStyle;
 import net.forixaim.ex_cap.capabilities.weapon_presets.ExCapWeapons;
 import net.forixaim.ex_cap.registry.ItemRegistry;
 import net.forixaim.ex_cap.skill.ExCapDatakeys;
@@ -22,6 +23,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
+import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
 import java.nio.file.Path;
@@ -44,6 +46,7 @@ public class EpicFightEXCapability {
         ExCapWeapons.EX_CAP_WEAPONS.register(modEventBus);
         MinecraftForge.EVENT_BUS.addListener(this::addResourceReloader);
         MinecraftForge.EVENT_BUS.register(this);
+        Style.ENUM_MANAGER.registerEnumCls(MODID, ExCapStyle.class);
         WeaponCategory.ENUM_MANAGER.registerEnumCls(MODID, ExCapCategories.class);
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         modEventBus.addListener(EpicFightEXCapability::onFMLLoadComplete);

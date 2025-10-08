@@ -55,7 +55,6 @@ public class ExCapWeaponReloadListener extends SimpleJsonResourceReloadListener
         Registries.registerCapabilities();
     }
 
-
     @Override
     protected void apply(@NotNull Map<ResourceLocation, JsonElement> json, @NotNull ResourceManager manager, @NotNull ProfilerFiller filler) {
         clear();
@@ -71,9 +70,10 @@ public class ExCapWeaponReloadListener extends SimpleJsonResourceReloadListener
                                     {
                                         providers.forEach((key, value) -> {
                                             JsonObject gsonObject = value.getAsJsonObject();
-                                            ProviderConditionalType type = ProviderConditionalType.valueOf(gsonObject.get("type").getAsString().toUpperCase());
+                                            ProviderConditional.ProviderConditionalBuilder builder = ProviderConditional.builder();
+                                            ProviderConditionalType type = ProviderConditionalType.valueOf(gsonObject.get("provider_type").getAsString().toUpperCase());
                                             Style wieldStyle = Style.ENUM_MANAGER.get(gsonObject.get("style").getAsString().toUpperCase());
-                                            Boolean visibleOffHand = gsonObject.get("visible_offhand").getAsBoolean();
+                                            boolean visibleOffHand = gsonObject.get("visible_offhand").getAsBoolean();
                                             switch (type) {
                                                 case DEFAULT ->
                                                 {
@@ -86,32 +86,29 @@ public class ExCapWeaponReloadListener extends SimpleJsonResourceReloadListener
                                                         }
                                                     }
                                                 }
-                                                case WEAPON_CATEGORY -> weapon.getStyleComboProviderRegistry().add(ProviderConditional.builder()
+                                                case WEAPON_CATEGORY -> builder
                                                         .setType(type).setWieldStyle(wieldStyle).isVisibleOffHand(visibleOffHand)
                                                         .setCategory(WeaponCategory.ENUM_MANAGER.get(gsonObject.get("weapon_category").getAsString().toUpperCase()))
                                                         .setHand(InteractionHand.valueOf(gsonObject.get("hand").getAsString().toUpperCase()))
-                                                        .build());
-                                                case SPECIFIC_WEAPON -> weapon.getStyleComboProviderRegistry().add(ProviderConditional.builder()
+                                                        .build();
+                                                case SPECIFIC_WEAPON -> builder
                                                         .setType(type).setWieldStyle(wieldStyle).isVisibleOffHand(visibleOffHand)
                                                         .setWeapon(ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(gsonObject.get("specific_weapon").getAsString())))
                                                         .setHand(InteractionHand.valueOf(gsonObject.get("hand").getAsString().toUpperCase()))
-                                                        .build());
-                                                case SKILL_EXISTENCE -> weapon.getStyleComboProviderRegistry().add(ProviderConditional.builder()
+                                                        .build();
+                                                case SKILL_EXISTENCE, SKILL_ACTIVATION -> builder
                                                         .setType(type).setWieldStyle(wieldStyle).isVisibleOffHand(visibleOffHand)
                                                         .setSkillToCheck(SkillManager.getSkill(gsonObject.get("skill").getAsString()))
                                                         .setSlot(SkillSlot.ENUM_MANAGER.get(gsonObject.get("slot").getAsString().toUpperCase()))
-                                                        .build());
-                                                case SKILL_ACTIVATION -> weapon.getStyleComboProviderRegistry().add(ProviderConditional.builder()
-                                                        .setType(type).setWieldStyle(wieldStyle).isVisibleOffHand(visibleOffHand)
-                                                        .setSkillToCheck(SkillManager.getSkill(gsonObject.get("skill").getAsString()))
-                                                        .setSlot(SkillSlot.ENUM_MANAGER.get(gsonObject.get("slot").getAsString().toUpperCase()))
-                                                        .build());
-                                                case DATA_KEY -> weapon.getStyleComboProviderRegistry().add(ProviderConditional.builder()
+                                                        .build();
+                                                case DATA_KEY -> builder
                                                         .setType(type).setWieldStyle(wieldStyle).isVisibleOffHand(visibleOffHand)
                                                         .setSkillToCheck(SkillManager.getSkill(gsonObject.get("skill").getAsString()))
                                                         .setKey((SkillDataKey<Boolean>) SkillDataKeys.REGISTRY.get().getValue(ResourceLocation.parse(gsonObject.get("boolean_key").getAsString())))
                                                         .setSlot(SkillSlot.ENUM_MANAGER.get(gsonObject.get("slot").getAsString().toUpperCase()))
-                                                        .build());
+                                                        .build();
+
+
                                             }
                                         });
                                     }
