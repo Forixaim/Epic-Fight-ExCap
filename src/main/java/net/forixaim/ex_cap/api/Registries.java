@@ -13,17 +13,6 @@ import java.util.Map;
 
 public class Registries
 {
-    public static void registerMovesets()
-    {
-        MoveSetDefinitionRegistryEvent event2 = new MoveSetDefinitionRegistryEvent();
-
-        ModLoader.get().postEvent(event2);
-
-        event2.getMoveSets().forEach(
-                (moveSet, registryEvent) -> registryEvent.run()
-        );
-    }
-
     public static MaterialProperties quickRegister(float pierce, float impact, float maxStrikes)
     {
         return new MaterialProperties(Map.ofEntries(
@@ -55,7 +44,11 @@ public class Registries
      */
     public static void registerCapabilities()
     {
+        MoveSetDefinitionRegistryEvent dynamicEvent = new MoveSetDefinitionRegistryEvent();
         ExCapMovesetRegistryEvent event3 = new ExCapMovesetRegistryEvent();
+        ModLoader.get().postEvent(dynamicEvent);
+
+        dynamicEvent.getMoveSets().forEach((string, runnable) -> runnable.run());
 
         ModLoader.get().postEvent(event3);
 

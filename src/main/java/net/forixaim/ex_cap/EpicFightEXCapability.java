@@ -75,7 +75,5 @@ public class EpicFightEXCapability {
 
     public static void onFMLLoadComplete(FMLLoadCompleteEvent event) {
         event.enqueueWork(Registries::registerMaterials);
-        event.enqueueWork(Registries::registerMovesets);
-        event.enqueueWork(Registries::registerCapabilities);
     }
 }

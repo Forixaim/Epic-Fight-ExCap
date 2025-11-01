@@ -7,7 +7,6 @@ import net.forixaim.ex_cap.api.Registries;
 import net.forixaim.ex_cap.api.providers.ProviderConditional;
 import net.forixaim.ex_cap.api.providers.ProviderConditionalType;
 import net.forixaim.ex_cap.api.utilities.JsonUtils;
-import net.forixaim.ex_cap.capabilities.ExCapWeapon;
 import net.forixaim.ex_cap.capabilities.weapon_presets.ExCapWeapons;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
@@ -16,7 +15,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import yesman.epicfight.api.animation.AnimationManager;
@@ -24,7 +22,6 @@ import yesman.epicfight.api.animation.LivingMotion;
 import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.data.reloader.SkillManager;
-import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.SkillDataKey;
 import yesman.epicfight.skill.SkillDataKeys;
 import yesman.epicfight.skill.SkillSlot;
@@ -33,8 +30,6 @@ import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("unchecked")
 public class ExCapWeaponReloadListener extends SimpleJsonResourceReloadListener
@@ -101,15 +96,50 @@ public class ExCapWeaponReloadListener extends SimpleJsonResourceReloadListener
                                                         .setSkillToCheck(SkillManager.getSkill(gsonObject.get("skill").getAsString()))
                                                         .setSlot(SkillSlot.ENUM_MANAGER.get(gsonObject.get("slot").getAsString().toUpperCase()))
                                                         .build();
+                                                case COMPOSITE -> {
+                                                    List<ProviderConditional> subs = Lists.newArrayList();
+                                                    JsonArray array = gsonObject.get("conditionals").getAsJsonArray();
+                                                    array.forEach(element -> {
+                                                        if (!element.getAsJsonObject().get("provider_type").getAsString().equals("composite") || !element.getAsJsonObject().get("provider_type").getAsString().equals("default"))
+                                                        {
+                                                            ProviderConditional.ProviderConditionalBuilder subBuilder = ProviderConditional.builder();
+                                                            ProviderConditionalType subtype = ProviderConditionalType.valueOf(element.getAsJsonObject().get("provider_type").getAsString().toUpperCase());
+                                                            switch (subtype) {
+                                                                case WEAPON_CATEGORY -> subs.add(subBuilder
+                                                                        .setType(subtype)
+                                                                        .setCategory(WeaponCategory.ENUM_MANAGER.get(element.getAsJsonObject().get("weapon_category").getAsString().toUpperCase()))
+                                                                        .setHand(InteractionHand.valueOf(element.getAsJsonObject().get("hand").getAsString().toUpperCase()))
+                                                                        .build());
+                                                                case SPECIFIC_WEAPON -> subs.add(subBuilder
+                                                                        .setType(subtype)
+                                                                        .setWeapon(ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(element.getAsJsonObject().get("specific_weapon").getAsString())))
+                                                                        .setHand(InteractionHand.valueOf(element.getAsJsonObject().get("hand").getAsString().toUpperCase()))
+                                                                        .build());
+                                                                case SKILL_EXISTENCE, SKILL_ACTIVATION -> subBuilder
+                                                                        .setType(subtype)
+                                                                        .setSkillToCheck(SkillManager.getSkill(element.getAsJsonObject().get("skill").getAsString()))
+                                                                        .setSlot(SkillSlot.ENUM_MANAGER.get(element.getAsJsonObject().get("slot").getAsString().toUpperCase()))
+                                                                        .build();
+
+                                                                case DATA_KEY -> subs.add(subBuilder
+                                                                        .setType(subtype)
+                                                                        .setSkillToCheck(SkillManager.getSkill(element.getAsJsonObject().get("skill").getAsString()))
+                                                                        .setKey((SkillDataKey<Boolean>) SkillDataKeys.REGISTRY.get().getValue(ResourceLocation.parse(element.getAsJsonObject().get("boolean_key").getAsString())))
+                                                                        .setSlot(SkillSlot.ENUM_MANAGER.get(element.getAsJsonObject().get("slot").getAsString().toUpperCase()))
+                                                                        .build());
+                                                            }
+                                                        }
+                                                    });
+                                                    builder.setProviderConditionals(subs.toArray(new ProviderConditional[0]));
+                                                }
                                                 case DATA_KEY -> builder
                                                         .setType(type).setWieldStyle(wieldStyle).isVisibleOffHand(visibleOffHand)
                                                         .setSkillToCheck(SkillManager.getSkill(gsonObject.get("skill").getAsString()))
                                                         .setKey((SkillDataKey<Boolean>) SkillDataKeys.REGISTRY.get().getValue(ResourceLocation.parse(gsonObject.get("boolean_key").getAsString())))
                                                         .setSlot(SkillSlot.ENUM_MANAGER.get(gsonObject.get("slot").getAsString().toUpperCase()))
                                                         .build();
-
-
                                             }
+                                            weapon.getStyleComboProviderRegistry().add(builder.build());
                                         });
                                     }
 
