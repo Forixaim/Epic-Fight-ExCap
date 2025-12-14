@@ -20,6 +20,7 @@ public class MixinGuard
 	@Unique
 	private GuardSkill epicFight_EXCapability$self = (GuardSkill) (Object) this;
 
+
 	@Inject(method = "lambda$onInitiate$15", at = @At("HEAD"), remap = false)
 	private void onInitiate(SkillContainer container, MovementInputEvent event, CallbackInfo ci)
 	{

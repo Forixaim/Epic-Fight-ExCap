@@ -70,7 +70,19 @@ public class EXWeaponCapability extends WeaponCapability
 		return super.getLivingMotion(entityPatch, hand);
 	}
 
-	public List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> getMountAttackEX(Style style)
+    @Override
+    public boolean checkOffhandValid(LivingEntityPatch<?> entitypatch) {
+        try
+        {
+            return super.checkOffhandValid(entitypatch) || this.weaponCombinationPredicator.apply(entitypatch);
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
+    public List<AnimationManager.AnimationAccessor<? extends AttackAnimation>> getMountAttackEX(Style style)
 	{
 		if (mountAttackAnimations.get(style) == null) {
 			return getMountAttackMotion();
