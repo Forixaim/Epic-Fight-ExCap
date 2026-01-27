@@ -151,9 +151,8 @@ dependencies {
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    implementation fg.deobf("curse.maven:epic-fight-mod-405076:7316952")
-    implementation fg.deobf("libs:BattleArtsAPI:20.14.8.0")
-    implementation fg.deobf("curse.maven:epic-fight-skill-tree-1295882:6854381")
+    implementation fg.deobf("curse.maven:epic-fight-mod-405076:7476040")
+    implementation fg.deobf("curse.maven:battle-arts-api-1091499:7325885")
 
     runtimeOnly fg.deobf("curse.maven:caelus-308989:4581481")
     runtimeOnly fg.deobf("curse.maven:playeranimator-658587:4587214")

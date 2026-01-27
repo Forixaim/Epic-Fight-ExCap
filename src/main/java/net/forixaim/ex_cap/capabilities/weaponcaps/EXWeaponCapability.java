@@ -37,6 +37,7 @@ import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCapability;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
+import yesman.epicfight.world.entity.eventlistener.ComboCounterHandleEvent;
 import yesman.epicfight.world.item.EpicFightItems;
 
 import java.util.Arrays;
@@ -280,7 +281,7 @@ public class EXWeaponCapability extends WeaponCapability
 			clashes = Maps.newHashMap();
 			guardAnimations = Maps.newHashMap();
 			weaponPassiveSkill = Maps.newHashMap();
-			sheath = Maps.newHashMap();
+            sheath = Maps.newHashMap();
 		}
 
 		@SafeVarargs
@@ -337,13 +338,7 @@ public class EXWeaponCapability extends WeaponCapability
 			return this;
 		}
 
-		public Builder renderSheath(Style style, Predicate<LivingEntityPatch<?>> shouldRenderSheath)
-		{
-			this.shouldRenderSheath.put(style, shouldRenderSheath);
-			return this;
-		}
-
-		@Override
+        @Override
 		public Builder constructor(Function<CapabilityItem.Builder, CapabilityItem> constructor)
 		{
 			copyConstructor = constructor;
@@ -436,7 +431,6 @@ public class EXWeaponCapability extends WeaponCapability
 		public void addMoveset(Style style, MoveSet moveSet)
 		{
 			newStyleCombo(style, moveSet.getAutoAttackAnimations().toArray(AnimationManager.AnimationAccessor[]::new));
-			renderSheath(style, moveSet.shouldRenderSheath());
 			moveSet.getLivingMotionModifiers().forEach((motion, animation) -> exCapLMMs(style, motion, animation));
 			moveSet.getGuardAnimations().forEach((guardSkill, blockTypeListMap) -> blockTypeListMap.forEach(((blockType, animationProviders) -> addGuardMotion(style, guardSkill, blockType, animationProviders.toArray(AnimationManager.AnimationAccessor[]::new)))));
 			innateSkill(style, moveSet.getWeaponInnateSkill());
