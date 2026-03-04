@@ -6,14 +6,11 @@ import net.forixaim.ex_cap.api.events.MoveSetDefinitionRegistryEvent;
 import net.forixaim.ex_cap.api.moveset.MoveSet;
 import net.forixaim.ex_cap.api.moveset.RangedMoveSet;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.gameasset.Animations;
 import yesman.epicfight.registry.entries.EpicFightSkills;
 
 @SuppressWarnings("unchecked")
-@EventBusSubscriber(modid = EpicFightEXCapability.MODID)
 public class CoreMovesets
 {
 	public static MoveSet.MoveSetBuilder mountedSwordMS;
@@ -26,7 +23,6 @@ public class CoreMovesets
 	public static MoveSet.MoveSetBuilder LiechtenauerMS;
 	public static MoveSet.MoveSetBuilder dagger1HMS;
 	public static MoveSet.MoveSetBuilder dagger2HMS;
-	public static MoveSet.MoveSetBuilder baseSpellMS;
 	public static MoveSet.MoveSetBuilder spear2HMS;
 	public static MoveSet.MoveSetBuilder spear1HMS;
 	public static MoveSet.MoveSetBuilder sword1HMS;
@@ -36,7 +32,6 @@ public class CoreMovesets
 	public static MoveSet.MoveSetBuilder UchigatanaSheathed;
 	public static MoveSet.MoveSetBuilder glove;
 
-	@SubscribeEvent
 	public static void registerMovesets(MoveSetDefinitionRegistryEvent event)
 	{
 		event.getMoveSets().put(EpicFightEXCapability.MODID, CoreMovesets::build);

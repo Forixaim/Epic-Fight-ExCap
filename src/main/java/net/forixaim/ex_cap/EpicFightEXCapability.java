@@ -6,7 +6,10 @@ import net.forixaim.ex_cap.api.moveset.ExCapWeaponReloadListener;
 import net.forixaim.ex_cap.capabilities.CapabilityRegistry;
 import net.forixaim.ex_cap.capabilities.ExCapCategories;
 import net.forixaim.ex_cap.capabilities.ExCapStyle;
+import net.forixaim.ex_cap.capabilities.WeaponModificationRegistry;
+import net.forixaim.ex_cap.capabilities.weapon_presets.CoreMovesets;
 import net.forixaim.ex_cap.capabilities.weapon_presets.ExCapWeapons;
+import net.forixaim.ex_cap.capabilities.weapon_presets.MainConditionals;
 import net.forixaim.ex_cap.registry.ItemRegistry;
 import net.forixaim.ex_cap.skill.ExCapDatakeys;
 import net.minecraft.network.chat.Component;
@@ -25,6 +28,7 @@ import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.slf4j.Logger;
 import yesman.epicfight.api.event.EpicFightEventHooks;
+import yesman.epicfight.api.event.types.registry.WeaponCapabilityPresetRegistryEvent;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
@@ -44,6 +48,8 @@ public class EpicFightEXCapability {
         bus.addListener(this::addPackFindersEvent);
         ItemRegistry.ITEMS.register(bus);
         ExCapWeapons.EX_CAP_WEAPONS.register(bus);
+        bus.addListener(CoreMovesets::registerMovesets);
+        bus.addListener(WeaponModificationRegistry::registerExCap);
         NeoForge.EVENT_BUS.addListener(this::addResourceReloader);
         Style.ENUM_MANAGER.registerEnumCls(MODID, ExCapStyle.class);
         WeaponCategory.ENUM_MANAGER.registerEnumCls(MODID, ExCapCategories.class);
@@ -53,15 +59,20 @@ public class EpicFightEXCapability {
 
     public void onCommonSetup(FMLCommonSetupEvent event)
     {
-        EpicFightEventHooks.Registry.WEAPON_CAPABILITY_PRESET.registerEvent(regevent -> ExCapWeapons.REGISTRY.forEach(item -> regevent.getTypeEntry().put(ExCapWeapons.REGISTRY.getKey(item), CapabilityRegistry.process(item))));
     }
+
+    public static void registerWeaponPresets(WeaponCapabilityPresetRegistryEvent event)
+    {
+        LogUtils.getLogger().debug("size {}", ExCapWeapons.REGISTRY.size());
+        ExCapWeapons.REGISTRY.holders().forEach(holder -> event.getTypeEntry().put(holder.unwrapKey().get().location(), CapabilityRegistry.process(holder)));
+    }
+
+
 
     private void addResourceReloader(AddReloadListenerEvent event)
     {
         event.addListener(new ExCapWeaponReloadListener());
     }
-
-
 
     public void addPackFindersEvent(AddPackFindersEvent event) {
 //        if (event.getPackType() == PackType.CLIENT_RESOURCES) {

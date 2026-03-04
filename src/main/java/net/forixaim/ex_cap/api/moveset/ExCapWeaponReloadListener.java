@@ -3,6 +3,7 @@ package net.forixaim.ex_cap.api.moveset;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.*;
+import net.forixaim.ex_cap.EpicFightEXCapability;
 import net.forixaim.ex_cap.api.Registries;
 import net.forixaim.ex_cap.api.providers.ProviderConditional;
 import net.forixaim.ex_cap.api.providers.ProviderConditionalType;
@@ -21,6 +22,7 @@ import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.LivingMotion;
 import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
+import yesman.epicfight.api.event.EpicFightEventHooks;
 import yesman.epicfight.registry.EpicFightRegistries;
 import yesman.epicfight.skill.SkillDataKey;
 import yesman.epicfight.skill.SkillSlot;
@@ -241,6 +243,7 @@ public class ExCapWeaponReloadListener extends SimpleJsonResourceReloadListener
                             }
                     );
             }));
+        EpicFightEventHooks.Registry.WEAPON_CAPABILITY_PRESET.registerEvent(EpicFightEXCapability::registerWeaponPresets);
     }
 
     private static Map<LivingMotion, AnimationManager.AnimationAccessor<? extends StaticAnimation>> getLivingMotionModifiers(Map<String, JsonElement> map)

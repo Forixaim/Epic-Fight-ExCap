@@ -11,7 +11,6 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import yesman.epicfight.api.utils.math.ValueModifier;
 import yesman.epicfight.registry.entries.EpicFightAttributes;
-import yesman.epicfight.world.capabilities.item.CapabilityItem;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCapability;
 
@@ -105,18 +104,4 @@ public class ExCapWeapon
 		return exportBuilder;
 	}
 
-	public CapabilityItem.Builder export(boolean test)
-	{
-		EXWeaponCapability.Builder exportBuilder = EXWeaponCapability.copy(builder);
-		registerProviderConditionals();
-		registerAttackCombo();
-		for (Map.Entry<Item, Item> entry : sheathes.entrySet())
-		{
-			exportBuilder.addSheath(entry.getKey(), entry.getValue());
-		}
-		AttackSets.forEach((exportBuilder::addMoveset));
-		exportBuilder.styleProvider(provider.exportStyle()).weaponCombinationPredicator(provider.exportCombination());
-
-		return exportBuilder;
-	}
 }

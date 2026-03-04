@@ -1,5 +1,6 @@
 package net.forixaim.ex_cap.api;
 
+import com.mojang.logging.LogUtils;
 import net.forixaim.ex_cap.api.events.ExCapMovesetRegistryEvent;
 import net.forixaim.ex_cap.api.events.MoveSetDefinitionRegistryEvent;
 import net.neoforged.fml.ModLoader;
@@ -26,14 +27,17 @@ public class Registries
 
         ModLoader.postEvent(event3);
 
+        LogUtils.getLogger().debug("Provider Map: {}", event3.getCoreCapabilityConditionalMap().toString());
+        LogUtils.getLogger().debug("Moveset Map: {}", event3.getMoveSetRegistryMap().toString());
+
         event3.getCoreCapabilityConditionalMap().forEach(
                 (coreCapability, conditionals) ->
-                        coreCapability.getStyleComboProviderRegistry().addAll(conditionals)
+                        coreCapability.get().getStyleComboProviderRegistry().addAll(conditionals)
         );
         event3.getMoveSetRegistryMap().forEach(
                 (coreCapability, styleMoveSetMap) ->
                         styleMoveSetMap.forEach(
-                                (style, moveSet) -> coreCapability.getAttackSets().put(style, moveSet.build())
+                                (style, moveSet) -> coreCapability.get().getAttackSets().put(style, moveSet.build())
                         )
         );
     }
