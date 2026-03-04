@@ -5,8 +5,8 @@ import com.google.common.collect.Maps;
 import net.forixaim.ex_cap.api.providers.ProviderConditional;
 import net.forixaim.ex_cap.capabilities.ExCapWeapon;
 import net.forixaim.ex_cap.api.moveset.MoveSet;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.fml.event.IModBusEvent;
+import net.neoforged.bus.api.Event;
+import net.neoforged.fml.event.IModBusEvent;
 import yesman.epicfight.world.capabilities.item.Style;
 
 import java.util.Arrays;

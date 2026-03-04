@@ -2,13 +2,14 @@ package net.forixaim.ex_cap.api.providers;
 
 import net.forixaim.battle_arts_api.battle_arts_skills.BattleArtsSkillSlots;
 import net.forixaim.ex_cap.EpicFightEXCapability;
-import net.forixaim.ex_cap.api.moveset.MoveSet;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import org.jetbrains.annotations.NotNull;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.SkillDataKey;
@@ -35,11 +36,11 @@ public class ProviderConditional
 	protected final Item weapon;
 	protected final ProviderConditional[] providerConditionals;
 	protected final SkillSlot slot;
-	protected final SkillDataKey<Boolean> key;
+	protected final Holder<SkillDataKey<?>> key;
 	protected final InteractionHand hand;
 	protected final Predicate<LivingEntityPatch<?>> customFunction;
 
-	private ProviderConditional(ProviderConditionalType type, Style style, Skill skillToCheck, WeaponCategory category, Item weapon, InteractionHand hand, SkillSlot slot, SkillDataKey<Boolean> key, Boolean combination, Predicate<LivingEntityPatch<?>> customFunction, ProviderConditional[] providerConditionals) {
+	private ProviderConditional(ProviderConditionalType type, Style style, Skill skillToCheck, WeaponCategory category, Item weapon, InteractionHand hand, SkillSlot slot, Holder<SkillDataKey<?>> key, Boolean combination, Predicate<LivingEntityPatch<?>> customFunction, ProviderConditional[] providerConditionals) {
 		this.type = type;
 		this.style = style;
 		this.skillToCheck = skillToCheck;
@@ -108,7 +109,7 @@ public class ProviderConditional
 		{
 			if (entityPatch instanceof PlayerPatch<?> playerPatch)
 			{
-				return playerPatch.getSkill(slot).getDataManager().hasData(key) && playerPatch.getSkill(slot).getDataManager().getDataValue(key);
+				return playerPatch.getSkill(slot).getDataManager().hasData(key) && (Boolean) playerPatch.getSkill(slot).getDataManager().getRawDataValue(key);
 			}
 		}
 		if (type.equals(ProviderConditionalType.SPECIFIC_WEAPON))
@@ -165,7 +166,7 @@ public class ProviderConditional
 		{
 			if (entityPatch instanceof PlayerPatch<?> playerPatch)
 			{
-				if (playerPatch.getSkill(slot).getDataManager().hasData(key) && playerPatch.getSkill(slot).getDataManager().getDataValue(key))
+				if (playerPatch.getSkill(slot).getDataManager().hasData(key) && (Boolean) playerPatch.getSkill(slot).getDataManager().getRawDataValue(key))
 					return style;
 			}
 		}
@@ -224,7 +225,7 @@ public class ProviderConditional
 		{
 			if (entityPatch instanceof PlayerPatch<?> playerPatch)
 			{
-				if (playerPatch.getSkill(slot).getDataManager().hasData(key) && playerPatch.getSkill(slot).getDataManager().getDataValue(key))
+				if (playerPatch.getSkill(slot).getDataManager().hasData(key) && (Boolean) playerPatch.getSkill(slot).getDataManager().getRawDataValue(key))
 					return combination;
 			}
 		}
@@ -318,7 +319,7 @@ public class ProviderConditional
 		private Item weapon;
 		private ProviderConditional[] providerConditionals;
 		private SkillSlot slot;
-		private SkillDataKey<Boolean> key;
+		private Holder<SkillDataKey<?>> key;
 		private InteractionHand hand;
 		private Predicate<LivingEntityPatch<?>> customFunction;
 
@@ -383,7 +384,7 @@ public class ProviderConditional
 			return this;
 		}
 
-		public ProviderConditionalBuilder setKey(SkillDataKey<Boolean> key) {
+		public ProviderConditionalBuilder setKey(Holder<SkillDataKey<?>> key) {
 			this.key = key;
 			return this;
 		}

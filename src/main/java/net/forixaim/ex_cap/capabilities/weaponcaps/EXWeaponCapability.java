@@ -4,24 +4,19 @@ package net.forixaim.ex_cap.capabilities.weaponcaps;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
-import io.redspace.ironsspellbooks.IronsSpellbooks;
 import net.forixaim.ex_cap.api.moveset.MoveSet;
-import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentContents;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
-import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraftforge.fml.ModList;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.LivingMotion;
 import yesman.epicfight.api.animation.LivingMotions;
@@ -29,21 +24,18 @@ import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
 import yesman.epicfight.api.collider.Collider;
 import yesman.epicfight.gameasset.ColliderPreset;
-import yesman.epicfight.gameasset.EpicFightSounds;
 import yesman.epicfight.network.EpicFightNetworkManager;
 import yesman.epicfight.network.server.SPChangeSkill;
 import yesman.epicfight.network.server.SPSetRemotePlayerSkill;
 import yesman.epicfight.network.server.SPSetSkillContainerValue;
-import yesman.epicfight.particle.EpicFightParticles;
 import yesman.epicfight.particle.HitParticleType;
+import yesman.epicfight.registry.entries.*;
 import yesman.epicfight.skill.*;
 import yesman.epicfight.skill.guard.GuardSkill;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.entitypatch.player.PlayerPatch;
+import yesman.epicfight.world.capabilities.entitypatch.player.ServerPlayerPatch;
 import yesman.epicfight.world.capabilities.item.*;
-import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
-import yesman.epicfight.world.entity.eventlistener.ComboCounterHandleEvent;
-import yesman.epicfight.world.item.EpicFightItems;
 
 import java.util.*;
 import java.util.function.Function;
@@ -94,7 +86,7 @@ public class EXWeaponCapability extends WeaponCapability
 		return mountAttackAnimations.get(style);
 	}
 
-	protected EXWeaponCapability(CapabilityItem.Builder builder)
+	protected EXWeaponCapability(WeaponCapability.Builder builder)
 	{
 		super(builder);
 		Builder efbsBuilder = (Builder) builder;
@@ -151,8 +143,9 @@ public class EXWeaponCapability extends WeaponCapability
 		return chantAnimations;
 	}
 
+
 	@Override
-	public void changeWeaponInnateSkill(PlayerPatch<?> playerpatch, ItemStack itemstack)
+	public void changeWeaponInnateSkill(ServerPlayerPatch playerpatch, ItemStack itemstack)
 	{
 		Skill weaponInnateSkill = this.getInnateSkill(playerpatch, itemstack);
         EpicFightNetworkManager.PayloadBundleBuilder toLocal = EpicFightNetworkManager.PayloadBundleBuilder.create();
@@ -162,25 +155,25 @@ public class EXWeaponCapability extends WeaponCapability
 			if (weaponInnateSkillContainer.getSkill() != weaponInnateSkill) {
 				weaponInnateSkillContainer.setSkill(weaponInnateSkill);
 			}
-			toLocal.and(new SPChangeSkill(SkillSlots.WEAPON_INNATE, playerpatch.getOriginal().getId(), weaponInnateSkill));
+            toLocal.and(new SPChangeSkill(SkillSlots.WEAPON_INNATE, playerpatch.getOriginal().getId(), weaponInnateSkill.holder()));
         } else {
-			toLocal.and(SPSetSkillContainerValue.enable(SkillSlots.WEAPON_INNATE, false, playerpatch.getOriginal().getId()));
+            toLocal.and(SPSetSkillContainerValue.enable(SkillSlots.WEAPON_INNATE, true, playerpatch.getOriginal().getId()));
 		}
 
 		weaponInnateSkillContainer.setDisabled(weaponInnateSkill == null);
-		toRemote.and(new SPSetRemotePlayerSkill(playerpatch.getOriginal().getId(), SkillSlots.WEAPON_INNATE, weaponInnateSkill));
+        toRemote.and(new SPSetRemotePlayerSkill(SkillSlots.WEAPON_INNATE, playerpatch.getOriginal().getId(), Skill.holderOrNull(weaponInnateSkill)));
 		Skill skill = weaponPassiveSkill.get(this.getStyle(playerpatch));
 		SkillContainer passiveSkillContainer = playerpatch.getSkill(SkillSlots.WEAPON_PASSIVE);
 		if (skill != null) {
 			if (passiveSkillContainer.getSkill() != skill) {
 				passiveSkillContainer.setSkill(skill);
-				toLocal.and(new SPChangeSkill(SkillSlots.WEAPON_PASSIVE, playerpatch.getOriginal().getId(), passiveSkill));
-				toRemote.and(new SPSetRemotePlayerSkill(playerpatch.getOriginal().getId(), SkillSlots.WEAPON_PASSIVE, passiveSkill));
+                toLocal.and(new SPChangeSkill(SkillSlots.WEAPON_PASSIVE, playerpatch.getOriginal().getId(), passiveSkill.holder()));
+                toRemote.and(new SPSetRemotePlayerSkill(SkillSlots.WEAPON_PASSIVE, playerpatch.getOriginal().getId(), passiveSkill.holder()));
 			}
 		} else {
 			passiveSkillContainer.setSkill(null);
 			toLocal.and(new SPChangeSkill(SkillSlots.WEAPON_PASSIVE, playerpatch.getOriginal().getId(), null));
-			toRemote.and(new SPSetRemotePlayerSkill(playerpatch.getOriginal().getId(), SkillSlots.WEAPON_PASSIVE, null));
+            toRemote.and(new SPSetRemotePlayerSkill(SkillSlots.WEAPON_PASSIVE, playerpatch.getOriginal().getId(), null));
 		}
 
 		toLocal.send((first, others) -> EpicFightNetworkManager.sendToPlayer(first, (ServerPlayer)playerpatch.getOriginal(), others));
@@ -204,10 +197,10 @@ public class EXWeaponCapability extends WeaponCapability
 			SkillDataManager dataManager = playerpatch.getSkill(skill).getDataManager();
 			if (animations != null && !animations.isEmpty())
 			{
-				if (dataManager.hasData(SkillDataKeys.PARRY_MOTION_COUNTER.get()) && blockType == GuardSkill.BlockType.ADVANCED_GUARD)
+				if (dataManager.hasData(EpicFightSkillDataKeys.PARRY_MOTION_COUNTER) && blockType == GuardSkill.BlockType.ADVANCED_GUARD)
 				{
-					int motionCounter = dataManager.getDataValue(SkillDataKeys.PARRY_MOTION_COUNTER.get());
-					dataManager.setDataF(SkillDataKeys.PARRY_MOTION_COUNTER.get(), (v) -> v + 1);
+					int motionCounter = dataManager.getDataValue(EpicFightSkillDataKeys.PARRY_MOTION_COUNTER);
+					dataManager.setDataF(EpicFightSkillDataKeys.PARRY_MOTION_COUNTER, (v) -> v + 1);
 					motionCounter %= animations.size();
 					return animations.get(motionCounter);
 				}
@@ -223,74 +216,15 @@ public class EXWeaponCapability extends WeaponCapability
 
 	public static Builder copy(Builder copyFrom)
 	{
-        return builder()
+        return (Builder) builder()
                 .collider(copyFrom.colliderCopy)
                 .category(copyFrom.copyCategory)
-                .constructor(copyFrom.copyConstructor)
+                .constructor(EXWeaponCapability::new)
                 .hitParticle(copyFrom.hitParticleCopy)
                 .canBePlacedOffhand(copyFrom.offHandPlacementCopy)
                 .swingSound(copyFrom.swingSoundCopy)
                 .hitSound(copyFrom.hitSoundCopy);
 	}
-
-    @Override
-    public void modifyItemTooltip(ItemStack itemstack, List<Component> itemTooltip, LivingEntityPatch<?> entitypatch) {
-        Style style = this instanceof EXRangedWeaponCapability ? CapabilityItem.Styles.RANGED : this.getStyle(entitypatch);
-        if (style != null) {
-            String var10002 = style.toString();
-            itemTooltip.add(1, Component.translatable("epicfight.style." + var10002.toLowerCase(Locale.ROOT)).withStyle(ChatFormatting.DARK_GRAY));
-            int index = 0;
-            boolean modifyIn = false;
-
-            for(int i = 0; i < itemTooltip.size(); ++i) {
-                Component textComp = itemTooltip.get(i);
-                index = i;
-                if (this.findComponentArgument(textComp, Attributes.ATTACK_SPEED.getDescriptionId()) != null) {
-                    modifyIn = true;
-                    break;
-                }
-            }
-
-            ++index;
-            Map<Attribute, AttributeModifier> attribute = this.getDamageAttributesInCondition(style);
-            if (attribute != null) {
-                if (!modifyIn) {
-                    itemTooltip.add(index, Component.literal(""));
-                    ++index;
-                    itemTooltip.add(index, Component.translatable("epicfight.gui.attribute").withStyle(ChatFormatting.GRAY));
-                    ++index;
-                }
-
-                Attribute armorNegation = EpicFightAttributes.ARMOR_NEGATION.get();
-                Attribute impact = EpicFightAttributes.IMPACT.get();
-                Attribute maxStrikes = EpicFightAttributes.MAX_STRIKES.get();
-                if (attribute.containsKey(armorNegation)) {
-                    double value = attribute.get(armorNegation).getAmount() + Objects.requireNonNull(entitypatch.getOriginal().getAttribute(armorNegation)).getBaseValue();
-                    if (value > (double)0.0F) {
-                        itemTooltip.add(index, Component.literal(" ").append(Component.translatable(armorNegation.getDescriptionId() + ".value", ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(value))));
-                    }
-                }
-
-                if (attribute.containsKey(impact)) {
-                    double value = attribute.get(impact).getAmount() + Objects.requireNonNull(entitypatch.getOriginal().getAttribute(impact)).getBaseValue();
-                    if (value > (double)0.0F) {
-                        int i = itemstack.getEnchantmentLevel(Enchantments.KNOCKBACK);
-                        value *= 1.0F + (float)i * 0.12F;
-                        itemTooltip.add(index++, Component.literal(" ").append(Component.translatable(impact.getDescriptionId() + ".value", new Object[]{ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(value)})));
-                    }
-                }
-
-                if (attribute.containsKey(maxStrikes)) {
-                    double value = attribute.get(maxStrikes).getAmount() + Objects.requireNonNull(entitypatch.getOriginal().getAttribute(maxStrikes)).getBaseValue();
-                    if (value > (double)0.0F) {
-                        itemTooltip.add(index++, Component.literal(" ").append(Component.translatable(maxStrikes.getDescriptionId() + ".value", ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(value))));
-                    }
-                } else {
-                    itemTooltip.add(index++, Component.literal(" ").append(Component.translatable(maxStrikes.getDescriptionId() + ".value", ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(maxStrikes.getDefaultValue()))));
-                }
-            }
-        }
-    }
 
     private Object findComponentArgument(Component component, String key) {
         ComponentContents var4 = component.getContents();
@@ -299,13 +233,11 @@ public class EXWeaponCapability extends WeaponCapability
                 return component;
             }
 
-            if (contents.getArgs() != null) {
-                for(Object arg : contents.getArgs()) {
-                    if (arg instanceof Component argComponent) {
-                        Object ret = this.findComponentArgument(argComponent, key);
-                        if (ret != null) {
-                            return ret;
-                        }
+            for (Object arg : contents.getArgs()) {
+                if (arg instanceof Component argComponent) {
+                    Object ret = this.findComponentArgument(argComponent, key);
+                    if (ret != null) {
+                        return ret;
                     }
                 }
             }
@@ -345,7 +277,6 @@ public class EXWeaponCapability extends WeaponCapability
 		protected final Map<Style, List<AnimationManager.AnimationAccessor<? extends AttackAnimation>>> mountAttackAnimation;
 
 		//Fields that are primarily there to be used when this object is copied.
-		protected Function<CapabilityItem.Builder, CapabilityItem> copyConstructor = EXWeaponCapability::new;
 		protected WeaponCategory copyCategory = CapabilityItem.WeaponCategories.FIST;
 		protected SoundEvent swingSoundCopy = EpicFightSounds.WHOOSH.get();
 		protected SoundEvent hitSoundCopy = EpicFightSounds.BLUNT_HIT.get();
@@ -359,10 +290,10 @@ public class EXWeaponCapability extends WeaponCapability
 		protected Builder()
 		{
 			super();
+            this.constructor(EXWeaponCapability::new);
 			mountAttackAnimation = Maps.newHashMap();
 			punishmentAnimation = Maps.newHashMap();
             this.shouldRenderSheath = Maps.newHashMap();
-            this.constructor(EXWeaponCapability::new);
 			battleModeAnimations = Maps.newHashMap();
 			battleTransitionAnimations = Maps.newHashMap();
 			castAnimations = Maps.newHashMap();
@@ -404,34 +335,12 @@ public class EXWeaponCapability extends WeaponCapability
 			return this;
 		}
 
-		/**
-		 *
-		 * @param style the style
-		 * @param castType must be a CastType class which will be cast into the respective class when onSpellCast.
-		 * @param provider what
-		 * @return the builder itself
-		 */
-		public Builder addCastAnimation(Style style, Object castType, AnimationManager.AnimationAccessor<? extends StaticAnimation> provider)
-		{
-			castAnimations.computeIfAbsent(style, k -> Maps.newHashMap());
-			if (ModList.get().isLoaded(IronsSpellbooks.MODID))
-			{
-				castAnimations.get(style).put(castType, provider);
-			}
-			return this;
-		}
+
 
 		public Builder addTransitionAnimation(Style wieldStyle, AnimationManager.AnimationAccessor<? extends StaticAnimation> transitionAnimations)
 		{
 			battleTransitionAnimations.put(wieldStyle, transitionAnimations);
 			return this;
-		}
-
-        @Override
-		public Builder constructor(Function<CapabilityItem.Builder, CapabilityItem> constructor)
-		{
-			copyConstructor = constructor;
-			return (Builder) super.constructor(constructor);
 		}
 
 		@Override
@@ -492,8 +401,8 @@ public class EXWeaponCapability extends WeaponCapability
 		}
 
 		@Override
-		public Builder addStyleAttibutes(Style style, Pair<Attribute, AttributeModifier> attributePair) {
-			return (Builder) super.addStyleAttibutes(style, attributePair);
+		public Builder addStyleAttibutes(Style style, Holder<Attribute> attribute, AttributeModifier attributePair) {
+			return (Builder) super.addStyleAttibutes(style, attribute, attributePair);
 		}
 
 		@Override

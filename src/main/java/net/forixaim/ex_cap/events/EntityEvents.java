@@ -3,17 +3,18 @@ package net.forixaim.ex_cap.events;
 import net.forixaim.ex_cap.EpicFightEXCapability;
 import net.forixaim.ex_cap.capabilities.weaponcaps.EXWeaponCapability;
 import net.minecraft.world.InteractionHand;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 
-@Mod.EventBusSubscriber(modid = EpicFightEXCapability.MODID)
+@EventBusSubscriber(modid = EpicFightEXCapability.MODID)
 public class EntityEvents
 {
     @SubscribeEvent
-    public static void onHurt(LivingHurtEvent event)
+    public static void onHurt(LivingDamageEvent.Pre event)
     {
         LivingEntityPatch<?> attackerPatch = EpicFightCapabilities.getEntityPatch(event.getSource().getEntity(), LivingEntityPatch.class);
         LivingEntityPatch<?> victimPatch = EpicFightCapabilities.getEntityPatch(event.getEntity(), LivingEntityPatch.class);
@@ -24,9 +25,9 @@ public class EntityEvents
                     victimPatch.getHoldingItemCapability(InteractionHand.MAIN_HAND) instanceof EXWeaponCapability victimWeapon &&
                     attackerPatch.getAnimator().getEntityState().attacking() && victimPatch.getAnimator().getEntityState().attacking())
             {
-                float damage = event.getAmount();
+                float damage = event.getOriginalDamage();
                 damage *= 0.3f;
-                event.setAmount(damage);
+                event.setNewDamage(damage);
             }
         }
     }

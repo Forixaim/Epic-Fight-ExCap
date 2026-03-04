@@ -1,11 +1,12 @@
 package net.forixaim.ex_cap.capabilities.weaponcaps;
 
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
+import yesman.epicfight.world.capabilities.item.WeaponCapability;
 
 public class EXRangedWeaponCapability extends EXWeaponCapability implements RangedWeapon
 {
 
-	public EXRangedWeaponCapability(CapabilityItem.Builder builder) {
+	public EXRangedWeaponCapability(WeaponCapability.Builder builder) {
 		super(builder);
 		EXRangedWeaponCapability.Builder rangedBuilder = (EXRangedWeaponCapability.Builder)builder;
 	}

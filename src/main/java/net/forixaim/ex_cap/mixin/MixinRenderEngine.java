@@ -2,9 +2,9 @@ package net.forixaim.ex_cap.mixin;
 
 import com.google.gson.JsonElement;
 import net.forixaim.ex_cap.capabilities.weaponcaps.EXBowWeaponCapability;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -25,7 +25,7 @@ public abstract class MixinRenderEngine
     @Inject(method = "reloadItemRenderers", at = @At("RETURN"), remap = false)
     public void reloadExCapItems(Map<ResourceLocation, JsonElement> objects, CallbackInfo ci)
     {
-        RenderTwoHandedRangedWeapon exCapBowRenderer = new RenderTwoHandedRangedWeapon(objects.get(ForgeRegistries.ITEMS.getKey(Items.BOW)).getAsJsonObject());
+        RenderTwoHandedRangedWeapon exCapBowRenderer = new RenderTwoHandedRangedWeapon(objects.get(BuiltInRegistries.ITEM.getKey(Items.BOW)).getAsJsonObject());
 
         itemRendererMapByClass.put(EXBowWeaponCapability.class, exCapBowRenderer);
     }

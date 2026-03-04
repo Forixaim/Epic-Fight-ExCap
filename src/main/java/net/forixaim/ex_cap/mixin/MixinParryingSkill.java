@@ -7,9 +7,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.types.StaticAnimation;
+import yesman.epicfight.registry.entries.EpicFightSkillDataKeys;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.SkillContainer;
-import yesman.epicfight.skill.SkillDataKeys;
 import yesman.epicfight.skill.SkillDataManager;
 import yesman.epicfight.skill.guard.GuardSkill;
 import yesman.epicfight.skill.guard.ParryingSkill;
@@ -32,7 +32,7 @@ public abstract class MixinParryingSkill
             if (blockType == GuardSkill.BlockType.ADVANCED_GUARD) {
                 if (!playerpatch.isLogicalClient())
                 {
-                    dm.setDataSync(SkillDataKeys.PARRY_MOTION_COUNTER.get(), dm.getDataValue(SkillDataKeys.PARRY_MOTION_COUNTER.get()));
+                    dm.setDataSync(EpicFightSkillDataKeys.PARRY_MOTION_COUNTER, dm.getDataValue(EpicFightSkillDataKeys.PARRY_MOTION_COUNTER));
                 }
             }
         }

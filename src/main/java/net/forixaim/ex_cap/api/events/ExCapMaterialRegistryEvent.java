@@ -4,8 +4,9 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import net.forixaim.ex_cap.api.material.MaterialProperties;
 import net.minecraft.world.item.Tier;
-import net.minecraftforge.eventbus.api.Event;
-import net.minecraftforge.fml.event.IModBusEvent;
+import net.neoforged.bus.api.Event;
+import net.neoforged.fml.event.IModBusEvent;
+
 
 import java.util.Map;
 

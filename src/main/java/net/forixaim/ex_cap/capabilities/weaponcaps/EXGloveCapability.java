@@ -6,10 +6,11 @@ import net.minecraft.world.item.SwordItem;
 import yesman.epicfight.world.capabilities.EpicFightCapabilities;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
+import yesman.epicfight.world.capabilities.item.WeaponCapability;
 
 public class EXGloveCapability extends EXWeaponCapability
 {
-    public EXGloveCapability(CapabilityItem.Builder builder)
+    public EXGloveCapability(WeaponCapability.Builder builder)
     {
         super(builder);
     }

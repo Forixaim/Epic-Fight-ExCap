@@ -8,14 +8,10 @@ import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.IForgeRegistryInternal;
-import net.minecraftforge.registries.RegistryManager;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.LivingMotion;
 import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
-import yesman.epicfight.api.utils.datastruct.ClearableIdMapper;
 import yesman.epicfight.skill.Skill;
 import yesman.epicfight.skill.guard.GuardSkill;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
@@ -43,34 +39,6 @@ public class MoveSet
     private final Skill WeaponPassiveSkill;
     private final AnimationManager.AnimationAccessor<? extends AttackAnimation> revelationAnimation;
     private final Predicate<LivingEntityPatch<?>> sheathRender;
-
-    public static class MoveSetCallbacks implements IForgeRegistry.BakeCallback<MoveSet>, IForgeRegistry.CreateCallback<MoveSet>, IForgeRegistry.ClearCallback<MoveSet>
-    {
-        static final MoveSetCallbacks INSTANCE = new MoveSetCallbacks();
-
-        @Override
-        public void onBake(IForgeRegistryInternal<MoveSet> iForgeRegistryInternal, RegistryManager registryManager)
-        {
-            //What a bakery, no I'm not gonna show you my bakery.
-        }
-
-        @Override
-        public void onClear(IForgeRegistryInternal<MoveSet> iForgeRegistryInternal, RegistryManager registryManager)
-        {
-        }
-
-        @Override
-        public void onCreate(IForgeRegistryInternal<MoveSet> iForgeRegistryInternal, RegistryManager registryManager)
-        {
-            iForgeRegistryInternal.setSlaveMap(CLASS_TO_MOVESET, Maps.newHashMap());
-            iForgeRegistryInternal.setSlaveMap(MOVESET_TO_ID, new ClearableIdMapper<MoveSet>(iForgeRegistryInternal.getKeys().size()));
-        }
-    }
-
-    public MoveSetCallbacks getCallbacks()
-    {
-        return MoveSetCallbacks.INSTANCE;
-    }
 
     public final ResourceLocation registryIdentifier;
 

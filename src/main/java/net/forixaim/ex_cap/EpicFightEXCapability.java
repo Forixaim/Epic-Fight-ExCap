@@ -3,6 +3,7 @@ package net.forixaim.ex_cap;
 import com.mojang.logging.LogUtils;
 import net.forixaim.ex_cap.api.Registries;
 import net.forixaim.ex_cap.api.moveset.ExCapWeaponReloadListener;
+import net.forixaim.ex_cap.capabilities.CapabilityRegistry;
 import net.forixaim.ex_cap.capabilities.ExCapCategories;
 import net.forixaim.ex_cap.capabilities.ExCapStyle;
 import net.forixaim.ex_cap.capabilities.weapon_presets.ExCapWeapons;
@@ -13,16 +14,17 @@ import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.PathPackResources;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.AddPackFindersEvent;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.*;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddPackFindersEvent;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import org.slf4j.Logger;
+import yesman.epicfight.api.event.EpicFightEventHooks;
 import yesman.epicfight.world.capabilities.item.Style;
 import yesman.epicfight.world.capabilities.item.WeaponCategory;
 
@@ -38,18 +40,20 @@ public class EpicFightEXCapability {
     private static final Logger LOGGER = LogUtils.getLogger();
 
 
-    public EpicFightEXCapability(FMLJavaModLoadingContext context) {
-        IEventBus modEventBus = context.getModEventBus();
-        modEventBus.addListener(this::addPackFindersEvent);
-        ExCapDatakeys.DATA_KEYS.register(modEventBus);
-        ItemRegistry.ITEMS.register(modEventBus);
-        ExCapWeapons.EX_CAP_WEAPONS.register(modEventBus);
-        MinecraftForge.EVENT_BUS.addListener(this::addResourceReloader);
-        MinecraftForge.EVENT_BUS.register(this);
+    public EpicFightEXCapability(IEventBus bus, ModContainer container) {
+        bus.addListener(this::addPackFindersEvent);
+        ItemRegistry.ITEMS.register(bus);
+        ExCapWeapons.EX_CAP_WEAPONS.register(bus);
+        NeoForge.EVENT_BUS.addListener(this::addResourceReloader);
         Style.ENUM_MANAGER.registerEnumCls(MODID, ExCapStyle.class);
         WeaponCategory.ENUM_MANAGER.registerEnumCls(MODID, ExCapCategories.class);
-        context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-        modEventBus.addListener(EpicFightEXCapability::onFMLLoadComplete);
+        container.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        bus.addListener(this::onCommonSetup);
+    }
+
+    public void onCommonSetup(FMLCommonSetupEvent event)
+    {
+        EpicFightEventHooks.Registry.WEAPON_CAPABILITY_PRESET.registerEvent(regevent -> ExCapWeapons.REGISTRY.forEach(item -> regevent.getTypeEntry().put(ExCapWeapons.REGISTRY.getKey(item), CapabilityRegistry.process(item))));
     }
 
     private void addResourceReloader(AddReloadListenerEvent event)
@@ -60,20 +64,16 @@ public class EpicFightEXCapability {
 
 
     public void addPackFindersEvent(AddPackFindersEvent event) {
-        if (event.getPackType() == PackType.CLIENT_RESOURCES) {
-            Path resourcePath = ModList.get().getModFileById(EpicFightEXCapability.MODID).getFile().findResource("packs/ex_cap_spears");
-            PathPackResources pack = new PathPackResources(ModList.get().getModFileById(EpicFightEXCapability.MODID).getFile().getFileName() + ":" + resourcePath, resourcePath, false);
-            Pack.ResourcesSupplier resourcesSupplier = (string) -> pack;
-            Pack.Info info = Pack.readPackInfo("ex_cap_spears", resourcesSupplier);
-
-            if (info != null) {
-                event.addRepositorySource((source) ->
-                        source.accept(Pack.create("ex_cap_spears", Component.translatable("pack.ex_cap_spears.title"), false, resourcesSupplier, info, PackType.CLIENT_RESOURCES, Pack.Position.TOP, false, PackSource.BUILT_IN)));
-            }
-        }
-    }
-
-    public static void onFMLLoadComplete(FMLLoadCompleteEvent event) {
-        event.enqueueWork(Registries::registerMaterials);
+//        if (event.getPackType() == PackType.CLIENT_RESOURCES) {
+//            Path resourcePath = ModList.get().getModFileById(EpicFightEXCapability.MODID).getFile().findResource("packs/ex_cap_spears");
+//            PathPackResources pack = new PathPackResources(ModList.get().getModFileById(EpicFightEXCapability.MODID).getFile().getFileName() + ":" + resourcePath, resourcePath, false);
+//            Pack.ResourcesSupplier resourcesSupplier = (string) -> pack;
+//            Pack.Info info = Pack.readPackInfo("ex_cap_spears", resourcesSupplier);
+//
+//            if (info != null) {
+//                event.addRepositorySource((source) ->
+//                        source.accept(Pack.create("ex_cap_spears", Component.translatable("pack.ex_cap_spears.title"), false, resourcesSupplier, info, PackType.CLIENT_RESOURCES, Pack.Position.TOP, false, PackSource.BUILT_IN)));
+//            }
+//        }
     }
 }

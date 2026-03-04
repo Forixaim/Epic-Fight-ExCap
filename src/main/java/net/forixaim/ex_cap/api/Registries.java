@@ -1,43 +1,17 @@
 package net.forixaim.ex_cap.api;
 
-import net.forixaim.ex_cap.api.events.ExCapMaterialRegistryEvent;
 import net.forixaim.ex_cap.api.events.ExCapMovesetRegistryEvent;
 import net.forixaim.ex_cap.api.events.MoveSetDefinitionRegistryEvent;
-import net.forixaim.ex_cap.api.material.MaterialProperties;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.Tiers;
-import net.minecraftforge.fml.ModLoader;
-import yesman.epicfight.world.entity.ai.attribute.EpicFightAttributes;
-
-import java.util.Map;
+import net.neoforged.fml.ModLoader;
 
 public class Registries
 {
-    public static MaterialProperties quickRegister(float pierce, float impact, float maxStrikes)
-    {
-        return new MaterialProperties(Map.ofEntries(
-                Map.entry(EpicFightAttributes.ARMOR_NEGATION.get(), (double)pierce),
-                Map.entry(EpicFightAttributes.IMPACT.get(), (double)impact),
-                Map.entry(EpicFightAttributes.MAX_STRIKES.get(), (double)maxStrikes)
-        ));
-    }
+
 
     public static void registerMaterials()
     {
-        Map<Tier, MaterialProperties> properties = Map.ofEntries(
-                Map.entry(Tiers.WOOD, quickRegister(0f, 1f, 1)),
-                Map.entry(Tiers.STONE, quickRegister(0f, 2f, 1)),
-                Map.entry(Tiers.IRON, quickRegister(5f, 3f, 1)),
-                Map.entry(Tiers.GOLD, quickRegister(0f, 2f, 2)),
-                Map.entry(Tiers.DIAMOND, quickRegister(7f, 3f, 2)),
-                Map.entry(Tiers.NETHERITE, quickRegister(10f, 3f, 3))
-        );
 
-        MaterialPropertyManager.addAll(properties);
 
-        ExCapMaterialRegistryEvent event = new ExCapMaterialRegistryEvent();
-        ModLoader.get().postEvent(event);
-        event.getModMap().values().forEach(MaterialPropertyManager::addAll);
     }
     /**
      * This is to be called after everything has been loaded
@@ -46,11 +20,11 @@ public class Registries
     {
         MoveSetDefinitionRegistryEvent dynamicEvent = new MoveSetDefinitionRegistryEvent();
         ExCapMovesetRegistryEvent event3 = new ExCapMovesetRegistryEvent();
-        ModLoader.get().postEvent(dynamicEvent);
+        ModLoader.postEvent(dynamicEvent);
 
         dynamicEvent.getMoveSets().forEach((string, runnable) -> runnable.run());
 
-        ModLoader.get().postEvent(event3);
+        ModLoader.postEvent(event3);
 
         event3.getCoreCapabilityConditionalMap().forEach(
                 (coreCapability, conditionals) ->

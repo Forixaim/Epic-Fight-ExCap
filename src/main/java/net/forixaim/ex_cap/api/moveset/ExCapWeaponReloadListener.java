@@ -8,6 +8,7 @@ import net.forixaim.ex_cap.api.providers.ProviderConditional;
 import net.forixaim.ex_cap.api.providers.ProviderConditionalType;
 import net.forixaim.ex_cap.api.utilities.JsonUtils;
 import net.forixaim.ex_cap.capabilities.weapon_presets.ExCapWeapons;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.resources.Resource;
@@ -15,15 +16,13 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.InteractionHand;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import yesman.epicfight.api.animation.AnimationManager;
 import yesman.epicfight.api.animation.LivingMotion;
 import yesman.epicfight.api.animation.types.AttackAnimation;
 import yesman.epicfight.api.animation.types.StaticAnimation;
-import yesman.epicfight.api.data.reloader.SkillManager;
+import yesman.epicfight.registry.EpicFightRegistries;
 import yesman.epicfight.skill.SkillDataKey;
-import yesman.epicfight.skill.SkillDataKeys;
 import yesman.epicfight.skill.SkillSlot;
 import yesman.epicfight.skill.guard.GuardSkill;
 import yesman.epicfight.world.capabilities.item.Style;
@@ -42,7 +41,7 @@ public class ExCapWeaponReloadListener extends SimpleJsonResourceReloadListener
 
     private void clear()
     {
-        ExCapWeapons.REGISTRY.get().forEach( weapon ->
+        ExCapWeapons.REGISTRY.forEach( weapon ->
         {
             weapon.getAttackSets().clear();
             weapon.getStyleComboProviderRegistry().clear();
@@ -56,11 +55,11 @@ public class ExCapWeaponReloadListener extends SimpleJsonResourceReloadListener
         manager.listPacks().forEach(pack ->
                 pack.getNamespaces(PackType.SERVER_DATA).forEach(namespace -> {
                     //Lists all weapons
-                    ExCapWeapons.REGISTRY.get().forEach(
+                    ExCapWeapons.REGISTRY.forEach(
                             weapon -> {
-                                if (Objects.requireNonNull(ExCapWeapons.REGISTRY.get().getKey(weapon)).getNamespace().equals(namespace)) {
-                                    Map<ResourceLocation, JsonElement> movesets = JsonUtils.getJsonsForNamespace(manager, namespace, DIRECTORY + "/" + Objects.requireNonNull(ExCapWeapons.REGISTRY.get().getKey(weapon)).getPath() + "/movesets");
-                                    Map<ResourceLocation, JsonElement> providers = JsonUtils.getJsonsForNamespace(manager, namespace, DIRECTORY + "/" +  Objects.requireNonNull(ExCapWeapons.REGISTRY.get().getKey(weapon)).getPath() + "/providers");
+                                if (Objects.requireNonNull(ExCapWeapons.REGISTRY.getKey(weapon)).getNamespace().equals(namespace)) {
+                                    Map<ResourceLocation, JsonElement> movesets = JsonUtils.getJsonsForNamespace(manager, namespace, DIRECTORY + "/" + Objects.requireNonNull(ExCapWeapons.REGISTRY.getKey(weapon)).getPath() + "/movesets");
+                                    Map<ResourceLocation, JsonElement> providers = JsonUtils.getJsonsForNamespace(manager, namespace, DIRECTORY + "/" +  Objects.requireNonNull(ExCapWeapons.REGISTRY.getKey(weapon)).getPath() + "/providers");
                                     if (!providers.isEmpty())
                                     {
                                         providers.forEach((key, value) -> {
@@ -88,12 +87,12 @@ public class ExCapWeaponReloadListener extends SimpleJsonResourceReloadListener
                                                         .build();
                                                 case SPECIFIC_WEAPON -> builder
                                                         .setType(type).setWieldStyle(wieldStyle).isVisibleOffHand(visibleOffHand)
-                                                        .setWeapon(ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(gsonObject.get("specific_weapon").getAsString())))
+                                                        .setWeapon(BuiltInRegistries.ITEM.get(ResourceLocation.parse(gsonObject.get("specific_weapon").getAsString())))
                                                         .setHand(InteractionHand.valueOf(gsonObject.get("hand").getAsString().toUpperCase()))
                                                         .build();
                                                 case SKILL_EXISTENCE, SKILL_ACTIVATION -> builder
                                                         .setType(type).setWieldStyle(wieldStyle).isVisibleOffHand(visibleOffHand)
-                                                        .setSkillToCheck(SkillManager.getSkill(gsonObject.get("skill").getAsString()))
+                                                        .setSkillToCheck(EpicFightRegistries.SKILL.get(ResourceLocation.parse(gsonObject.get("skill").getAsString())))
                                                         .setSlot(SkillSlot.ENUM_MANAGER.get(gsonObject.get("slot").getAsString().toUpperCase()))
                                                         .build();
                                                 case COMPOSITE -> {
@@ -112,19 +111,19 @@ public class ExCapWeaponReloadListener extends SimpleJsonResourceReloadListener
                                                                         .build());
                                                                 case SPECIFIC_WEAPON -> subs.add(subBuilder
                                                                         .setType(subtype)
-                                                                        .setWeapon(ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(element.getAsJsonObject().get("specific_weapon").getAsString())))
+                                                                        .setWeapon(BuiltInRegistries.ITEM.get(ResourceLocation.parse(element.getAsJsonObject().get("specific_weapon").getAsString())))
                                                                         .setHand(InteractionHand.valueOf(element.getAsJsonObject().get("hand").getAsString().toUpperCase()))
                                                                         .build());
                                                                 case SKILL_EXISTENCE, SKILL_ACTIVATION -> subBuilder
                                                                         .setType(subtype)
-                                                                        .setSkillToCheck(SkillManager.getSkill(element.getAsJsonObject().get("skill").getAsString()))
+                                                                        .setSkillToCheck(EpicFightRegistries.SKILL.get(ResourceLocation.parse(element.getAsJsonObject().get("skill").getAsString())))
                                                                         .setSlot(SkillSlot.ENUM_MANAGER.get(element.getAsJsonObject().get("slot").getAsString().toUpperCase()))
                                                                         .build();
 
                                                                 case DATA_KEY -> subs.add(subBuilder
                                                                         .setType(subtype)
-                                                                        .setSkillToCheck(SkillManager.getSkill(element.getAsJsonObject().get("skill").getAsString()))
-                                                                        .setKey((SkillDataKey<Boolean>) SkillDataKeys.REGISTRY.get().getValue(ResourceLocation.parse(element.getAsJsonObject().get("boolean_key").getAsString())))
+                                                                        .setSkillToCheck(EpicFightRegistries.SKILL.get(ResourceLocation.parse(element.getAsJsonObject().get("skill").getAsString())))
+                                                                        .setKey(EpicFightRegistries.SKILL_DATA_KEY.wrapAsHolder(Objects.requireNonNull(EpicFightRegistries.SKILL_DATA_KEY.get(ResourceLocation.parse(element.getAsJsonObject().get("boolean_key").getAsString())))))
                                                                         .setSlot(SkillSlot.ENUM_MANAGER.get(element.getAsJsonObject().get("slot").getAsString().toUpperCase()))
                                                                         .build());
                                                             }
@@ -134,8 +133,8 @@ public class ExCapWeaponReloadListener extends SimpleJsonResourceReloadListener
                                                 }
                                                 case DATA_KEY -> builder
                                                         .setType(type).setWieldStyle(wieldStyle).isVisibleOffHand(visibleOffHand)
-                                                        .setSkillToCheck(SkillManager.getSkill(gsonObject.get("skill").getAsString()))
-                                                        .setKey((SkillDataKey<Boolean>) SkillDataKeys.REGISTRY.get().getValue(ResourceLocation.parse(gsonObject.get("boolean_key").getAsString())))
+                                                        .setSkillToCheck(EpicFightRegistries.SKILL.get(ResourceLocation.parse(gsonObject.getAsJsonObject().get("skill").getAsString())))
+                                                        .setKey(EpicFightRegistries.SKILL_DATA_KEY.wrapAsHolder(Objects.requireNonNull(EpicFightRegistries.SKILL_DATA_KEY.get(ResourceLocation.parse(gsonObject.getAsJsonObject().get("boolean_key").getAsString())))))
                                                         .setSlot(SkillSlot.ENUM_MANAGER.get(gsonObject.get("slot").getAsString().toUpperCase()))
                                                         .build();
                                             }
@@ -181,7 +180,7 @@ public class ExCapWeaponReloadListener extends SimpleJsonResourceReloadListener
                                                         if (importedCombos.containsKey("mount"))
                                                             moveSetBuilder.addMountAttacks(getAnimationAccessors(importedCombos.get("mount")).toArray(AnimationManager.AnimationAccessor[]::new));
                                                         if (importedInnates.containsKey(s))
-                                                            moveSetBuilder.addInnateSkill(itemstack -> SkillManager.getSkill(importedInnates.get(s).getAsString()));
+                                                            moveSetBuilder.addInnateSkill(itemstack -> EpicFightRegistries.SKILL.get(ResourceLocation.parse(importedInnates.get(s).getAsString())));
                                                         if (!importedLivingMotions.isEmpty())
                                                             if (importedLivingMotions.containsKey(s))
                                                                 getLivingMotionModifiers(importedLivingMotions.get(s).getAsJsonObject().asMap()).forEach(moveSetBuilder::addLivingMotionModifier);
@@ -210,7 +209,7 @@ public class ExCapWeaponReloadListener extends SimpleJsonResourceReloadListener
                                                 }
                                                 if (gsonObject.has("innate_skill"))
                                                 {
-                                                    moveSetBuilder.addInnateSkill(itemStack -> SkillManager.getSkill(gsonObject.get("innate_skill").getAsString()));
+                                                    moveSetBuilder.addInnateSkill(itemStack -> EpicFightRegistries.SKILL.get(ResourceLocation.parse(gsonObject.get("innate_skill").getAsString())));
                                                 }
                                                 if (gsonObject.has("living_animations"))
                                                 {
@@ -218,15 +217,15 @@ public class ExCapWeaponReloadListener extends SimpleJsonResourceReloadListener
                                                 }
                                                 if (gsonObject.has("weapon_passive"))
                                                 {
-                                                    moveSetBuilder.setPassiveSkill(SkillManager.getSkill(gsonObject.get("weapon_passive").getAsString()));
+                                                    moveSetBuilder.setPassiveSkill(EpicFightRegistries.SKILL.get(ResourceLocation.parse(gsonObject.get("weapon_passive").getAsString())));
                                                 }
                                                 if (gsonObject.has("guard_motions"))
                                                 {
                                                     gsonObject.get("guard_motions").getAsJsonObject().asMap().forEach((s, jsonElement) ->
                                                     {
-                                                        if (SkillManager.getSkill(s) != null)
+                                                        if (EpicFightRegistries.SKILL.get(ResourceLocation.parse(s)) != null)
                                                         {
-                                                            jsonElement.getAsJsonObject().asMap().forEach((s1, jsonElement1) -> moveSetBuilder.addGuardAnimations(SkillManager.getSkill(s), GuardSkill.BlockType.valueOf(s1.toUpperCase(Locale.ROOT)), getAnimationAccessors(jsonElement1).toArray(AnimationManager.AnimationAccessor[]::new)));
+                                                            jsonElement.getAsJsonObject().asMap().forEach((s1, jsonElement1) -> moveSetBuilder.addGuardAnimations(EpicFightRegistries.SKILL.get(ResourceLocation.parse(s)), GuardSkill.BlockType.valueOf(s1.toUpperCase(Locale.ROOT)), getAnimationAccessors(jsonElement1).toArray(AnimationManager.AnimationAccessor[]::new)));
                                                         }
                                                     });
                                                 }
@@ -234,7 +233,6 @@ public class ExCapWeaponReloadListener extends SimpleJsonResourceReloadListener
                                                 {
                                                     moveSetBuilder.revelationAttack(AnimationManager.byKey(gsonObject.get("revelation_attack").getAsString()));
                                                 }
-
                                                 weapon.getAttackSets().put(wieldStyle, moveSetBuilder.build());
                                             }
                                         });

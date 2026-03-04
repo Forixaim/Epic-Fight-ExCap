@@ -1,13 +1,12 @@
 package net.forixaim.ex_cap.animations;
 
 import net.forixaim.ex_cap.EpicFightEXCapability;
-import net.forixaim.ex_cap.animations.mna.MNAAnimations;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import yesman.epicfight.api.animation.AnimationManager;
 
 
-@Mod.EventBusSubscriber(modid = EpicFightEXCapability.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = EpicFightEXCapability.MODID)
 public class AnimRegistry
 {
 
@@ -23,7 +22,6 @@ public class AnimRegistry
 	public static void RegisterAnimsBuild(AnimationManager.AnimationBuilder event)
 	{
 
-		MNAAnimations.Build(event);
 
 	}
 }

@@ -120,6 +120,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
     implementation("maven.modrinth:epic-fight:${epicfight_version}")
+    implementation("maven.modrinth:battle-arts-api:${battle_arts_api_version}")
     implementation("maven.modrinth:epic-fight-skill-tree:${epicskills_version}")
 }
 

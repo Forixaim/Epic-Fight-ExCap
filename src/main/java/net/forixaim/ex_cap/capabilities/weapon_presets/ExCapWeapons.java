@@ -4,29 +4,25 @@ import net.forixaim.ex_cap.EpicFightEXCapability;
 import net.forixaim.ex_cap.capabilities.ExCapWeapon;
 import net.forixaim.ex_cap.capabilities.ExCapCategories;
 import net.forixaim.ex_cap.capabilities.weaponcaps.EXGloveCapability;
-import net.forixaim.ex_cap.capabilities.weaponcaps.compat.EXSpellCapability;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.*;
+
+import net.neoforged.neoforge.registries.DeferredRegister;
 import yesman.epicfight.gameasset.ColliderPreset;
-import yesman.epicfight.gameasset.EpicFightSounds;
+import yesman.epicfight.registry.entries.EpicFightSounds;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
-import java.util.function.Supplier;
-
-@Mod.EventBusSubscriber(modid = EpicFightEXCapability.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ExCapWeapons
 {
     public static final ResourceKey<Registry<ExCapWeapon>> REGISTRY_KEY = ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(EpicFightEXCapability.MODID, "weapons"));
 
     public static final DeferredRegister<ExCapWeapon> EX_CAP_WEAPONS = DeferredRegister.create(REGISTRY_KEY, EpicFightEXCapability.MODID);
+    public static final Registry<ExCapWeapon> REGISTRY = EX_CAP_WEAPONS.makeRegistry(builder -> builder.sync(true));
 
-    public static final Supplier<IForgeRegistry<ExCapWeapon>> REGISTRY = EX_CAP_WEAPONS.makeRegistry(() -> new RegistryBuilder<ExCapWeapon>().setName(REGISTRY_KEY.location()));
 
-
-    public static RegistryObject<ExCapWeapon> BOKKEN = EX_CAP_WEAPONS.register(
+    public static Holder<ExCapWeapon> BOKKEN = EX_CAP_WEAPONS.register(
             "bokken", () -> ExCapWeapon.quickStart(
                     builder -> builder.category(CapabilityItem.WeaponCategories.SWORD)
                             .collider(ColliderPreset.SWORD)
@@ -36,7 +32,7 @@ public class ExCapWeapons
                     1, 1, 1
             ));
 
-    public static final RegistryObject<ExCapWeapon> SWORD = EX_CAP_WEAPONS.register("sword",
+    public static final Holder<ExCapWeapon> SWORD = EX_CAP_WEAPONS.register("sword",
             () -> ExCapWeapon.quickStart(
                     builder -> builder.category(CapabilityItem.WeaponCategories.SWORD)
                             .collider(ColliderPreset.SWORD)
@@ -46,7 +42,7 @@ public class ExCapWeapons
                     1, 1, 1
             ));
 
-    public static final RegistryObject<ExCapWeapon> SHIELD = EX_CAP_WEAPONS.register("shield",
+    public static final Holder<ExCapWeapon> SHIELD = EX_CAP_WEAPONS.register("shield",
             () -> ExCapWeapon.quickStart(
                     builder -> builder
                             .category(CapabilityItem.WeaponCategories.SHIELD)
@@ -56,7 +52,7 @@ public class ExCapWeapons
                     1, 1, 1
             ));
 
-    public static final RegistryObject<ExCapWeapon> AXE = EX_CAP_WEAPONS.register("axe",
+    public static final Holder<ExCapWeapon> AXE = EX_CAP_WEAPONS.register("axe",
             () -> ExCapWeapon.quickStart(
                     builder -> builder
                             .category(CapabilityItem.WeaponCategories.AXE)
@@ -66,7 +62,7 @@ public class ExCapWeapons
                     1, 1, 1
             ));
 
-    public static final RegistryObject<ExCapWeapon> LONGSWORD = EX_CAP_WEAPONS.register("longsword",
+    public static final Holder<ExCapWeapon> LONGSWORD = EX_CAP_WEAPONS.register("longsword",
             () -> ExCapWeapon.quickStart(
                     builder -> builder
                             .category(CapabilityItem.WeaponCategories.LONGSWORD)
@@ -76,7 +72,7 @@ public class ExCapWeapons
                     1, 1, 1
             ));
 
-    public static final RegistryObject<ExCapWeapon> BOW = EX_CAP_WEAPONS.register("bow",
+    public static final Holder<ExCapWeapon> BOW = EX_CAP_WEAPONS.register("bow",
             () -> ExCapWeapon.quickStart(
                     builder -> builder
                             .category(ExCapCategories.BOW)
@@ -87,7 +83,7 @@ public class ExCapWeapons
                     1, 1, 1
             ));
 
-    public static final RegistryObject<ExCapWeapon> GREATSWORD = EX_CAP_WEAPONS.register("greatsword",
+    public static final Holder<ExCapWeapon> GREATSWORD = EX_CAP_WEAPONS.register("greatsword",
             () -> ExCapWeapon.quickStart(
                     builder -> builder
                             .category(CapabilityItem.WeaponCategories.GREATSWORD)
@@ -97,7 +93,7 @@ public class ExCapWeapons
                     1, 1, 1
             ));
 
-    public static final RegistryObject<ExCapWeapon> GLOVE = EX_CAP_WEAPONS.register("glove",
+    public static final Holder<ExCapWeapon> GLOVE = EX_CAP_WEAPONS.register("glove",
             () -> ExCapWeapon.quickStart(
                     builder -> builder
                             .constructor(EXGloveCapability::new)
@@ -108,7 +104,7 @@ public class ExCapWeapons
                     1, 1, 1
             ));
 
-    public static final RegistryObject<ExCapWeapon> SPEAR = EX_CAP_WEAPONS.register("spear",
+    public static final Holder<ExCapWeapon> SPEAR = EX_CAP_WEAPONS.register("spear",
             () -> ExCapWeapon.quickStart(
                     builder -> builder
                             .category(CapabilityItem.WeaponCategories.SPEAR)
@@ -118,18 +114,7 @@ public class ExCapWeapons
                     1, 1, 1
             ));
 
-    public static final RegistryObject<ExCapWeapon> SPELL = EX_CAP_WEAPONS.register("spell",
-            () -> ExCapWeapon.quickStart(
-                    builder -> builder
-                            .category(CapabilityItem.WeaponCategories.RANGED)
-                            .collider(ColliderPreset.FIST)
-                            .swingSound(EpicFightSounds.WHOOSH.get())
-                            .hitSound(EpicFightSounds.BLUNT_HIT.get())
-                            .constructor(EXSpellCapability::new),
-                    1, 1, 1
-            ));
-
-    public static final RegistryObject<ExCapWeapon> TACHI = EX_CAP_WEAPONS.register("tachi",
+    public static final Holder<ExCapWeapon> TACHI = EX_CAP_WEAPONS.register("tachi",
             () -> ExCapWeapon.quickStart(
                     builder -> builder
                             .category(CapabilityItem.WeaponCategories.TACHI)
@@ -139,7 +124,7 @@ public class ExCapWeapons
                     1, 1, 1
             ));
 
-    public static final RegistryObject<ExCapWeapon> UCHIGATANA = EX_CAP_WEAPONS.register("uchigatana",
+    public static final Holder<ExCapWeapon> UCHIGATANA = EX_CAP_WEAPONS.register("uchigatana",
             () -> ExCapWeapon.quickStart(
                     builder -> builder
                             .category(CapabilityItem.WeaponCategories.UCHIGATANA)
@@ -149,7 +134,7 @@ public class ExCapWeapons
                     1, 0.7f, 1
             ));
 
-    public static final RegistryObject<ExCapWeapon> DAGGER = EX_CAP_WEAPONS.register("dagger",
+    public static final Holder<ExCapWeapon> DAGGER = EX_CAP_WEAPONS.register("dagger",
             () -> ExCapWeapon.quickStart(
                     builder -> builder
                             .category(CapabilityItem.WeaponCategories.DAGGER)

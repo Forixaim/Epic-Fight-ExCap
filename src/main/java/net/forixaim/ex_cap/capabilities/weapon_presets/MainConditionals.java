@@ -3,8 +3,8 @@ package net.forixaim.ex_cap.capabilities.weapon_presets;
 import net.forixaim.ex_cap.api.providers.ProviderConditional;
 import net.forixaim.ex_cap.api.providers.ProviderConditionalType;
 import net.minecraft.world.InteractionHand;
-import yesman.epicfight.gameasset.EpicFightSkills;
-import yesman.epicfight.skill.SkillDataKeys;
+import yesman.epicfight.registry.entries.EpicFightSkillDataKeys;
+import yesman.epicfight.registry.entries.EpicFightSkills;
 import yesman.epicfight.skill.SkillSlots;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
 
@@ -40,7 +40,7 @@ public class MainConditionals
     public static ProviderConditional LiechtenauerCondition = ProviderConditional.builder()
             .setType(ProviderConditionalType.SKILL_ACTIVATION)
             .setSlot(SkillSlots.WEAPON_INNATE)
-            .setSkillToCheck(EpicFightSkills.LIECHTENAUER)
+            .setSkillToCheck(EpicFightSkills.LIECHTENAUER.value())
             .isVisibleOffHand(false)
             .setWieldStyle(CapabilityItem.Styles.OCHS).build();
 
@@ -48,9 +48,9 @@ public class MainConditionals
             .setType(ProviderConditionalType.DATA_KEY)
             .isVisibleOffHand(false)
             .setSlot(SkillSlots.WEAPON_PASSIVE)
-            .setSkillToCheck(EpicFightSkills.BATTOJUTSU_PASSIVE)
+            .setSkillToCheck(EpicFightSkills.BATTOJUTSU_PASSIVE.value())
             .setWieldStyle(CapabilityItem.Styles.SHEATH)
-            .setKey(SkillDataKeys.SHEATH.get())
+            .setKey(EpicFightSkillDataKeys.SHEATH)
             .build();
 
     public static ProviderConditional DualDaggers = ProviderConditional.builder()

@@ -6,10 +6,11 @@ import yesman.epicfight.api.animation.LivingMotion;
 import yesman.epicfight.api.animation.LivingMotions;
 import yesman.epicfight.world.capabilities.entitypatch.LivingEntityPatch;
 import yesman.epicfight.world.capabilities.item.CapabilityItem;
+import yesman.epicfight.world.capabilities.item.WeaponCapability;
 
 public class EXBowWeaponCapability extends EXRangedWeaponCapability
 {
-	public EXBowWeaponCapability(CapabilityItem.Builder builder) {
+	public EXBowWeaponCapability(WeaponCapability.Builder builder) {
 		super(builder);
 	}
 
